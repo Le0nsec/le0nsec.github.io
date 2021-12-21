@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>企业微信自动健康上报脚本小记 - Leon&#39;s Blog</title><meta name="Description" content="Leon&#39;s Blog-Keep learning web security"><meta property="og:title" content="企业微信自动健康上报脚本小记" />
+<meta property="og:description" content="编写企业微信自动健康上报脚本小记" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://clq0.top/qiye_weixin_health_check/" />
+<meta property="og:image" content="https://clq0.top/logo_.jpg"/>
+<meta property="article:published_time" content="2021-12-02T23:19:52+08:00" />
+<meta property="article:modified_time" content="2021-12-02T23:19:52+08:00" />
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://clq0.top/logo_.jpg"/>
+
+<meta name="twitter:title" content="企业微信自动健康上报脚本小记"/>
+<meta name="twitter:description" content="编写企业微信自动健康上报脚本小记"/>
+<meta name="application-name" content="Leon&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Leon&#39;s Blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/logo.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://clq0.top/qiye_weixin_health_check/" /><link rel="prev" href="https://clq0.top/shiro_721_analysis/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "企业微信自动健康上报脚本小记",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/clq0.top\/qiye_weixin_health_check\/"
+        },"genre": "posts","keywords": "tool","wordcount":  2511 ,
+        "url": "https:\/\/clq0.top\/qiye_weixin_health_check\/","datePublished": "2021-12-02T23:19:52+08:00","dateModified": "2021-12-02T23:19:52+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Leon","logo": "https:\/\/clq0.top\/logo_.jpg"},"author": {
+                "@type": "Person",
+                "name": "Leon"
+            },"description": ""
+    }
+    </script></head>
+    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Leon&#39;s Blog"><span class="header-title-pre">❤</span>Leon&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/tags/"> Tags </a><a class="menu-item" href="/categories/"> Categories </a><a class="menu-item" href="/links/"> Links </a><a class="menu-item" href="/about/"> About </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Leon&#39;s Blog"><span class="header-title-pre">❤</span>Leon&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/tags/" title="">Tags</a><a class="menu-item" href="/categories/" title="">Categories</a><a class="menu-item" href="/links/" title="">Links</a><a class="menu-item" href="/about/" title="">About</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">企业微信自动健康上报脚本小记</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="http://clq0.top" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>Leon</a></span>&nbsp;<span class="post-category">included in <a href="/categories/tools/"><i class="far fa-folder fa-fw"></i>Tools</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-12-02">2021-12-02</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;2511 words&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;6 minutes&nbsp;<span id="/qiye_weixin_health_check/" class="leancloud_visitors" data-flag-title="企业微信自动健康上报脚本小记">
+                        <i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;views
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#关于">关于</a></li>
+    <li><a href="#环境">环境</a></li>
+    <li><a href="#使用">使用</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>编写企业微信自动健康上报脚本小记</p>
+<h2 id="关于">关于</h2>
+<p>疫情期间学校要求每天都要健康打卡，之前是中午12点之前打卡，现在改成晚上21点到22点之间打卡，有时候事情多总是会忘，再加上周末可能会超过22点才回学校，上报定位也是个问题，因为这些原因，昨晚闲着没事给手机代理然后抓了个包，简单写了个脚本自动提交健康打卡。</p>
+<p>简单看了一下，表单页面是通过<code>form_id</code>来请求api获取需要填写的表单内容，我们提交的时候也是需要这个<code>form_id</code>，由于这个<code>form_id</code>每天可能都会变，需要先获取一下，也就是下图这个页面：</p>
+<p align="center">
+<img src="https://gitee.com/leonsec/images/raw/master/8CF7904CAC110B9C3F09D53417FDFCEF.jpg" alt="8CF7904CAC110B9C3F09D53417FDFCEF" style="zoom: 33%;" />
+</p>
+<p>API为：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">https://doc.weixin.qq.com/form/healthformlist
+</code></pre></td></tr></table>
+</div>
+</div><p>获取到其中的<code>form_id</code>就可以直接提交了，看了一下定位的流程，发现其实提交时提交的是写死的字符串</p>
+<p>在表单点击定位时，会调用手机gps获取当前坐标，然后调用腾讯地图api获取指定坐标的详细信息，如下图</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20211202214529972-8452737.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20211202214529972-8452737.png, https://gitee.com/leonsec/images/raw/master/image-20211202214529972-8452737.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20211202214529972-8452737.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20211202214529972-8452737.png"
+        title="image-20211202214529972" /></p>
+<p>所以其实最后提交的是获取的位置信息静态中文字符串，所以妈妈再也不用担心晚上十点后回学校的定位问题了</p>
+<p>提交的http报文如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-http" data-lang="http"><span class="nf">POST</span> <span class="nn">/form/share?f=json</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="n">Host</span><span class="o">:</span> <span class="l">doc.weixin.qq.com</span>
+<span class="n">Content-Type</span><span class="o">:</span> <span class="l">multipart/form-data; boundary=----WebKitFormBoundarynFnLeYS3a4cZQr7B</span>
+<span class="n">Origin</span><span class="o">:</span> <span class="l">https://doc.weixin.qq.com</span>
+<span class="n">Accept-Encoding</span><span class="o">:</span> <span class="l">gzip, deflate</span>
+<span class="n">Cookie</span><span class="o">:</span> <span class="l">**********************</span>
+<span class="n">Connection</span><span class="o">:</span> <span class="l">close</span>
+<span class="n">Accept</span><span class="o">:</span> <span class="l">application/json, text/plain, */*</span>
+<span class="n">User-Agent</span><span class="o">:</span> <span class="l">Mozilla/5.0 (iPhone; CPU iPhone OS 15_0_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko)  Mobile/15E148 wxwork/3.1.18 MicroMessenger/7.0.1 Language/zh ColorScheme/Light</span>
+<span class="n">Referer</span><span class="o">:</span> <span class="l">https://doc.weixin.qq.com/</span>
+<span class="n">Content-Length</span><span class="o">:</span> <span class="l">1657</span>
+<span class="n">Accept-Language</span><span class="o">:</span> <span class="l">zh-CN,zh-Hans;q=0.9</span>
+
+------WebKitFormBoundarynFnLeYS3a4cZQr7B
+Content-Disposition: form-data; name=&#34;type&#34;
+
+2
+------WebKitFormBoundarynFnLeYS3a4cZQr7B
+Content-Disposition: form-data; name=&#34;form_id&#34;
+
+AGkA4wfzAA0_AGkA4wfz-A0AH8AtgaFAFoxwj9N5t3Ql1638374400
+------WebKitFormBoundarynFnLeYS3a4cZQr7B
+Content-Disposition: form-data; name=&#34;form_reply&#34;
+
+{&#34;items&#34;:[{&#34;question_id&#34;:1,&#34;text_reply&#34;:&#34;{\&#34;type\&#34;:\&#34;\&#34;,\&#34;nation\&#34;:\&#34;中国\&#34;,\&#34;province\&#34;:\&#34;江苏省\&#34;,\&#34;city\&#34;:\&#34;南京市\&#34;,\&#34;district\&#34;:\&#34;栖霞区\&#34;,\&#34;addr\&#34;:\&#34;江苏省南京市南京邮电大学(仙林校区)\&#34;,\&#34;lat\&#34;:32.1126594543457,\&#34;lng\&#34;:118.93416595458984,\&#34;module\&#34;:\&#34;wework-native\&#34;,\&#34;exportText\&#34;:\&#34;江苏省南京市南京邮电大学(仙林校区)\&#34;}&#34;,&#34;option_reply&#34;:[]},{&#34;question_id&#34;:2,&#34;text_reply&#34;:&#34;&#34;,&#34;option_reply&#34;:[&#34;1&#34;]},{&#34;question_id&#34;:3,&#34;text_reply&#34;:&#34;&#34;,&#34;option_reply&#34;:[&#34;2&#34;]},{&#34;question_id&#34;:4,&#34;text_reply&#34;:&#34;&#34;,&#34;option_reply&#34;:[&#34;2&#34;]},{&#34;question_id&#34;:6,&#34;text_reply&#34;:&#34;&#34;,&#34;option_reply&#34;:[&#34;2&#34;]},{&#34;question_id&#34;:7,&#34;text_reply&#34;:&#34;&#34;,&#34;option_reply&#34;:[&#34;1&#34;]},{&#34;question_id&#34;:8,&#34;text_reply&#34;:&#34;&#34;,&#34;option_reply&#34;:[&#34;5&#34;]},{&#34;question_id&#34;:9,&#34;text_reply&#34;:&#34;&#34;,&#34;option_reply&#34;:[&#34;2&#34;]},{&#34;question_id&#34;:10,&#34;text_reply&#34;:&#34;&#34;,&#34;option_reply&#34;:[&#34;3&#34;]},{&#34;question_id&#34;:11,&#34;text_reply&#34;:&#34;&#34;,&#34;option_reply&#34;:[&#34;3&#34;]},{&#34;question_id&#34;:12,&#34;text_reply&#34;:&#34;&#34;,&#34;option_reply&#34;:[]},{&#34;question_id&#34;:13,&#34;text_reply&#34;:&#34;&#34;,&#34;option_reply&#34;:[]}]}
+------WebKitFormBoundarynFnLeYS3a4cZQr7B
+Content-Disposition: form-data; name=&#34;f&#34;
+
+json
+------WebKitFormBoundarynFnLeYS3a4cZQr7B
+Content-Disposition: form-data; name=&#34;source&#34;
+
+
+------WebKitFormBoundarynFnLeYS3a4cZQr7B
+Content-Disposition: form-data; name=&#34;vcode&#34;
+
+null
+------WebKitFormBoundarynFnLeYS3a4cZQr7B--
+
+</code></pre></td></tr></table>
+</div>
+</div><p>其中<code>form_reply</code>表单是提交的健康打卡表单内容，定位也为南京邮电大学，如果有其他要求可以自己修改</p>
+<p>基于此写了个自动化脚本，开源地址：</p>
+<p>Github: <a href="https://github.com/Le0nsec/qiye_weixin_health_check" target="_blank" rel="noopener noreffer">https://github.com/Le0nsec/qiye_weixin_health_check</a></p>
+<h2 id="环境">环境</h2>
+<p>Python2</p>
+<h2 id="使用">使用</h2>
+<ol>
+<li>
+<p>使用前请先安装<code>hackhttp</code>库</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">pip2 install hackhttp
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>添加你的企业微信cookie（因为考虑到多人使用，所以使用了dict，可以添加多个cookie，会遍历提交）
+先使用浏览器打开新的无痕窗口，访问：<a href="https://doc.weixin.qq.com/disklogin/login_page" target="_blank" rel="noopener noreffer">https://doc.weixin.qq.com/disklogin/login_page</a>，然后使用你登陆了南京邮电大学的<strong>企业微信</strong>（不是微信）扫码登陆</p>
+<p>登录后按F12打开开发者工具，或者在网页空白处右键点击“检查”，如下图：</p>
+ <p align="center">
+ <img src="https://gitee.com/leonsec/images/raw/master/144440784-d825f6ea-1657-470e-8fe5-ee94025789cd.png" alt="image" style="zoom:67%;" />
+ </p>
+<p>然后在控制台(console)输入<code>document.cookie</code>查看当前cookie字符串：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/144441988-90e30845-8a31-4c28-9751-1202047df99d.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/144441988-90e30845-8a31-4c28-9751-1202047df99d.png, https://gitee.com/leonsec/images/raw/master/144441988-90e30845-8a31-4c28-9751-1202047df99d.png 1.5x, https://gitee.com/leonsec/images/raw/master/144441988-90e30845-8a31-4c28-9751-1202047df99d.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/144441988-90e30845-8a31-4c28-9751-1202047df99d.png"
+        title="image" /></p>
+<p>复制后粘贴到脚本中即可</p>
+</li>
+<li>
+<p>运行</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">python2 auto_health_check.py
+</code></pre></td></tr></table>
+</div>
+</div><p>脚本中使用了server酱进行通知，打卡成功或者失败都将通知到手机，<SENDKEY>需要自行替换，具体用法参考<a href="https://sct.ftqq.com/" target="_blank" rel="noopener noreffer">https://sct.ftqq.com/</a>，如果不需要，可以自行删除这部分代码</p>
+<p>关于自动打卡，可以挂在服务器上设置定时任务运行，或者直接在代码中加sleep 24h。</p>
+</li>
+</ol></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2021-12-02</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://clq0.top/qiye_weixin_health_check/" data-title="企业微信自动健康上报脚本小记" data-hashtags="tool"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://clq0.top/qiye_weixin_health_check/" data-hashtag="tool"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="Share on Reddit" data-sharer="reddit" data-url="https://clq0.top/qiye_weixin_health_check/"><i class="fab fa-reddit fa-fw"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://clq0.top/qiye_weixin_health_check/" data-title="企业微信自动健康上报脚本小记"><i class="fab fa-weibo fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/tool/">tool</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/shiro_721_analysis/" class="prev" rel="prev" title="Shiro-721漏洞分析(CVE-2019-12422)"><i class="fas fa-angle-left fa-fw"></i>Shiro-721漏洞分析(CVE-2019-12422)</a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><a>本网站由</a><a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral" target="-blank"><img src="/upyun_logo2.png" width="4%" style="vertical-align:middle"></a><a>提供CDN加速/云存储服务</a></div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2020 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="http://clq0.top" target="_blank">Leon</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span><span class="icp-splitter">&nbsp;|&nbsp;</span><br class="icp-br"/>
+                    <span class="icp"><script type="text/javascript" src="https://s9.cnzz.com/z_stat.php?id=1278765080&web_id=1278765080"></script></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/valine/valine.min.css"><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script type="text/javascript" src="/lib/valine/Valine.min.js"></script><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":40},"comment":{"valine":{"appId":"saBpLNPwjiIGzpSf9QvvTLw3-9Nh9j0Va","appKey":"jU0L8JdQYxxwunKTXrmGV194","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@5.0.1/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"en","pageSize":10,"placeholder":"Your comment ...","recordIP":true,"visitor":true}},"cookieconsent":{"content":{"dismiss":"Got it!","link":"Learn more","message":"This website uses Cookies to improve your experience."},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"highlightTag":"em","lunrIndexURL":"/index.json","maxResultLength":10,"noResultsFound":"No results found","snippetLength":50,"type":"lunr"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

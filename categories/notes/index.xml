@@ -1,0 +1,51 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>Notes - Category - Leon&#39;s Blog</title>
+        <link>https://clq0.top/categories/notes/</link>
+        <description>Notes - Category - Leon&#39;s Blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>leonsec@163.com (Leon)</managingEditor>
+            <webMaster>leonsec@163.com (Leon)</webMaster><lastBuildDate>Mon, 16 Aug 2021 11:31:40 &#43;0800</lastBuildDate><atom:link href="https://clq0.top/categories/notes/" rel="self" type="application/rss+xml" /><item>
+    <title>Golang开发端口扫描器一些常用技术</title>
+    <link>https://clq0.top/golang_scan_tech/</link>
+    <pubDate>Mon, 16 Aug 2021 11:31:40 &#43;0800</pubDate>
+    <author>Author</author>
+    <guid>https://clq0.top/golang_scan_tech/</guid>
+    <description><![CDATA[<p>记录了使用golang开发扫描器的一些常用技术</p>]]></description>
+</item><item>
+    <title>计算机组成与结构笔记</title>
+    <link>https://clq0.top/computer_organization_and_architecture/</link>
+    <pubDate>Fri, 26 Feb 2021 09:54:35 &#43;0800</pubDate>
+    <author>Author</author>
+    <guid>https://clq0.top/computer_organization_and_architecture/</guid>
+    <description><![CDATA[<p>零零碎碎的计算机组成与结构学习笔记</p>]]></description>
+</item><item>
+    <title>ThinkPHP审计入门</title>
+    <link>https://clq0.top/thinkphp%E5%AE%A1%E8%AE%A1%E5%85%A5%E9%97%A8/</link>
+    <pubDate>Mon, 01 Feb 2021 23:44:03 &#43;0800</pubDate>
+    <author>Author</author>
+    <guid>https://clq0.top/thinkphp%E5%AE%A1%E8%AE%A1%E5%85%A5%E9%97%A8/</guid>
+    <description><![CDATA[<p>跟一下<a href="https://github.com/Mochazz/ThinkPHP-Vuln" target="_blank" rel="noopener noreffer">Mochazz/ThinkPHP-Vuln: 关于ThinkPHP框架的历史漏洞分析集合</a>，记点笔记</p>]]></description>
+</item><item>
+    <title>Bypass Disable_function (PHP)</title>
+    <link>https://clq0.top/bypass-disable_function-php/</link>
+    <pubDate>Fri, 29 Jan 2021 17:04:52 &#43;0800</pubDate>
+    <author>Author</author>
+    <guid>https://clq0.top/bypass-disable_function-php/</guid>
+    <description><![CDATA[<p>花了点时间，总结了一下遇到的所有能够Bypass disable_function的方法，持续更新ing</p>]]></description>
+</item><item>
+    <title>PHP无参数读文件和RCE</title>
+    <link>https://clq0.top/php%E6%97%A0%E5%8F%82%E6%95%B0%E8%AF%BB%E6%96%87%E4%BB%B6%E5%92%8Crce/</link>
+    <pubDate>Tue, 07 Jul 2020 15:00:03 &#43;0800</pubDate>
+    <author>Author</author>
+    <guid>https://clq0.top/php%E6%97%A0%E5%8F%82%E6%95%B0%E8%AF%BB%E6%96%87%E4%BB%B6%E5%92%8Crce/</guid>
+    <description><![CDATA[<p>本文首发于合天智汇：<a href="http://www.heetian.com/info/827" title="http://www.heetian.com/info/827" target="_blank" rel="noopener noreffer">http://www.heetian.com/info/827</a>
+之前做题时遇到了无参数RCE这类题，在网上查找资料发现都是零散的Writeup或者payload，没有一篇能够完整涵盖读取文件和命令执行的技巧，所以我花了点时间，将PHP无参数读文件以及命令执行所用到的方法总结了一遍，希望能对读者起到些许作用。</p>]]></description>
+</item><item>
+    <title>PHP Create_function()</title>
+    <link>https://clq0.top/php-create_function/</link>
+    <pubDate>Thu, 04 Jun 2020 13:55:20 &#43;0800</pubDate>
+    <author>Author</author>
+    <guid>https://clq0.top/php-create_function/</guid>
+    <description><![CDATA[<p>简单写写PHP中利用create_function()进行rce的方式</p>]]></description>
+</item></channel>
+</rss>

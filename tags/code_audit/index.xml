@@ -1,0 +1,22 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>code_audit - Tag - Leon&#39;s Blog</title>
+        <link>https://clq0.top/tags/code_audit/</link>
+        <description>code_audit - Tag - Leon&#39;s Blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>leonsec@163.com (Leon)</managingEditor>
+            <webMaster>leonsec@163.com (Leon)</webMaster><lastBuildDate>Wed, 01 Sep 2021 10:03:52 &#43;0800</lastBuildDate><atom:link href="https://clq0.top/tags/code_audit/" rel="self" type="application/rss+xml" /><item>
+    <title>Apache Commons Collections反序列化链分析</title>
+    <link>https://clq0.top/commons_collections_analysis/</link>
+    <pubDate>Wed, 01 Sep 2021 10:03:52 &#43;0800</pubDate>
+    <author>Author</author>
+    <guid>https://clq0.top/commons_collections_analysis/</guid>
+    <description><![CDATA[<p>来分析分析cc链&hellip;</p>]]></description>
+</item><item>
+    <title>ThinkPHP审计入门</title>
+    <link>https://clq0.top/thinkphp%E5%AE%A1%E8%AE%A1%E5%85%A5%E9%97%A8/</link>
+    <pubDate>Mon, 01 Feb 2021 23:44:03 &#43;0800</pubDate>
+    <author>Author</author>
+    <guid>https://clq0.top/thinkphp%E5%AE%A1%E8%AE%A1%E5%85%A5%E9%97%A8/</guid>
+    <description><![CDATA[<p>跟一下<a href="https://github.com/Mochazz/ThinkPHP-Vuln" target="_blank" rel="noopener noreffer">Mochazz/ThinkPHP-Vuln: 关于ThinkPHP框架的历史漏洞分析集合</a>，记点笔记</p>]]></description>
+</item></channel>
+</rss>

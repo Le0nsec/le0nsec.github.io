@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>计算机组成与结构笔记 - Leon&#39;s Blog</title><meta name="Description" content="Leon&#39;s Blog-Keep learning web security"><meta property="og:title" content="计算机组成与结构笔记" />
+<meta property="og:description" content="零零碎碎的计算机组成与结构学习笔记" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://clq0.top/computer_organization_and_architecture/" />
+<meta property="og:image" content="https://clq0.top/logo_.jpg"/>
+<meta property="article:published_time" content="2021-02-26T09:54:35+08:00" />
+<meta property="article:modified_time" content="2021-05-12T11:39:35+08:00" />
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://clq0.top/logo_.jpg"/>
+
+<meta name="twitter:title" content="计算机组成与结构笔记"/>
+<meta name="twitter:description" content="零零碎碎的计算机组成与结构学习笔记"/>
+<meta name="application-name" content="Leon&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Leon&#39;s Blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/logo.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://clq0.top/computer_organization_and_architecture/" /><link rel="prev" href="https://clq0.top/thinkphp%E5%AE%A1%E8%AE%A1%E5%85%A5%E9%97%A8/" /><link rel="next" href="https://clq0.top/%E5%9B%9B%E5%8F%B6%E8%8D%89%E5%AE%89%E5%85%A8%E7%89%9B%E5%B9%B4ctf%E5%A4%A7%E8%B5%9B/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "计算机组成与结构笔记",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/clq0.top\/computer_organization_and_architecture\/"
+        },"genre": "posts","keywords": "Courses","wordcount":  3203 ,
+        "url": "https:\/\/clq0.top\/computer_organization_and_architecture\/","datePublished": "2021-02-26T09:54:35+08:00","dateModified": "2021-05-12T11:39:35+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Leon","logo": "https:\/\/clq0.top\/logo_.jpg"},"author": {
+                "@type": "Person",
+                "name": "Leon"
+            },"description": ""
+    }
+    </script></head>
+    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Leon&#39;s Blog"><span class="header-title-pre">❤</span>Leon&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/tags/"> Tags </a><a class="menu-item" href="/categories/"> Categories </a><a class="menu-item" href="/links/"> Links </a><a class="menu-item" href="/about/"> About </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Leon&#39;s Blog"><span class="header-title-pre">❤</span>Leon&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/tags/" title="">Tags</a><a class="menu-item" href="/categories/" title="">Categories</a><a class="menu-item" href="/links/" title="">Links</a><a class="menu-item" href="/about/" title="">About</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">计算机组成与结构笔记</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="http://clq0.top" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>Leon</a></span>&nbsp;<span class="post-category">included in <a href="/categories/notes/"><i class="far fa-folder fa-fw"></i>Notes</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-02-26">2021-02-26</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;3203 words&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;7 minutes&nbsp;<span id="/computer_organization_and_architecture/" class="leancloud_visitors" data-flag-title="计算机组成与结构笔记">
+                        <i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;views
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#12计算机的发展简史">1.2计算机的发展简史</a>
+      <ul>
+        <li><a href="#124计算机的性能指标">1.2.4计算机的性能指标</a></li>
+      </ul>
+    </li>
+    <li><a href="#21数据与文字的表示方法">2.1数据与文字的表示方法</a>
+      <ul>
+        <li><a href="#211数据格式">2.1.1数据格式</a>
+          <ul>
+            <li><a href="#定点数的表示方法">定点数的表示方法</a></li>
+            <li><a href="#原码表示法">原码表示法</a></li>
+            <li><a href="#补码表示法">补码表示法</a></li>
+            <li><a href="#补码与真值之间转换">补码与真值之间转换</a></li>
+            <li><a href="#反码表示法">反码表示法</a></li>
+            <li><a href="#原码-反码-补码">原码-&gt;反码-&gt;补码</a></li>
+            <li><a href="#移码表示法">移码表示法</a></li>
+            <li><a href="#浮点数的表示方法">浮点数的表示方法</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>零零碎碎的计算机组成与结构学习笔记</p>
+<h2 id="12计算机的发展简史">1.2计算机的发展简史</h2>
+<h3 id="124计算机的性能指标">1.2.4计算机的性能指标</h3>
+<p><strong>机器字长</strong>：指参与运算的基本位数，由加法器、寄存器的位数决定。</p>
+<blockquote>
+<p>机器字长以“字节Byte”为基本单位，字节用大写B表示，位用小写b表示，1Byte=8bit</p>
+</blockquote>
+<p><strong>数据通路宽度</strong>：数据总线一次能并行传送的位数，是指外部数据总线的宽度，影响信息传输能力、计算机有效处理速度。</p>
+<p><strong>主存容量</strong>：一个主存储器所能存储的全部信息量。</p>
+<blockquote>
+<p>主存容量一般以字节数表示，1024B=1KB</p>
+</blockquote>
+<p><strong>影响计算机运算速度的指标</strong>：</p>
+<ul>
+<li>
+<p><strong>吞吐量</strong>：计算机在单位时间内处理请求的数量</p>
+</li>
+<li>
+<p><strong>响应时间</strong>：计算机对请求作出的响应时间（包括CPU时间与等待时间总和）</p>
+</li>
+<li>
+<p><strong>主频 (f)</strong>：时钟频率，表示在CPU内数字脉冲信号震荡的速度</p>
+</li>
+<li>
+<p><strong>时钟周期 (T)</strong>：CPU主频的倒数($T=\frac{1}{f}$)，CPU中最小的时间元素，每个动作最少一个时钟周期</p>
+</li>
+<li>
+<p><strong>CPI(Cycles perInstruction)</strong>：每条指令执行所用的时钟周期数</p>
+<blockquote>
+<p>CPI常用IPC(Instruction per Cycle)表示，即每个时钟周期执行的指令数</p>
+<p>$IPC = \frac{1}{CPI}$</p>
+</blockquote>
+</li>
+<li>
+<p><strong>CPU执行时间</strong>：$CPU执行时间 = \frac{CPU时钟周期数}{时钟频率} = \frac{指令数*CPI}{时钟频率}$</p>
+</li>
+<li>
+<p><strong>MIPS(MillionInstructions per Second)</strong>：每秒执行多少百万条($10^6$)指令，值越大计算机速度越快</p>
+<blockquote>
+<p>$MIPS = \frac{指令条数}{执行时间*10^6} = \frac{主频}{CPI} = 主频 * IPC$</p>
+</blockquote>
+</li>
+<li>
+<p><strong>MFLOPS(MillionFloating-point Operations per Second)</strong>：每秒执行多少百万次浮点运算</p>
+<blockquote>
+<p>$MFLOPS = \frac{浮点操作次数}{执行时间*10^6}$</p>
+</blockquote>
+</li>
+</ul>
+<p>例题：</p>
+<blockquote>
+<p>例1-1︰某程序在一台时钟频率为2GHz的计算机A上运行需要10秒。现在将设计一台计算机B希望将运行时间缩短为6秒。计算机的设计者采用的方法是提高时钟频率，但这会影响CPU其余部分的设计，使计算机B运行该程序时需要相当于计算机A的1.2倍的时钟周期数。那么计算机设计者应该将时钟频率提高到多少?</p>
+</blockquote>
+<p>解：</p>
+<p>在A上运行该程序需要的时钟周期数：</p>
+<p>$$
+CPU时间_A = \frac{CPU时钟周期数_A}{时钟频率_A}
+$$</p>
+<p>$$
+10s = \frac{CPU时钟周期数_A}{2* 10^9} 周期数/s
+$$</p>
+<p>$$
+CPU时钟周期数_A = 20*10^9 周期数
+$$</p>
+<p>B的CPU时间公式为：
+$$
+CPU时间_B = 1.2 * \frac{CPU时钟周期数_A}{时钟频率_B}
+$$</p>
+<p>$$
+6s = 1.2 *20 * \frac{10^9时钟周期数_A}{时钟频率_B}
+$$</p>
+<p>$$
+时钟频率_B = 1.2* 20 * \frac{10^9时钟周期数}{6s} = 0.2 * 20 * \frac{10^9时钟周期数}{秒}
+\\
+= 4 * 10^9 时钟周期数/s
+\\
+= 4GHz
+$$</p>
+<blockquote>
+<p>例1-2∶假设计算机A的时钟周期为250ps，对某程序的CPI为2.0 ; 计算机B的时钟周期为500ps，对同样程序的CPI为1.2。对于该程序，请问哪台计算机执行的速度更快? 快多少?</p>
+</blockquote>
+<p>解：</p>
+<p>对于固定程序，每台计算机执行的总指令数是相同的，用$I$表示</p>
+<p>首先，每台计算机的CPU时钟周期数：
+$$
+CPU时钟周期数_A = 1 * 2.0
+$$</p>
+<p>$$
+CPU时钟周期数_B = 1* 1.2
+$$</p>
+<p>每台计算机的CPU时间：
+$$
+CPU时间_A = CPU时钟周期数_A * 时钟周期 = 1* 2.0 * 250ps = 500 * 1ps
+$$
+同理：
+$$
+CPU时间_B = 1* 1.2 * 500ps = 600 * 1ps
+$$</p>
+<p>$$
+\frac{CPU性能_A}{CPU性能_B} = \frac{执行时间_B}{执行时间_A} = 600* \frac{1ps}{500} = 1.2
+$$</p>
+<h2 id="21数据与文字的表示方法">2.1数据与文字的表示方法</h2>
+<h3 id="211数据格式">2.1.1数据格式</h3>
+<p>计算机中常用的数据表示格式有两种：</p>
+<p><strong>•</strong> 定点格式——容许的数值范围有限，但要求的处理硬件比较简单</p>
+<p><strong>•</strong> 浮点格式——容许的数值范围很大，但要求的处理硬件比较复杂</p>
+<h4 id="定点数的表示方法">定点数的表示方法</h4>
+<p><strong>定点表示</strong>：约定机器中所有数据的小数点位置是固定不变的（由于约定在固定的位置，小数点就不再使用记号“.”来表示）</p>
+<p>通常将数据表示成<strong>纯小数</strong>或<strong>纯整数</strong></p>
+<p><strong>定点数</strong>：小数点位置固定不变的数</p>
+<p><strong>定点整数</strong>：小数点固定在最低位数的右面</p>
+<p><strong>定点小数</strong>：小数点固定在最高位数的后面，即纯小数表示</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20210511154157018.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20210511154157018.png, https://gitee.com/leonsec/images/raw/master/image-20210511154157018.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20210511154157018.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20210511154157018.png"
+        title="image-20210511154157018" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20210511154321020.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20210511154321020.png, https://gitee.com/leonsec/images/raw/master/image-20210511154321020.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20210511154321020.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20210511154321020.png"
+        title="image-20210511154321020" /></p>
+<p>目前计算机中多采用定点纯整数表示，因此将定点数表示的运算简称为<strong>整数运算</strong></p>
+<p><strong>真值</strong>：正、负号加某进制数绝对值的形式称为真值，即数的实际值，如+3，-5等</p>
+<p><strong>机器数（机器码）</strong>：真值按某种编码方式进行编码后的数值，如$x = 01011$</p>
+<h4 id="原码表示法">原码表示法</h4>
+<blockquote>
+<p>符号位加上二进制数的绝对值，0正1负</p>
+</blockquote>
+<ol>
+<li>
+<p>定点小数</p>
+<p>若定点小数的原码形式为$x_n.x_{n-1}···x_1x_0$（$x_n$为符号位），则：</p>
+<p>$$
+[x]_{\text {原}}=\left\{\begin{array}{rr}
+x &amp; 0 \leq x&lt;1
+\\
+1-x=1+|x| &amp; -1&lt;x \leq 0
+\end{array}\right.
+$$</p>
+<p>式中$[x]_原$是机器数，$x$是真值，下同</p>
+</li>
+<li>
+<p>定点整数</p>
+<p>若定点整数的原码形式为$x_n.x_{n-1}···x_1x_0$（$x_n$为符号位），则：</p>
+<p>$$
+[x]_原=\left\{
+\begin{aligned}
+x &amp;&amp; 0 \le x &lt; 2^n
+\\
+2^n - x = 2^n + |x| &amp;&amp; -2^n &lt; x \le 0
+\end{aligned}
+\right.
+$$</p>
+</li>
+</ol>
+<p>例如：</p>
+<p>$x = +1001$，则$[x]_原 = 01001$；$x = -1001$，则$[x]_原 = 11001$</p>
+<p>$x = +0.1001$，则$[x]_原 = 0.1001$；$x = -0.1001$，则$[x]_原 = 1.1001$</p>
+<p>对于0，原码中有“+0”、“-0”之分</p>
+<h4 id="补码表示法">补码表示法</h4>
+<ol>
+<li>
+<p>定点小数</p>
+<p>若定点小数的补码形式为$x_n.x_{n-1}···x_1x_0$（$x_n$为符号位），则：
+$$
+[x]_补=\left\{
+\begin{aligned}
+x &amp;&amp; (mod\ 2) &amp;&amp; 0 \le x &lt; 1
+\\
+2 + x = 2 - |x| &amp;&amp; (mod\ 2) &amp;&amp; -1 &lt; x \le 0
+\end{aligned}
+\right.
+$$</p>
+</li>
+<li>
+<p>定点整数</p>
+<p>若定点整数的补码形式为$x_n.x_{n-1}···x_1x_0$（$x_n$为符号位），则：
+$$
+[x]_原=\left\{
+\begin{aligned}
+x &amp;&amp; (mod\ 2^{n+1}) &amp;&amp; 0 \le x &lt; 2^n
+\\
+2^{n+1} + x = 2^{n+1} - |x| &amp;&amp; (mod\ 2^{n+1}) &amp;&amp; -2^n &lt; x \le 0
+\end{aligned}
+\right.
+$$</p>
+</li>
+</ol>
+<p>例如：</p>
+<p>$x = +0111$，则$[x]_补 = 00111$；$x = -0111$，则$[x]_补 = 11001$</p>
+<p>$x = +0.1011$，则$[x]_补 = 0.1011$；$x = -0.1011$，则$[x]_补 = 1.0101$</p>
+<p>对于0，补码中只有一种</p>
+<h4 id="补码与真值之间转换">补码与真值之间转换</h4>
+<blockquote>
+<p>$[x]_补 = 010011011$，求$x$</p>
+</blockquote>
+<p>$x = 0*2^8 + 1*2^7 = 0*2^6 + 0*2^5 + 1*2^4 + 1*2^3 + 0*2^2 + 1*2^1 + 1*2^0 = 155$</p>
+<blockquote>
+<p>$[x]_补 = 110011011$，求$x$</p>
+</blockquote>
+<p>$x = -1*2^8 + 1*2^7 + 0*2^6 + 0*2^5 + 1*2^4 + 1*2^3 + 0*2^2 + 1*2^1 + 1*2^0 = -101$</p>
+<p>注意符号位，0为正，1为负，加负号</p>
+<h4 id="反码表示法">反码表示法</h4>
+<p>正数的反码等于其真值，符号位置0</p>
+<p>负数的反码符号位置1，其余取反即可</p>
+<h4 id="原码-反码-补码">原码-&gt;反码-&gt;补码</h4>
+<ul>
+<li>
+<p>正整数</p>
+<p>原码、反码、补码符号位都置0，用二进制表示的数位值都相同，三种表示法完全一样</p>
+</li>
+<li>
+<p>负整数</p>
+<p>原码、反码、补码符号位都置1，用二进制表示的数位值都不相同，规则如下：</p>
+<ol>
+<li>原码符号位为1不变，整数的每一位二进制数位求反得到反码；</li>
+<li>反码符号位为1不变，反码数值位最低位加1，得到补码</li>
+</ol>
+</li>
+</ul>
+<p>例：</p>
+<blockquote>
+<p>$x = +122$，$y = -122$，求$[x]_原$、$[x]_反$、$[x]_补$、$[y]_原$、$[y]_反$、$[y]_补$</p>
+</blockquote>
+<p>$$
+x = (+122)_{10} = (+1111010)_2, \qquad y = (-122)_{10} = (-1111010)_2
+\\
+[x]_原 = 01111010, \quad [x]_反 = 01111010, \quad [x]_补 = 01111010
+\\
+[y]_原 = 11111010, \quad [y]_反 = 10000101, \quad [y]_补 = 10000110
+$$</p>
+<p><strong>$[x]_补$-&gt;$[-x]_补$</strong>：将$[x]_补$连同符号位一起各位取反，末位加1得到$[-x]_补$</p>
+<h4 id="移码表示法">移码表示法</h4>
+<blockquote>
+<p>移码通常用于表示浮点数的阶码，对两个数的指数大小比较和对阶操作比较方便</p>
+</blockquote>
+<p>假设定点整数移码形式为$x_n.x_{n-1}···x_1x_0$（最高位为符号位），移码定义为：</p>
+<p>$$
+[x]_移 = 2^n + x \qquad -2^n \le x &lt; 2^n
+$$</p>
+<p>$x$为真值，$2^n$为一个固定的偏移值常数，$n$为阶码长度，即移码字长</p>
+<p>0的移码是唯一的</p>
+<p>例：</p>
+<p>$x = + 10101$时，$[x]_移 = 2^5 + 10101 = 1,10101$</p>
+<p>$x = -10101$时，$[x]_移 = 2^5 + x = 2^5 - 10101 = 0,01011$</p>
+<blockquote>
+<p>注：符号位与原码、反码、补码规律相反，1正0负</p>
+<p>移码和补码只差一个符号位，符号位取反</p>
+<p>移码为全0时所对应的真值最小，为全1时所对应的真值最大</p>
+</blockquote>
+<h4 id="浮点数的表示方法">浮点数的表示方法</h4>
+<p>计算机中一个任意进制数N可以写成：$N = \pm M * R^{\pm E}$</p>
+<blockquote>
+<p><strong>M</strong>：<strong>尾数</strong>，是一个纯小数</p>
+<p><strong>E</strong>：<strong>浮点的指数</strong>，是一个整数</p>
+<p><strong>R</strong>：<strong>基数</strong>，对于二进制计数值的机器是一个常数，一般为2，8或16</p>
+</blockquote>
+<p>一个机器浮点数由<strong>阶码</strong>和<strong>尾数</strong>及其<strong>符号位</strong>组成：</p>
+<p>持续更新ing&hellip;（第二章第40张）</p></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2021-05-12</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://clq0.top/computer_organization_and_architecture/" data-title="计算机组成与结构笔记" data-hashtags="Courses"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://clq0.top/computer_organization_and_architecture/" data-hashtag="Courses"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="Share on Reddit" data-sharer="reddit" data-url="https://clq0.top/computer_organization_and_architecture/"><i class="fab fa-reddit fa-fw"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://clq0.top/computer_organization_and_architecture/" data-title="计算机组成与结构笔记"><i class="fab fa-weibo fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/courses/">Courses</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/thinkphp%E5%AE%A1%E8%AE%A1%E5%85%A5%E9%97%A8/" class="prev" rel="prev" title="ThinkPHP审计入门"><i class="fas fa-angle-left fa-fw"></i>ThinkPHP审计入门</a>
+            <a href="/%E5%9B%9B%E5%8F%B6%E8%8D%89%E5%AE%89%E5%85%A8%E7%89%9B%E5%B9%B4ctf%E5%A4%A7%E8%B5%9B/" class="next" rel="next" title="四叶草安全牛年CTF大赛">四叶草安全牛年CTF大赛<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><a>本网站由</a><a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral" target="-blank"><img src="/upyun_logo2.png" width="4%" style="vertical-align:middle"></a><a>提供CDN加速/云存储服务</a></div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2020 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="http://clq0.top" target="_blank">Leon</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span><span class="icp-splitter">&nbsp;|&nbsp;</span><br class="icp-br"/>
+                    <span class="icp"><script type="text/javascript" src="https://s9.cnzz.com/z_stat.php?id=1278765080&web_id=1278765080"></script></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/valine/valine.min.css"><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script type="text/javascript" src="/lib/valine/Valine.min.js"></script><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":40},"comment":{"valine":{"appId":"saBpLNPwjiIGzpSf9QvvTLw3-9Nh9j0Va","appKey":"jU0L8JdQYxxwunKTXrmGV194","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@5.0.1/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"en","pageSize":10,"placeholder":"Your comment ...","recordIP":true,"visitor":true}},"cookieconsent":{"content":{"dismiss":"Got it!","link":"Learn more","message":"This website uses Cookies to improve your experience."},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"highlightTag":"em","lunrIndexURL":"/index.json","maxResultLength":10,"noResultsFound":"No results found","snippetLength":50,"type":"lunr"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

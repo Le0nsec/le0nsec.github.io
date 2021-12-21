@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>Golang开发端口扫描器一些常用技术 - Leon&#39;s Blog</title><meta name="Description" content="Leon&#39;s Blog-Keep learning web security"><meta property="og:title" content="Golang开发端口扫描器一些常用技术" />
+<meta property="og:description" content="记录了使用golang开发扫描器的一些常用技术" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://clq0.top/golang_scan_tech/" />
+<meta property="og:image" content="https://clq0.top/logo_.jpg"/>
+<meta property="article:published_time" content="2021-08-16T11:31:40+08:00" />
+<meta property="article:modified_time" content="2021-08-16T11:31:40+08:00" />
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://clq0.top/logo_.jpg"/>
+
+<meta name="twitter:title" content="Golang开发端口扫描器一些常用技术"/>
+<meta name="twitter:description" content="记录了使用golang开发扫描器的一些常用技术"/>
+<meta name="application-name" content="Leon&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Leon&#39;s Blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/logo.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://clq0.top/golang_scan_tech/" /><link rel="prev" href="https://clq0.top/ciscn2021_writeup/" /><link rel="next" href="https://clq0.top/commons_collections_analysis/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Golang开发端口扫描器一些常用技术",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/clq0.top\/golang_scan_tech\/"
+        },"genre": "posts","keywords": "Golang, Scanner","wordcount":  5862 ,
+        "url": "https:\/\/clq0.top\/golang_scan_tech\/","datePublished": "2021-08-16T11:31:40+08:00","dateModified": "2021-08-16T11:31:40+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Leon","logo": "https:\/\/clq0.top\/logo_.jpg"},"author": {
+                "@type": "Person",
+                "name": "Leon"
+            },"description": ""
+    }
+    </script></head>
+    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Leon&#39;s Blog"><span class="header-title-pre">❤</span>Leon&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/tags/"> Tags </a><a class="menu-item" href="/categories/"> Categories </a><a class="menu-item" href="/links/"> Links </a><a class="menu-item" href="/about/"> About </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Leon&#39;s Blog"><span class="header-title-pre">❤</span>Leon&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/tags/" title="">Tags</a><a class="menu-item" href="/categories/" title="">Categories</a><a class="menu-item" href="/links/" title="">Links</a><a class="menu-item" href="/about/" title="">About</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">Golang开发端口扫描器一些常用技术</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="http://clq0.top" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>Leon</a></span>&nbsp;<span class="post-category">included in <a href="/categories/notes/"><i class="far fa-folder fa-fw"></i>Notes</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-08-16">2021-08-16</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;5862 words&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;12 minutes&nbsp;<span id="/golang_scan_tech/" class="leancloud_visitors" data-flag-title="Golang开发端口扫描器一些常用技术">
+                        <i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;views
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#golang-简介">Golang 简介</a></li>
+    <li><a href="#并发技术">并发技术</a>
+      <ul>
+        <li><a href="#进程线程">进程/线程</a></li>
+        <li><a href="#并发并行">并发/并行</a></li>
+        <li><a href="#协程线程">协程/线程</a></li>
+        <li><a href="#goroutine">Goroutine</a></li>
+        <li><a href="#runtimegomaxprocs">runtime.GOMAXPROCS</a></li>
+        <li><a href="#channel">Channel</a></li>
+        <li><a href="#syncwaitgroup">sync.WaitGroup</a></li>
+      </ul>
+    </li>
+    <li><a href="#通信技术">通信技术</a>
+      <ul>
+        <li><a href="#常用函数">常用函数</a></li>
+        <li><a href="#一些示例">一些示例</a></li>
+      </ul>
+    </li>
+    <li><a href="#reference">Reference</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>记录了使用golang开发扫描器的一些常用技术</p>
+<figure><a class="lightgallery" href="https://gitee.com/leonsec/images/raw/master/go_11112231231.jpg" title="https://gitee.com/leonsec/images/raw/master/go_11112231231.jpg" data-thumbnail="https://gitee.com/leonsec/images/raw/master/go_11112231231.jpg" data-sub-html="<h2>搬砖的gopher</h2>">
+        <img
+            class="lazyload"
+            src="/svg/loading.min.svg"
+            data-src="https://gitee.com/leonsec/images/raw/master/go_11112231231.jpg"
+            data-srcset="https://gitee.com/leonsec/images/raw/master/go_11112231231.jpg, https://gitee.com/leonsec/images/raw/master/go_11112231231.jpg 1.5x, https://gitee.com/leonsec/images/raw/master/go_11112231231.jpg 2x"
+            data-sizes="auto"
+            alt="https://gitee.com/leonsec/images/raw/master/go_11112231231.jpg" />
+    </a><figcaption class="image-caption">搬砖的gopher</figcaption>
+    </figure>
+<h2 id="golang-简介">Golang 简介</h2>
+<p>Go语言（或 Golang）起源于 2007 年，并在 2009 年正式对外发布。Go 是非常年轻的一门语言，它的主要目标是“兼具 Python 等动态语言的开发速度和 C/C++ 等编译型语言的性能与安全性”。</p>
+<p>Go语言是编程语言设计的又一次尝试，是对类C语言的重大改进，它不但能让你访问底层操作系统，还提供了强大的网络编程和并发编程支持。</p>
+<p>Go语言的推出，旨在不损失应用程序性能的情况下降低代码的复杂性，具有“部署简单、并发性好、语言设计良好、执行性能好”等优势，目前国内诸多 IT 公司均已采用Go语言开发项目，其中包括 Docker、Go-Ethereum、Thrraform 和 Kubernetes。</p>
+<p>作为程序员，要开发出能充分利用硬件资源的应用程序是一件很难的事情。现代计算机都拥有多个核心，但是大部分编程语言都没有有效的工具让程序可以轻易利用这些资源。编程时需要写大量的线程同步代码来利用多个核，很容易导致错误。</p>
+<p>Go语言正是在多核和网络化的时代背景下诞生的原生支持并发的编程语言。Go语言从底层原生支持并发，无需第三方库，开发人员可以很轻松地在编写程序时决定怎么使用 CPU 资源。</p>
+<p>Go语言的并发是基于 <strong>goroutine</strong> 的，goroutine 类似于线程，但并非线程。可以将 goroutine 理解为一种虚拟线程。Go语言运行时会参与调度 goroutine，并将 goroutine 合理地分配到每个 CPU 中，最大限度地使用 CPU 性能。</p>
+<p>多个 goroutine 中，Go语言使用通道（<strong>channel</strong>）进行通信，通道是一种内置的数据结构，可以让用户在不同的 goroutine 之间同步发送具有类型的消息。这让编程模型更倾向于在 goroutine 之间发送消息，而不是让多个 goroutine 争夺同一个数据的使用权。</p>
+<h2 id="并发技术">并发技术</h2>
+<p>无论是扫描器还是各种高并发web服务，都少不了使用到并发技术，而 Golang 原生支持了这一特性，这也是 Golang 被广泛使用在各种高并发场景的原因。</p>
+<p>Go语言的并发机制运用起来非常简便，在启动并发的方式上直接添加了语言级的关键字就可以实现，和其他编程语言相比更加轻量。</p>
+<p>下面来介绍几个概念：</p>
+<h3 id="进程线程">进程/线程</h3>
+<p><strong>进程</strong>是程序在操作系统中的一次执行过程，系统进行资源分配和调度的一个独立单位。</p>
+<p><strong>线程</strong>是进程的一个执行实体，是 CPU 调度和分派的基本单位，它是比进程更小的能独立运行的基本单位。</p>
+<p>一个进程可以创建和撤销多个线程，同一个进程中的多个线程之间可以并发执行。</p>
+<h3 id="并发并行">并发/并行</h3>
+<p><strong>并发</strong>：把任务在不同的时间点交给处理器进行处理。在同一时间点，任务并不会同时运行。</p>
+<p><strong>并行</strong>：把每一个任务分配给每一个处理器独立完成。在同一时间点，任务一定是同时运行。</p>
+<p>并发与并行并不相同，并发主要由切换时间片来实现“同时”运行，并行则是直接利用多核实现多线程的运行，Go程序可以设置使用核心数，以发挥多核计算机的能力。</p>
+<h3 id="协程线程">协程/线程</h3>
+<p><strong>协程</strong>：独立的栈空间，共享堆空间，调度由用户自己控制，本质上有点类似于用户级线程，这些用户级线程的调度也是自己实现的。</p>
+<p><strong>线程</strong>：一个线程上可以跑多个协程，协程是轻量级的线程。</p>
+<p>关于协程和线程的具体区别，可以参考<a href="https://zhuanlan.zhihu.com/p/169426477" target="_blank" rel="noopener noreffer">线程和协程的区别的通俗说明</a>一文</p>
+<h3 id="goroutine">Goroutine</h3>
+<p><strong>Goroutine</strong> 是 Go语言中的轻量级线程实现，由 Go 运行时（runtime）管理。Go 程序会智能地将 goroutine 中的任务合理地分配给每个 CPU。</p>
+<p>Go 程序从 main 包的 main() 函数开始，在程序启动时，Go 程序就会为 main() 函数创建一个默认的 goroutine。</p>
+<p>Goroutine 的用法如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">//go 关键字放在方法调用前新建一个 goroutine 并执行方法体
+</span><span class="c1"></span>
+<span class="k">go</span> <span class="nf">GetThingDone</span><span class="p">(</span><span class="nx">param1</span><span class="p">,</span> <span class="nx">param2</span><span class="p">);</span>
+
+
+<span class="c1">//新建一个匿名方法并执行
+</span><span class="c1"></span>
+<span class="k">go</span> <span class="kd">func</span><span class="p">(</span><span class="nx">param1</span><span class="p">,</span> <span class="nx">param2</span><span class="p">)</span> <span class="p">{</span>
+
+<span class="p">}(</span><span class="nx">val1</span><span class="p">,</span> <span class="nx">val2</span><span class="p">)</span>
+
+
+<span class="c1">//直接新建一个 goroutine 并在 goroutine 中执行代码块
+</span><span class="c1"></span>
+<span class="k">go</span> <span class="p">{</span>
+    <span class="c1">//do someting...
+</span><span class="c1"></span><span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>注：</p>
+<ol>
+<li>使用 go 关键字创建 goroutine 时，被调用函数的返回值会被忽略</li>
+<li>如果需要在 goroutine 中返回数据，可以使用 channel 把数据从 goroutine 中作为返回值传出</li>
+<li>所有 goroutine 在 main() 函数结束时会一同结束。</li>
+</ol>
+<h3 id="runtimegomaxprocs">runtime.GOMAXPROCS</h3>
+<p>在 Go语言程序运行时（runtime）实现了一个小型的任务调度器。这套调度器的工作原理类似于操作系统调度线程，Go 程序调度器可以高效地将 CPU 资源分配给每一个任务。传统逻辑中，开发者需要维护线程池中线程与 CPU 核心数量的对应关系。同样的，Go 地中也可以通过 <code>runtime.GOMAXPROCS()</code> 函数做到，格式为：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">runtime</span><span class="p">.</span><span class="nf">GOMAXPROCS</span><span class="p">(</span><span class="nx">逻辑CPU数量</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>一般情况下，可以使用 <code>runtime.NumCPU()</code> 查询 CPU 数量，并使用 <code>runtime.GOMAXPROCS()</code> 函数进行设置，例如：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">runtime</span><span class="p">.</span><span class="nf">GOMAXPROCS</span><span class="p">(</span><span class="nx">runtime</span><span class="p">.</span><span class="nf">NumCPU</span><span class="p">())</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>Go 1.5 版本之前，默认使用的是单核心执行。从 Go 1.5 版本开始，默认执行上面语句以便让代码并发执行。</p>
+<h3 id="channel">Channel</h3>
+<p>一个 <strong>channel</strong> 是一个通信机制，它可以让一个 goroutine 通过它给另一个 goroutine 发送值信息。每个 channel 都有一个特殊的类型，也就是 channels 可发送数据的类型。</p>
+<p>Go语言提倡使用通信的方法代替共享内存，当一个资源需要在 goroutine 之间共享时，通道在 goroutine 之间架起了一个管道，并提供了确保同步交换数据的机制。声明通道时，需要指定将要被共享的数据的类型。可以通过通道共享内置类型、命名类型、结构类型和引用类型的值或者指针。</p>
+<p>在任何时候，同时只能有一个 goroutine 访问通道进行发送和获取数据。goroutine 间通过通道就可以通信，通道像一个传送带或者队列，总是遵循<strong>先入先出</strong>（First In First Out）的规则，保证收发数据的顺序。</p>
+<ul>
+<li>声明通道类型</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">通道变量</span> <span class="kd">chan</span> <span class="nx">通道类型</span>
+
+<span class="c1">//通道类型：通道内的数据类型。
+</span><span class="c1">//通道变量：保存通道的变量。
+</span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>创建通道</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">通道实例</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="nx">数据类型</span><span class="p">)</span>
+
+<span class="c1">//数据类型：通道内传输的元素类型。
+</span><span class="c1">//通道实例：通过make创建的通道句柄。
+</span><span class="c1"></span>
+<span class="nx">eg</span><span class="p">:</span>
+<span class="nx">ch1</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="kt">int</span><span class="p">)</span>               <span class="c1">// 创建一个整型类型的通道
+</span><span class="c1"></span><span class="nx">ch2</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="kd">interface</span><span class="p">{})</span>       <span class="c1">// 创建一个空接口类型的通道, 可以存放任意格式
+</span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>使用通道发送数据</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">通道变量</span> <span class="o">&lt;-</span> <span class="nx">值</span>
+
+<span class="c1">//通道变量：通过make创建好的通道实例。
+</span><span class="c1">//值：可以是变量、常量、表达式或者函数返回值等。值的类型必须与ch通道的元素类型一致。
+</span><span class="c1"></span>
+<span class="nx">eg</span><span class="p">:</span>
+<span class="c1">// 创建一个空接口通道
+</span><span class="c1"></span><span class="nx">ch</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="kd">interface</span><span class="p">{})</span>
+<span class="c1">// 将0放入通道中
+</span><span class="c1"></span><span class="nx">ch</span> <span class="o">&lt;-</span> <span class="mi">0</span>
+<span class="c1">// 将hello字符串放入通道中
+</span><span class="c1"></span><span class="nx">ch</span> <span class="o">&lt;-</span> <span class="s">&#34;hello&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>把数据往通道中发送时，如果接收方一直都没有接收，那么发送操作将持续阻塞直至数据被接收。</p>
+<ul>
+<li>使用通道接收数据</li>
+</ul>
+<ol>
+<li>阻塞接收数据</li>
+</ol>
+<p>阻塞模式接收数据时，将接收变量作为<code>&lt;-</code>操作符的左值，格式如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">data</span> <span class="o">:=</span> <span class="o">&lt;-</span><span class="nx">ch</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>执行该语句时将会阻塞，直到接收到数据并赋值给 data 变量。</p>
+<ol>
+<li>非阻塞接收数据</li>
+</ol>
+<p>使用非阻塞方式从通道接收数据时，语句不会发生阻塞，格式如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">data</span><span class="p">,</span> <span class="nx">ok</span> <span class="o">:=</span> <span class="o">&lt;-</span><span class="nx">ch</span>
+
+<span class="c1">//data：表示接收到的数据。未接收到数据时，data 为通道类型的零值。
+</span><span class="c1">//ok：表示是否接收到数据。
+</span></code></pre></td></tr></table>
+</div>
+</div><p>非阻塞的通道接收方法可能造成高的 CPU 占用，因此使用非常少。如果需要实现接收超时检测，可以配合 select 和计时器 channel 进行。</p>
+<ol>
+<li>接收任意数据，忽略接收的数据</li>
+</ol>
+<p>阻塞接收数据后，忽略从通道返回的数据，格式如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="o">&lt;-</span><span class="nx">ch</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>执行该语句时将会发生阻塞，直到接收到数据，但接收到的数据会被忽略。这个方式实际上只是通过通道在 goroutine 间阻塞收发实现并发同步。</p>
+<h3 id="syncwaitgroup">sync.WaitGroup</h3>
+<p>经常会看到以下代码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">main</span><span class="p">(){</span>
+    <span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="mi">100</span> <span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">{</span>
+        <span class="k">go</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="nx">time</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>为了等待所有 goroutine 运行完毕，不得不在程序的末尾使用<code>time.Sleep()</code> 来睡眠一段时间，等待其他线程充分运行，对于简单的代码这样做既方便也简单，但是遇到复杂的代码，无法估计运行时间时，就不能使用<code>time.Sleep</code>来等待所有 goroutine 运行完成了。</p>
+<p>可以考虑使用管道来完成上述操作：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">c</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="kt">bool</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+    <span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="mi">100</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="k">go</span> <span class="kd">func</span><span class="p">(</span><span class="nx">i</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span>
+            <span class="nx">c</span> <span class="o">&lt;-</span> <span class="kc">true</span>
+        <span class="p">}(</span><span class="nx">i</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="mi">100</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="o">&lt;-</span><span class="nx">c</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>但是管道被设计出来不仅仅只是在这里用作简单的同步处理，假设我们有十万甚至更多的<code>for</code>循环，需要申请同样数量大小的管道出来，对内存是不小的开销。</p>
+<p><code>sync.WaitGroup</code>可以方便的解决这种情况：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">wg</span> <span class="o">:=</span> <span class="nx">sync</span><span class="p">.</span><span class="nx">WaitGroup</span><span class="p">{}</span>
+    <span class="nx">wg</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+    <span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="mi">100</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="k">go</span> <span class="kd">func</span><span class="p">(</span><span class="nx">i</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span>
+            <span class="nx">wg</span><span class="p">.</span><span class="nf">Done</span><span class="p">()</span>
+        <span class="p">}(</span><span class="nx">i</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="nx">wg</span><span class="p">.</span><span class="nf">Wait</span><span class="p">()</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>官方文档对 WaitGroup 的描述是：<code>一个 WaitGroup 对象可以等待一组协程结束</code>。</p>
+<p>使用方法是：</p>
+<ol>
+<li>main协程通过调用 <code>wg.Add(delta int)</code> 设置worker协程的个数，然后创建worker协程；</li>
+<li>worker协程执行结束以后，都要调用 <code>wg.Done()</code>；</li>
+<li>main协程调用 <code>wg.Wait()</code> 且被阻塞，直到所有worker协程全部执行结束后返回。</li>
+</ol>
+<p>以端口扫描器中的代码片段为例：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">//限制goroutine数量
+</span><span class="c1"></span><span class="nx">ch</span> <span class="p">=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="kt">bool</span><span class="p">,</span> <span class="nx">goroutineNum</span><span class="p">)</span>
+
+<span class="kd">func</span> <span class="nf">run</span><span class="p">(){</span>
+    <span class="c1">//...
+</span><span class="c1"></span>    <span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">host</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">ipList</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">port</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">portList</span> <span class="p">{</span>
+            <span class="nx">ch</span> <span class="o">&lt;-</span> <span class="kc">true</span>
+            <span class="nx">wg</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">go</span> <span class="nf">scan</span><span class="p">(</span><span class="nx">host</span><span class="p">,</span> <span class="nx">port</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="nx">wg</span><span class="p">.</span><span class="nf">Wait</span><span class="p">()</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">scan</span><span class="p">(</span><span class="nx">host</span> <span class="kt">string</span><span class="p">,</span> <span class="nx">port</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">//...
+</span><span class="c1"></span>    <span class="o">&lt;-</span><span class="nx">ch</span>
+    <span class="nx">wg</span><span class="p">.</span><span class="nf">Done</span><span class="p">()</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="通信技术">通信技术</h2>
+<p>Golang 提供了官方库<code>net</code>为网络 I/O 提供了一个便携式接口，包括 TCP/IP，UDP，域名解析和 Unix 域套接字。</p>
+<p>端口扫描与主机存活探测主要用到tcp、udp、arp与icmp协议。</p>
+<h3 id="常用函数">常用函数</h3>
+<p><strong>func Dial</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">Dial</span><span class="p">(</span><span class="nx">network</span><span class="p">,</span> <span class="nx">address</span> <span class="kt">string</span><span class="p">)</span> <span class="p">(</span><span class="nx">Conn</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span>
+<span class="c1">//Dial 连接到指定网络上的地址。 
+</span><span class="c1"></span>
+<span class="nx">eg</span><span class="p">:</span>
+<span class="nf">Dial</span><span class="p">(</span><span class="s">&#34;tcp&#34;</span><span class="p">,</span> <span class="s">&#34;golang.org:http&#34;</span><span class="p">)</span>
+<span class="nf">Dial</span><span class="p">(</span><span class="s">&#34;tcp&#34;</span><span class="p">,</span> <span class="s">&#34;192.0.2.1:http&#34;</span><span class="p">)</span>
+<span class="nf">Dial</span><span class="p">(</span><span class="s">&#34;tcp&#34;</span><span class="p">,</span> <span class="s">&#34;198.51.100.1:80&#34;</span><span class="p">)</span>
+<span class="nf">Dial</span><span class="p">(</span><span class="s">&#34;ip4:1&#34;</span><span class="p">,</span> <span class="s">&#34;192.0.2.1&#34;</span><span class="p">)</span>
+<span class="nf">Dial</span><span class="p">(</span><span class="s">&#34;ip6:ipv6-icmp&#34;</span><span class="p">,</span> <span class="s">&#34;2001:db8::1&#34;</span><span class="p">)</span>
+<span class="nf">Dial</span><span class="p">(</span><span class="s">&#34;ip6:58&#34;</span><span class="p">,</span> <span class="s">&#34;fe80::1%lo0&#34;</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>已知网络是“tcp”，“tcp4”（仅IPv4），“tcp6”（仅IPv6），“udp”，“udp4”（仅IPv4），“udp6”（仅IPv6），“ip” ，“ip4”（仅限IPv4），“ip6”（仅限IPv6），“unix”，“unixgram”和“unixpacket”。</p>
+<ul>
+<li>对于TCP和UDP网络，地址格式为“主机：端口”。主机必须是文字IP地址或可以解析为IP地址的主机名。该端口必须是文字端口号或服务名称。如果主机是文字IPv6地址，则必须将其放在方括号中，如“2001：db8 :: 1：80”或“fe80 :: 1％zone：80”中所示。</li>
+<li>对于IP网络，网络必须是“ip”，“ip4”或“ip6”，后跟冒号和文字协议号或协议名称，地址格式为“主机”。主机必须是文字IP地址或带区域的文字IPv6地址。它取决于每个操作系统操作系统的行为如何使用不知名的协议编号，例如“0”或“255”。</li>
+<li>对于Unix网络，地址必须是文件系统路径。</li>
+</ul>
+<p><strong>func DialTimeout</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">DialTimeout</span><span class="p">(</span><span class="nx">network</span><span class="p">,</span> <span class="nx">address</span> <span class="kt">string</span><span class="p">,</span> <span class="nx">timeout</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Duration</span><span class="p">)</span> <span class="p">(</span><span class="nx">Conn</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span>
+
+<span class="c1">//DialTimeout与Dial相同，但需要超时。 
+</span></code></pre></td></tr></table>
+</div>
+</div><p>在扫描器中，仅是为了探测端口或主机是否开放，所以需要设置连接超时，否则可能出现阻塞影响正常扫描的情况。</p>
+<p>示例代码为：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">//tcp探测端口是否开放
+</span><span class="c1"></span><span class="nx">conn</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">net</span><span class="p">.</span><span class="nf">DialTimeout</span><span class="p">(</span><span class="s">&#34;tcp&#34;</span><span class="p">,</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;%s:%d&#34;</span><span class="p">,</span> <span class="nx">host</span><span class="p">,</span> <span class="nx">port</span><span class="p">),</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Duration</span><span class="p">(</span><span class="nx">timeout</span><span class="p">)</span><span class="o">*</span><span class="nx">time</span><span class="p">.</span><span class="nx">Millisecond</span><span class="p">)</span>
+
+<span class="c1">//icmp探测主机是否存活
+</span><span class="c1"></span><span class="nx">conn</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">net</span><span class="p">.</span><span class="nf">Dial</span><span class="p">(</span><span class="s">&#34;ip:icmp&#34;</span><span class="p">,</span> <span class="nx">host</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>func ParseCIDR</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">ParseCIDR</span><span class="p">(</span><span class="nx">s</span> <span class="kt">string</span><span class="p">)</span> <span class="p">(</span><span class="nx">IP</span><span class="p">,</span> <span class="o">*</span><span class="nx">IPNet</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span>
+
+<span class="c1">//ParseCIDR将s解析为CIDR表示法IP地址和前缀长度，如RFC 4632和RFC 4291中定义的“192.0.2.0/24”或“2001：db8 :: / 32”。
+</span></code></pre></td></tr></table>
+</div>
+</div><p>它返回由IP和前缀长度暗示的IP地址和网络。例如，ParseCIDR（“192.0.2.1/24”）返回IP地址192.0.2.1和网络192.0.2.0/24。</p>
+<p><strong>func ParseIP</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">ParseIP</span><span class="p">(</span><span class="nx">s</span> <span class="kt">string</span><span class="p">)</span> <span class="nx">IP</span>
+
+<span class="c1">//ParseIP将s解析为IP地址，并返回结果。
+</span></code></pre></td></tr></table>
+</div>
+</div><p>字符串s可以采用点分十进制（“192.0.2.1”）或IPv6（“2001：db8 :: 68”）形式。如果s不是IP地址的有效文本表示，则ParseIP返回nil。</p>
+<p><strong>func (*IPConn) SetReadDeadline</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="p">(</span><span class="nx">c</span> <span class="o">*</span><span class="nx">IPConn</span><span class="p">)</span> <span class="nf">SetReadDeadline</span><span class="p">(</span><span class="nx">t</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Time</span><span class="p">)</span> <span class="kt">error</span>
+
+<span class="c1">//SetReadDeadline设置从流中读取信息的超时时间。
+</span></code></pre></td></tr></table>
+</div>
+</div><p>在扫描器中需要获取开放端口的banner时，常常需要从流中读取返回信息，若不设置超时，将会出现不可预估的阻塞情况。</p>
+<h3 id="一些示例">一些示例</h3>
+<ul>
+<li><strong>解析IP</strong></li>
+</ul>
+<p>对扫描器而言，用户传入的参数可以为<code>192.168.1.1-255</code>、<code>192.168.1.1/24</code>等，所以需要对ip进行解析：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="k">if</span> <span class="nx">net</span><span class="p">.</span><span class="nf">ParseIP</span><span class="p">(</span><span class="nx">item</span><span class="p">)</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+    <span class="nx">ipList</span> <span class="p">=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">ipList</span><span class="p">,</span> <span class="nx">item</span><span class="p">)</span>
+<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="nx">ip</span><span class="p">,</span> <span class="nx">network</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">net</span><span class="p">.</span><span class="nf">ParseCIDR</span><span class="p">(</span><span class="nx">item</span><span class="p">);</span> <span class="nx">err</span> <span class="o">==</span> <span class="kc">nil</span> <span class="p">{</span>
+    <span class="nx">n</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">network</span><span class="p">.</span><span class="nx">Mask</span><span class="p">.</span><span class="nf">Size</span><span class="p">()</span>
+    <span class="nx">ipSub</span> <span class="o">:=</span> <span class="nx">strings</span><span class="p">.</span><span class="nf">Split</span><span class="p">(</span><span class="nx">ip</span><span class="p">.</span><span class="nf">Mask</span><span class="p">(</span><span class="nx">network</span><span class="p">.</span><span class="nx">Mask</span><span class="p">).</span><span class="nf">String</span><span class="p">(),</span> <span class="s">&#34;.&#34;</span><span class="p">)</span>
+    <span class="c1">//...
+</span><span class="c1"></span><span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="nx">strings</span><span class="p">.</span><span class="nf">Contains</span><span class="p">(</span><span class="nx">item</span><span class="p">,</span> <span class="s">&#34;-&#34;</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">//...
+</span><span class="c1"></span><span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">ipList</span><span class="p">,</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;%s is not an IP Address or CIDR Network&#34;</span><span class="p">,</span> <span class="nx">item</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>利用<code>net.ParseIP</code>与<code>net.ParseCIDR</code>判断传入的是否为CIDR模式的地址，利用<code>network.Mask.Size()</code>可以获取<code>192.168.1.1/24</code>中的掩码大小值<code>24</code>。</p>
+<ul>
+<li><strong>tcp连接并读取banner</strong></li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">msg</span> <span class="p">[</span><span class="mi">128</span><span class="p">]</span><span class="kt">byte</span>
+<span class="kd">var</span> <span class="nx">str</span> <span class="kt">string</span>
+
+<span class="nx">conn</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">net</span><span class="p">.</span><span class="nf">DialTimeout</span><span class="p">(</span><span class="s">&#34;tcp&#34;</span><span class="p">,</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;%s:%d&#34;</span><span class="p">,</span> <span class="nx">host</span><span class="p">,</span> <span class="nx">port</span><span class="p">),</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Duration</span><span class="p">(</span><span class="nx">timeout</span><span class="p">)</span><span class="o">*</span><span class="nx">time</span><span class="p">.</span><span class="nx">Millisecond</span><span class="p">)</span>
+<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="kc">false</span><span class="p">,</span> <span class="nx">str</span>
+<span class="p">}</span>
+<span class="nx">conn</span><span class="p">.</span><span class="nf">SetReadDeadline</span><span class="p">((</span><span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">Add</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nx">Millisecond</span> <span class="o">*</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Duration</span><span class="p">(</span><span class="nx">timeout</span><span class="p">))))</span>
+<span class="nx">_</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">conn</span><span class="p">.</span><span class="nf">Read</span><span class="p">(</span><span class="nx">msg</span><span class="p">[</span><span class="mi">0</span><span class="p">:])</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>使用<code>SetReadDeadline</code>设置读取超时，将128字节的返回信息读入<code>msg [128]byte</code>中</p>
+<ul>
+<li><strong>ping功能实现</strong></li>
+</ul>
+<p>使用<code>icmp</code>协议连接实现ping功能的核心代码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">ping</span><span class="p">(</span><span class="nx">host</span> <span class="kt">string</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">conn</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">net</span><span class="p">.</span><span class="nf">Dial</span><span class="p">(</span><span class="s">&#34;ip:icmp&#34;</span><span class="p">,</span> <span class="nx">host</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">())</span>
+        <span class="nx">os</span><span class="p">.</span><span class="nf">Exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="k">defer</span> <span class="nx">conn</span><span class="p">.</span><span class="nf">Close</span><span class="p">()</span>
+
+    <span class="kd">var</span> <span class="nx">msg</span> <span class="p">[</span><span class="mi">512</span><span class="p">]</span><span class="kt">byte</span>
+    <span class="nx">msg</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">=</span> <span class="mi">8</span>
+    <span class="nx">msg</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="p">=</span> <span class="mi">0</span>
+    <span class="nx">msg</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="p">=</span> <span class="mi">0</span>
+    <span class="nx">msg</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="p">=</span> <span class="mi">0</span>
+    <span class="nx">msg</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="p">=</span> <span class="mi">0</span>
+    <span class="nx">msg</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="p">=</span> <span class="mi">13</span>
+    <span class="nx">msg</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="p">=</span> <span class="mi">0</span>
+    <span class="nx">msg</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span> <span class="p">=</span> <span class="mi">37</span>
+    <span class="nx">msg</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span> <span class="p">=</span> <span class="mi">99</span>
+    <span class="nx">len</span> <span class="o">:=</span> <span class="mi">9</span>
+    <span class="nx">check</span> <span class="o">:=</span> <span class="nf">checkSum</span><span class="p">(</span><span class="nx">msg</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="nx">len</span><span class="p">])</span>
+    <span class="nx">msg</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="p">=</span> <span class="nb">byte</span><span class="p">(</span><span class="nx">check</span> <span class="o">&gt;&gt;</span> <span class="mi">8</span><span class="p">)</span>
+    <span class="nx">msg</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="p">=</span> <span class="nb">byte</span><span class="p">(</span><span class="nx">check</span> <span class="o">&amp;</span> <span class="mh">0xff</span><span class="p">)</span>
+    <span class="c1">//fmt.Println(msg[0:len])
+</span><span class="c1"></span>    <span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="mi">2</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="nx">_</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">conn</span><span class="p">.</span><span class="nf">Write</span><span class="p">(</span><span class="nx">msg</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="nx">len</span><span class="p">])</span>
+        <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+            <span class="k">continue</span>
+        <span class="p">}</span>
+
+        <span class="nx">conn</span><span class="p">.</span><span class="nf">SetReadDeadline</span><span class="p">((</span><span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">Add</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nx">Millisecond</span> <span class="o">*</span> <span class="mi">400</span><span class="p">)))</span>
+        <span class="nx">_</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">conn</span><span class="p">.</span><span class="nf">Read</span><span class="p">(</span><span class="nx">msg</span><span class="p">[</span><span class="mi">0</span><span class="p">:])</span>
+        <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+            <span class="k">continue</span>
+        <span class="p">}</span>
+        <span class="c1">//fmt.Println(msg[0 : 20+len])
+</span><span class="c1"></span>        <span class="c1">//fmt.Println(&#34;Got response&#34;)
+</span><span class="c1"></span>        <span class="k">if</span> <span class="nx">msg</span><span class="p">[</span><span class="mi">20</span><span class="o">+</span><span class="mi">5</span><span class="p">]</span> <span class="o">==</span> <span class="mi">13</span> <span class="o">&amp;&amp;</span> <span class="nx">msg</span><span class="p">[</span><span class="mi">20</span><span class="o">+</span><span class="mi">7</span><span class="p">]</span> <span class="o">==</span> <span class="mi">37</span> <span class="o">&amp;&amp;</span> <span class="nx">msg</span><span class="p">[</span><span class="mi">20</span><span class="o">+</span><span class="mi">8</span><span class="p">]</span> <span class="o">==</span> <span class="mi">99</span> <span class="p">{</span>
+            <span class="c1">//host is up
+</span><span class="c1"></span>            <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%s open\n&#34;</span><span class="p">,</span> <span class="nf">ljust</span><span class="p">(</span><span class="nx">host</span><span class="p">,</span> <span class="mi">21</span><span class="p">))</span>
+            <span class="nx">openHostList</span> <span class="p">=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">openHostList</span><span class="p">,</span> <span class="nx">host</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">checkSum</span><span class="p">(</span><span class="nx">msg</span> <span class="p">[]</span><span class="kt">byte</span><span class="p">)</span> <span class="kt">uint16</span> <span class="p">{</span>
+    <span class="nx">sum</span> <span class="o">:=</span> <span class="mi">0</span>
+
+    <span class="nx">len</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="nx">msg</span><span class="p">)</span>
+    <span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="nx">len</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="o">+=</span> <span class="mi">2</span> <span class="p">{</span>
+        <span class="nx">sum</span> <span class="o">+=</span> <span class="nb">int</span><span class="p">(</span><span class="nx">msg</span><span class="p">[</span><span class="nx">i</span><span class="p">])</span><span class="o">*</span><span class="mi">256</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="nx">msg</span><span class="p">[</span><span class="nx">i</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="nx">len</span><span class="o">%</span><span class="mi">2</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">{</span>
+        <span class="nx">sum</span> <span class="o">+=</span> <span class="nb">int</span><span class="p">(</span><span class="nx">msg</span><span class="p">[</span><span class="nx">len</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="mi">256</span>
+    <span class="p">}</span>
+
+    <span class="nx">sum</span> <span class="p">=</span> <span class="p">(</span><span class="nx">sum</span> <span class="o">&gt;&gt;</span> <span class="mi">16</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="nx">sum</span> <span class="o">&amp;</span> <span class="mh">0xffff</span><span class="p">)</span>
+    <span class="nx">sum</span> <span class="o">+=</span> <span class="p">(</span><span class="nx">sum</span> <span class="o">&gt;&gt;</span> <span class="mi">16</span><span class="p">)</span>
+    <span class="kd">var</span> <span class="nx">answer</span> <span class="kt">uint16</span> <span class="p">=</span> <span class="nb">uint16</span><span class="p">(^</span><span class="nx">sum</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nx">answer</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li><strong>广播ARP识别主机厂家信息</strong></li>
+</ul>
+<p>思路：</p>
+<ul>
+<li>
+<p>向内网广播ARP Request</p>
+</li>
+<li>
+<p>监听并抓取ARP Response包，记录IP和Mac地址</p>
+</li>
+<li>
+<p>发活跃IP发送MDNS和NBNS包，并监听和解析Hostname</p>
+</li>
+<li>
+<p>根据Mac地址计算出厂家信息</p>
+</li>
+</ul>
+<p>ARP（Address Resolution Protocol），地址解析协议，是根据IP地址获取物理地址的一个TCP/IP协议。主机发送信息时将包含目标IP地址的ARP请求广播到网络上的所有主机，并接收返回消息，以此确定目标的物理地址。</p>
+<p>当我们要向以太网中另一台主机发送IP数据时，本地会根据目的主机的IP地址在<strong>ARP高速缓存</strong>中查询相应的以太网地址，ARP高速缓存是主机维护的一个IP地址到相应以太网地址的<strong>映射表</strong>。如果查询失败，ARP会广播一个询问（op字段为1）目的主机硬件地址的报文，等待目标主机的响应。</p>
+<p>因为ARP高速缓存有时效性，读取到目标主机的硬件地址后，最好发送一个ICMP包验证目标是否在线。当然也可以选择不从高速缓存里读取数据，而是直接并发发送arp包，等待在线主机回应ARP报文。</p>
+<p><strong>发送arp请求后，只需要开启一个arp的监听goruntime，所有有返回arp response包的，就是内网在线的host，接受到一个arp的response后，就可以发起mdns和nbns包并等待hostname的返回。</strong></p>
+<p><strong>mDNS</strong>：往对方的<strong>5353</strong>端口和<strong>01:00:5E:00:00:FB</strong>的mac地址发送UDP的mdns（Multicast DNS）包，如果目标系统支持，回返回host name。详细协议介绍和报文格式可以查看<a href="https://en.wikipedia.org/wiki/Multicast_DNS" target="_blank" rel="noopener noreffer">维基百科</a>的介绍。</p>
+<p><strong>NBNS</strong>：也是一个种常见的查看目标机器hostname的一种协议，和mDNS一样，传输层也是UDP，端口是在137。</p>
+<p>我们可以通过目标主机的硬件地址，获取到设备的生产厂家信息，这样的话，即使遇到防御比较好的系统，我们无法获取到hostname，也能从厂家信息里获取一定的信息量。</p>
+<p>厂家对应manuf指纹：https://code.wireshark.org/review/gitweb?p=wireshark.git;a=blob_plain;f=manuf</p>
+<h2 id="reference">Reference</h2>
+<p><a href="http://c.biancheng.net/golang/intro/">http://c.biancheng.net/golang/intro/</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/169426477">https://zhuanlan.zhihu.com/p/169426477</a></p>
+<p><a href="https://cloud.tencent.com/developer/section/1143223">https://cloud.tencent.com/developer/section/1143223</a></p>
+<p><a href="https://github.com/timest/goscan/issues/1">https://github.com/timest/goscan/issues/1</a></p></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2021-08-16</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://clq0.top/golang_scan_tech/" data-title="Golang开发端口扫描器一些常用技术" data-hashtags="Golang,Scanner"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://clq0.top/golang_scan_tech/" data-hashtag="Golang"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="Share on Reddit" data-sharer="reddit" data-url="https://clq0.top/golang_scan_tech/"><i class="fab fa-reddit fa-fw"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://clq0.top/golang_scan_tech/" data-title="Golang开发端口扫描器一些常用技术"><i class="fab fa-weibo fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/golang/">Golang</a>,&nbsp;<a href="/tags/scanner/">Scanner</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/ciscn2021_writeup/" class="prev" rel="prev" title="CISCN2021 Writeup"><i class="fas fa-angle-left fa-fw"></i>CISCN2021 Writeup</a>
+            <a href="/commons_collections_analysis/" class="next" rel="next" title="Apache Commons Collections反序列化链分析">Apache Commons Collections反序列化链分析<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><a>本网站由</a><a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral" target="-blank"><img src="/upyun_logo2.png" width="4%" style="vertical-align:middle"></a><a>提供CDN加速/云存储服务</a></div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2020 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="http://clq0.top" target="_blank">Leon</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span><span class="icp-splitter">&nbsp;|&nbsp;</span><br class="icp-br"/>
+                    <span class="icp"><script type="text/javascript" src="https://s9.cnzz.com/z_stat.php?id=1278765080&web_id=1278765080"></script></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/valine/valine.min.css"><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script type="text/javascript" src="/lib/valine/Valine.min.js"></script><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":40},"comment":{"valine":{"appId":"saBpLNPwjiIGzpSf9QvvTLw3-9Nh9j0Va","appKey":"jU0L8JdQYxxwunKTXrmGV194","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@5.0.1/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"en","pageSize":10,"placeholder":"Your comment ...","recordIP":true,"visitor":true}},"cookieconsent":{"content":{"dismiss":"Got it!","link":"Learn more","message":"This website uses Cookies to improve your experience."},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"highlightTag":"em","lunrIndexURL":"/index.json","maxResultLength":10,"noResultsFound":"No results found","snippetLength":50,"type":"lunr"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

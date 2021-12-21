@@ -1,0 +1,15 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>Bypass - Tag - Leon&#39;s Blog</title>
+        <link>https://clq0.top/tags/bypass/</link>
+        <description>Bypass - Tag - Leon&#39;s Blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>leonsec@163.com (Leon)</managingEditor>
+            <webMaster>leonsec@163.com (Leon)</webMaster><lastBuildDate>Fri, 29 Jan 2021 17:04:52 &#43;0800</lastBuildDate><atom:link href="https://clq0.top/tags/bypass/" rel="self" type="application/rss+xml" /><item>
+    <title>Bypass Disable_function (PHP)</title>
+    <link>https://clq0.top/bypass-disable_function-php/</link>
+    <pubDate>Fri, 29 Jan 2021 17:04:52 &#43;0800</pubDate>
+    <author>Author</author>
+    <guid>https://clq0.top/bypass-disable_function-php/</guid>
+    <description><![CDATA[<p>花了点时间，总结了一下遇到的所有能够Bypass disable_function的方法，持续更新ing</p>]]></description>
+</item></channel>
+</rss>

