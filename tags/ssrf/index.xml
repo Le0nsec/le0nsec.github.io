@@ -1,29 +1,29 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
         <title>SSRF - Tag - Leon&#39;s Blog</title>
-        <link>https://clq0.top/tags/ssrf/</link>
+        <link>https://blog.h4ck.fun/tags/ssrf/</link>
         <description>SSRF - Tag - Leon&#39;s Blog</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>leonsec@163.com (Leon)</managingEditor>
-            <webMaster>leonsec@163.com (Leon)</webMaster><lastBuildDate>Wed, 08 Sep 2021 19:05:13 &#43;0800</lastBuildDate><atom:link href="https://clq0.top/tags/ssrf/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>leonsec@163.com (Leon)</webMaster><lastBuildDate>Wed, 08 Sep 2021 19:05:13 &#43;0800</lastBuildDate><atom:link href="https://blog.h4ck.fun/tags/ssrf/" rel="self" type="application/rss+xml" /><item>
     <title>[WMCTF2021]Scientific_adfree_networking</title>
-    <link>https://clq0.top/scientific_adfree_networking/</link>
+    <link>https://blog.h4ck.fun/scientific_adfree_networking/</link>
     <pubDate>Wed, 08 Sep 2021 19:05:13 &#43;0800</pubDate>
     <author>Author</author>
-    <guid>https://clq0.top/scientific_adfree_networking/</guid>
+    <guid>https://blog.h4ck.fun/scientific_adfree_networking/</guid>
     <description><![CDATA[<p>WMCTF2021失之交臂的一道题，蛮有意思的</p>]]></description>
 </item><item>
     <title>四叶草安全牛年CTF大赛</title>
-    <link>https://clq0.top/%E5%9B%9B%E5%8F%B6%E8%8D%89%E5%AE%89%E5%85%A8%E7%89%9B%E5%B9%B4ctf%E5%A4%A7%E8%B5%9B/</link>
+    <link>https://blog.h4ck.fun/%E5%9B%9B%E5%8F%B6%E8%8D%89%E5%AE%89%E5%85%A8%E7%89%9B%E5%B9%B4ctf%E5%A4%A7%E8%B5%9B/</link>
     <pubDate>Sat, 27 Feb 2021 20:34:38 &#43;0800</pubDate>
     <author>Author</author>
-    <guid>https://clq0.top/%E5%9B%9B%E5%8F%B6%E8%8D%89%E5%AE%89%E5%85%A8%E7%89%9B%E5%B9%B4ctf%E5%A4%A7%E8%B5%9B/</guid>
+    <guid>https://blog.h4ck.fun/%E5%9B%9B%E5%8F%B6%E8%8D%89%E5%AE%89%E5%85%A8%E7%89%9B%E5%B9%B4ctf%E5%A4%A7%E8%B5%9B/</guid>
     <description><![CDATA[<p>寒假没怎么打CTF，后面的AntCTF、D^3CTF刚好在开学的时间段，四叶草安全举办的小比赛，都是简单题，随便看看</p>]]></description>
 </item><item>
     <title>DozerCTF2020 Writeup</title>
-    <link>https://clq0.top/dozerctf2020-writeup/</link>
+    <link>https://blog.h4ck.fun/dozerctf2020-writeup/</link>
     <pubDate>Mon, 15 Jun 2020 20:24:46 &#43;0800</pubDate>
     <author>Author</author>
-    <guid>https://clq0.top/dozerctf2020-writeup/</guid>
+    <guid>https://blog.h4ck.fun/dozerctf2020-writeup/</guid>
     <description><![CDATA[<p>这个比赛赛题质量都很高，且偏向实战多一点，上来就是域渗透属实令人肾透，xxe打ssrf最后差一点做出来比较可惜</p>]]></description>
 </item></channel>
 </rss>

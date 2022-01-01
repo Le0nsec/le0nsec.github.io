@@ -1,15 +1,15 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
         <title>Tools - Category - Leon&#39;s Blog</title>
-        <link>https://clq0.top/categories/tools/</link>
+        <link>https://blog.h4ck.fun/categories/tools/</link>
         <description>Tools - Category - Leon&#39;s Blog</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>leonsec@163.com (Leon)</managingEditor>
-            <webMaster>leonsec@163.com (Leon)</webMaster><lastBuildDate>Thu, 02 Dec 2021 23:19:52 &#43;0800</lastBuildDate><atom:link href="https://clq0.top/categories/tools/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>leonsec@163.com (Leon)</webMaster><lastBuildDate>Thu, 02 Dec 2021 23:19:52 &#43;0800</lastBuildDate><atom:link href="https://blog.h4ck.fun/categories/tools/" rel="self" type="application/rss+xml" /><item>
     <title>企业微信自动健康上报脚本小记</title>
-    <link>https://clq0.top/qiye_weixin_health_check/</link>
+    <link>https://blog.h4ck.fun/qiye_weixin_health_check/</link>
     <pubDate>Thu, 02 Dec 2021 23:19:52 &#43;0800</pubDate>
     <author>Author</author>
-    <guid>https://clq0.top/qiye_weixin_health_check/</guid>
+    <guid>https://blog.h4ck.fun/qiye_weixin_health_check/</guid>
     <description><![CDATA[<p>编写企业微信自动健康上报脚本小记</p>]]></description>
 </item></channel>
 </rss>

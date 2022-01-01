@@ -1,22 +1,22 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
         <title>Penetration - Tag - Leon&#39;s Blog</title>
-        <link>https://clq0.top/tags/penetration/</link>
+        <link>https://blog.h4ck.fun/tags/penetration/</link>
         <description>Penetration - Tag - Leon&#39;s Blog</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>leonsec@163.com (Leon)</managingEditor>
-            <webMaster>leonsec@163.com (Leon)</webMaster><lastBuildDate>Sun, 12 Jul 2020 15:29:46 &#43;0800</lastBuildDate><atom:link href="https://clq0.top/tags/penetration/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>leonsec@163.com (Leon)</webMaster><lastBuildDate>Sun, 12 Jul 2020 15:29:46 &#43;0800</lastBuildDate><atom:link href="https://blog.h4ck.fun/tags/penetration/" rel="self" type="application/rss+xml" /><item>
     <title>HTB Traceback Writeup</title>
-    <link>https://clq0.top/htb-traceback-writeup/</link>
+    <link>https://blog.h4ck.fun/htb-traceback-writeup/</link>
     <pubDate>Sun, 12 Jul 2020 15:29:46 &#43;0800</pubDate>
     <author>Author</author>
-    <guid>https://clq0.top/htb-traceback-writeup/</guid>
+    <guid>https://blog.h4ck.fun/htb-traceback-writeup/</guid>
     <description><![CDATA[<p>HTB Traceback 靶机渗透笔记</p>]]></description>
 </item><item>
     <title>HTB Blunder Writeup</title>
-    <link>https://clq0.top/htb-blunder-writeup/</link>
+    <link>https://blog.h4ck.fun/htb-blunder-writeup/</link>
     <pubDate>Fri, 10 Jul 2020 15:22:34 &#43;0800</pubDate>
     <author>Author</author>
-    <guid>https://clq0.top/htb-blunder-writeup/</guid>
+    <guid>https://blog.h4ck.fun/htb-blunder-writeup/</guid>
     <description><![CDATA[<p>HTB Blunder 靶机渗透笔记</p>]]></description>
 </item></channel>
 </rss>

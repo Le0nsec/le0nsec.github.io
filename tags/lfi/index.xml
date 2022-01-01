@@ -1,29 +1,29 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
         <title>LFI - Tag - Leon&#39;s Blog</title>
-        <link>https://clq0.top/tags/lfi/</link>
+        <link>https://blog.h4ck.fun/tags/lfi/</link>
         <description>LFI - Tag - Leon&#39;s Blog</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>leonsec@163.com (Leon)</managingEditor>
-            <webMaster>leonsec@163.com (Leon)</webMaster><lastBuildDate>Tue, 18 May 2021 23:55:52 &#43;0800</lastBuildDate><atom:link href="https://clq0.top/tags/lfi/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>leonsec@163.com (Leon)</webMaster><lastBuildDate>Tue, 18 May 2021 23:55:52 &#43;0800</lastBuildDate><atom:link href="https://blog.h4ck.fun/tags/lfi/" rel="self" type="application/rss+xml" /><item>
     <title>CISCN2021 Writeup</title>
-    <link>https://clq0.top/ciscn2021_writeup/</link>
+    <link>https://blog.h4ck.fun/ciscn2021_writeup/</link>
     <pubDate>Tue, 18 May 2021 23:55:52 &#43;0800</pubDate>
     <author>Author</author>
-    <guid>https://clq0.top/ciscn2021_writeup/</guid>
+    <guid>https://blog.h4ck.fun/ciscn2021_writeup/</guid>
     <description><![CDATA[<p>CISCN2021 Web 部分Writeup</p>]]></description>
 </item><item>
     <title>ThinkPHP审计入门</title>
-    <link>https://clq0.top/thinkphp%E5%AE%A1%E8%AE%A1%E5%85%A5%E9%97%A8/</link>
+    <link>https://blog.h4ck.fun/thinkphp%E5%AE%A1%E8%AE%A1%E5%85%A5%E9%97%A8/</link>
     <pubDate>Mon, 01 Feb 2021 23:44:03 &#43;0800</pubDate>
     <author>Author</author>
-    <guid>https://clq0.top/thinkphp%E5%AE%A1%E8%AE%A1%E5%85%A5%E9%97%A8/</guid>
+    <guid>https://blog.h4ck.fun/thinkphp%E5%AE%A1%E8%AE%A1%E5%85%A5%E9%97%A8/</guid>
     <description><![CDATA[<p>跟一下<a href="https://github.com/Mochazz/ThinkPHP-Vuln" target="_blank" rel="noopener noreffer">Mochazz/ThinkPHP-Vuln: 关于ThinkPHP框架的历史漏洞分析集合</a>，记点笔记</p>]]></description>
 </item><item>
     <title>WHUCTF2020 Writeup</title>
-    <link>https://clq0.top/whuctf2020-writeup/</link>
+    <link>https://blog.h4ck.fun/whuctf2020-writeup/</link>
     <pubDate>Wed, 27 May 2020 14:10:31 &#43;0800</pubDate>
     <author>Author</author>
-    <guid>https://clq0.top/whuctf2020-writeup/</guid>
+    <guid>https://blog.h4ck.fun/whuctf2020-writeup/</guid>
     <description><![CDATA[<p>WHUCTF2020做题笔记</p>]]></description>
 </item></channel>
 </rss>

