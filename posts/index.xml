@@ -4,7 +4,14 @@
         <link>https://blog.h4ck.fun/posts/</link>
         <description>All Posts | Leon&#39;s Blog</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>leonsec@163.com (Leon)</managingEditor>
-            <webMaster>leonsec@163.com (Leon)</webMaster><lastBuildDate>Thu, 02 Dec 2021 23:19:52 &#43;0800</lastBuildDate><atom:link href="https://blog.h4ck.fun/posts/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>leonsec@163.com (Leon)</webMaster><lastBuildDate>Sat, 01 Jan 2022 20:35:24 &#43;0800</lastBuildDate><atom:link href="https://blog.h4ck.fun/posts/" rel="self" type="application/rss+xml" /><item>
+    <title>关于2021，关于我</title>
+    <link>https://blog.h4ck.fun/summary_about_2021/</link>
+    <pubDate>Sat, 01 Jan 2022 20:35:24 &#43;0800</pubDate>
+    <author>Author</author>
+    <guid>https://blog.h4ck.fun/summary_about_2021/</guid>
+    <description><![CDATA[<p>留个坑，复习ing，回家飞机上写&hellip;</p>]]></description>
+</item><item>
     <title>企业微信自动健康上报脚本小记</title>
     <link>https://blog.h4ck.fun/qiye_weixin_health_check/</link>
     <pubDate>Thu, 02 Dec 2021 23:19:52 &#43;0800</pubDate>
@@ -67,12 +74,5 @@
     <author>Author</author>
     <guid>https://blog.h4ck.fun/computer_organization_and_architecture/</guid>
     <description><![CDATA[<p>零零碎碎的计算机组成与结构学习笔记</p>]]></description>
-</item><item>
-    <title>ThinkPHP审计入门</title>
-    <link>https://blog.h4ck.fun/thinkphp%E5%AE%A1%E8%AE%A1%E5%85%A5%E9%97%A8/</link>
-    <pubDate>Mon, 01 Feb 2021 23:44:03 &#43;0800</pubDate>
-    <author>Author</author>
-    <guid>https://blog.h4ck.fun/thinkphp%E5%AE%A1%E8%AE%A1%E5%85%A5%E9%97%A8/</guid>
-    <description><![CDATA[<p>跟一下<a href="https://github.com/Mochazz/ThinkPHP-Vuln" target="_blank" rel="noopener noreffer">Mochazz/ThinkPHP-Vuln: 关于ThinkPHP框架的历史漏洞分析集合</a>，记点笔记</p>]]></description>
 </item></channel>
 </rss>
