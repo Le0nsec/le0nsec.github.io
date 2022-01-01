@@ -6,10 +6,10 @@
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>leonsec@163.com (Leon)</managingEditor>
             <webMaster>leonsec@163.com (Leon)</webMaster><lastBuildDate>Tue, 18 May 2021 23:55:52 &#43;0800</lastBuildDate><atom:link href="https://blog.h4ck.fun/tags/lfi/" rel="self" type="application/rss+xml" /><item>
     <title>CISCN2021 Writeup</title>
-    <link>https://blog.h4ck.fun/ciscn2021_writeup/</link>
+    <link>https://blog.h4ck.fun/ciscn2021-writeup/</link>
     <pubDate>Tue, 18 May 2021 23:55:52 &#43;0800</pubDate>
     <author>Author</author>
-    <guid>https://blog.h4ck.fun/ciscn2021_writeup/</guid>
+    <guid>https://blog.h4ck.fun/ciscn2021-writeup/</guid>
     <description><![CDATA[<p>CISCN2021 Web 部分Writeup</p>]]></description>
 </item><item>
     <title>ThinkPHP审计入门</title>

