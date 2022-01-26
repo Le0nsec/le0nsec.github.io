@@ -3,8 +3,8 @@
         <title>XSS - Tag - Leon&#39;s Blog</title>
         <link>https://blog.h4ck.fun/tags/xss/</link>
         <description>XSS - Tag - Leon&#39;s Blog</description>
-        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>leonsec@163.com (Leon)</managingEditor>
-            <webMaster>leonsec@163.com (Leon)</webMaster><lastBuildDate>Wed, 08 Sep 2021 19:05:13 &#43;0800</lastBuildDate><atom:link href="https://blog.h4ck.fun/tags/xss/" rel="self" type="application/rss+xml" /><item>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>leonsec@h4ck.fun (Leon)</managingEditor>
+            <webMaster>leonsec@h4ck.fun (Leon)</webMaster><lastBuildDate>Wed, 08 Sep 2021 19:05:13 &#43;0800</lastBuildDate><atom:link href="https://blog.h4ck.fun/tags/xss/" rel="self" type="application/rss+xml" /><item>
     <title>[WMCTF2021]Scientific_adfree_networking</title>
     <link>https://blog.h4ck.fun/scientific_adfree_networking/</link>
     <pubDate>Wed, 08 Sep 2021 19:05:13 &#43;0800</pubDate>

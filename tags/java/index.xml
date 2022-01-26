@@ -3,8 +3,8 @@
         <title>Java - Tag - Leon&#39;s Blog</title>
         <link>https://blog.h4ck.fun/tags/java/</link>
         <description>Java - Tag - Leon&#39;s Blog</description>
-        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>leonsec@163.com (Leon)</managingEditor>
-            <webMaster>leonsec@163.com (Leon)</webMaster><lastBuildDate>Thu, 09 Sep 2021 00:38:38 &#43;0800</lastBuildDate><atom:link href="https://blog.h4ck.fun/tags/java/" rel="self" type="application/rss+xml" /><item>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>leonsec@h4ck.fun (Leon)</managingEditor>
+            <webMaster>leonsec@h4ck.fun (Leon)</webMaster><lastBuildDate>Thu, 09 Sep 2021 00:38:38 &#43;0800</lastBuildDate><atom:link href="https://blog.h4ck.fun/tags/java/" rel="self" type="application/rss+xml" /><item>
     <title>Shiro-721漏洞分析(CVE-2019-12422)</title>
     <link>https://blog.h4ck.fun/shiro_721_analysis/</link>
     <pubDate>Thu, 09 Sep 2021 00:38:38 &#43;0800</pubDate>
