@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>Golang安全问题分享 - Leon&#39;s Blog</title><meta name="Description" content="Leon&#39;s Blog-Keep learning web security"><meta property="og:title" content="Golang安全问题分享" />
+<meta property="og:description" content="一些Golang的安全问题。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://blog.h4ck.fun/golang_vuln_share/" /><meta property="og:image" content="https://blog.h4ck.fun/logo_.jpg"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-11-30T23:52:50+08:00" />
+<meta property="article:modified_time" content="2022-02-25T23:52:50+08:00" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://blog.h4ck.fun/logo_.jpg"/>
+
+<meta name="twitter:title" content="Golang安全问题分享"/>
+<meta name="twitter:description" content="一些Golang的安全问题。"/>
+<meta name="application-name" content="Leon&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Leon&#39;s Blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/logo.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://blog.h4ck.fun/golang_vuln_share/" /><link rel="prev" href="https://blog.h4ck.fun/shiro_721_analysis/" /><link rel="next" href="https://blog.h4ck.fun/qiye_weixin_health_check/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Golang安全问题分享",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/blog.h4ck.fun\/golang_vuln_share\/"
+        },"genre": "posts","keywords": "Golang","wordcount":  5511 ,
+        "url": "https:\/\/blog.h4ck.fun\/golang_vuln_share\/","datePublished": "2021-11-30T23:52:50+08:00","dateModified": "2022-02-25T23:52:50+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Leon","logo": "https:\/\/blog.h4ck.fun\/logo_.jpg"},"author": {
+                "@type": "Person",
+                "name": "Leon"
+            },"description": ""
+    }
+    </script></head>
+    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Leon&#39;s Blog"><span class="header-title-pre">❤</span>Leon&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/tags/"> Tags </a><a class="menu-item" href="/categories/"> Categories </a><a class="menu-item" href="/links/"> Links </a><a class="menu-item" href="/about/"> About </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Leon&#39;s Blog"><span class="header-title-pre">❤</span>Leon&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/tags/" title="">Tags</a><a class="menu-item" href="/categories/" title="">Categories</a><a class="menu-item" href="/links/" title="">Links</a><a class="menu-item" href="/about/" title="">About</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">Golang安全问题分享</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://blog.h4ck.fun/" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>Leon</a></span>&nbsp;<span class="post-category">included in <a href="/categories/notes/"><i class="far fa-folder fa-fw"></i>Notes</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-11-30">2021-11-30</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;5511 words&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;11 minutes&nbsp;<span id="/golang_vuln_share/" class="leancloud_visitors" data-flag-title="Golang安全问题分享">
+                        <i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;views
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#整数溢出">整数溢出</a></li>
+    <li><a href="#伪随机数">伪随机数</a></li>
+    <li><a href="#windows-非可信目录路径查找">Windows 非可信目录路径查找</a></li>
+    <li><a href="#ssti">SSTI</a></li>
+    <li><a href="#net">net</a>
+      <ul>
+        <li><a href="#crlf注入">CRLF注入</a></li>
+        <li><a href="#header-crlf注入">header CRLF注入</a></li>
+        <li><a href="#ip前导0解析问题">ip前导0解析问题</a></li>
+        <li><a href="#fileserver对range头错误解析">FileServer对Range头错误解析</a></li>
+        <li><a href="#http2拒绝服务漏洞">HTTP/2拒绝服务漏洞</a></li>
+        <li><a href="#http_proxy安全问题">HTTP_PROXY安全问题</a></li>
+        <li><a href="#smtp注入">SMTP注入</a></li>
+        <li><a href="#readrequest栈溢出">ReadRequest栈溢出</a></li>
+        <li><a href="#cgifcgi-xss漏洞">CGI/FCGI XSS漏洞</a></li>
+      </ul>
+    </li>
+    <li><a href="#reference">Reference</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>一些Golang的安全问题。</p>
+<h2 id="前言">前言</h2>
+<p>Golang 是一门强类型的语言，在代码中不使用 cgo 的情况下默认使用静态编译，在编译过程中就能杜绝许多安全问题，因此 Golang 会出现的一些安全问题经常是因为依赖库中的issues和开发者自身操作不当。本文将分享几个 Golang 开发中容易忽视的安全问题。</p>
+<h2 id="整数溢出">整数溢出</h2>
+<p>无符号整型的溢出：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="kd">var</span> <span class="nx">a1</span> <span class="kt">uint16</span> <span class="p">=</span> <span class="mi">65535</span>
+	<span class="kd">var</span> <span class="nx">b1</span> <span class="kt">uint16</span> <span class="p">=</span> <span class="mi">1</span>
+	<span class="kd">var</span> <span class="nx">sum1</span> <span class="p">=</span> <span class="nx">a1</span> <span class="o">+</span> <span class="nx">b1</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">reflect</span><span class="p">.</span><span class="nf">TypeOf</span><span class="p">(</span><span class="nx">sum1</span><span class="p">))</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">sum1</span><span class="p">)</span>
+	<span class="c1">//uint16
+</span><span class="c1"></span>	<span class="c1">//0
+</span><span class="c1"></span><span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>如果开发者定义时直接赋值一个大小已经溢出的数，编译器会编译不通过</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20210901172926828.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20210901172926828.png, https://gitee.com/leonsec/images/raw/master/image-20210901172926828.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20210901172926828.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20210901172926828.png"
+        title="image-20210901172926828" /></p>
+<p>有符号数的溢出也是一样：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="kd">var</span> <span class="nx">a2</span> <span class="kt">int8</span> <span class="p">=</span> <span class="mi">127</span>
+	<span class="kd">var</span> <span class="nx">b2</span> <span class="kt">int8</span> <span class="p">=</span> <span class="mi">1</span>
+	<span class="kd">var</span> <span class="nx">sum2</span> <span class="kt">int8</span> <span class="p">=</span> <span class="nx">a2</span> <span class="o">+</span> <span class="nx">b2</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">reflect</span><span class="p">.</span><span class="nf">TypeOf</span><span class="p">(</span><span class="nx">sum2</span><span class="p">))</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">sum2</span><span class="p">)</span>
+	<span class="c1">//int8
+</span><span class="c1"></span>	<span class="c1">//-128
+</span><span class="c1"></span><span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>可以看到对127加1超出了int8的范围，翻转为了-128</p>
+<p>在<code>$GOROOT/src/math/const.go</code>文件可以看到对范围的定义</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20210901174316176.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20210901174316176.png, https://gitee.com/leonsec/images/raw/master/image-20210901174316176.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20210901174316176.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20210901174316176.png"
+        title="image-20210901174316176" /></p>
+<p>在类型转换中，也会出现较大整型向较小整型转换的截断问题，Golang 是一种强类型语言，但是 Golang 提供了类型强制转换的功能，来跳过该限制</p>
+<p>如：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="kd">var</span> <span class="nx">a3</span> <span class="kt">int16</span> <span class="p">=</span> <span class="mi">256</span>
+	<span class="kd">var</span> <span class="nx">b3</span> <span class="p">=</span> <span class="nb">int8</span><span class="p">(</span><span class="nx">a3</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">b3</span><span class="p">)</span>
+	<span class="c1">//0
+</span><span class="c1"></span><span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>旧版本的<code>kubectl</code>命令行中出现了一个<code>strconv.Atoi</code>导致的截断问题。当我们传入port参数的对应字符串后,容器启动的端口这一参数会将经Atoi处理后的字符串进行int32的类型转换。由于64位系统的int是int64类型。转int32的话会出现明显截断：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">v</span> <span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">strconv</span><span class="p">.</span><span class="nf">Atoi</span><span class="p">(</span><span class="s">&#34;4294967377&#34;</span><span class="p">)</span>
+<span class="nx">s</span>  <span class="o">:=</span> <span class="nb">int32</span><span class="p">(</span><span class="nx">v</span><span class="p">)</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">s</span><span class="p">)</span>
+<span class="c1">// 81
+</span></code></pre></td></tr></table>
+</div>
+</div><p>这样就有可能导致81端口的服务启动，或者被停止。</p>
+<p>小结：</p>
+<p>溢出问题一般会出现在开发者对数进行加减乘除操作等其他转换操作，如果开发者没有注意该整数定义的类型，对其操作超过了范围，就会出现无法预料的bug或者是安全漏洞</p>
+<h2 id="伪随机数">伪随机数</h2>
+<p>伪随机数，是使用一个确定性的算法计算出来的似乎是随机的数序，因此伪随机数实际上并不随机，只要用于计算的种子值相同，计算出来的伪随机数就相同，所以正常使用中开发者一般会使用当前时间作为种子值，但是仍然存在被猜测爆破的风险</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">rand</span><span class="p">.</span><span class="nf">Int</span><span class="p">())</span>
+<span class="p">}</span>
+
+<span class="c1">//5577006791947779410
+</span><span class="c1"></span>
+<span class="c1">//https://play.golang.org/ =&gt; 5577006791947779410
+</span></code></pre></td></tr></table>
+</div>
+</div><p>我们在https://golang.google.cn/pkg/math/rand/#Seed可以看到，Golang 官方库<code>math/rand</code>生成种子值默认为1，如果用户不指定种子值，则默认使用1作为种子</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20210902103330673.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20210902103330673.png, https://gitee.com/leonsec/images/raw/master/image-20210902103330673.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20210902103330673.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20210902103330673.png"
+        title="image-20210902103330673" /></p>
+<p>如果开发者使用的种子值信息泄漏了，也会被恶意攻击者利用导致一些安全问题，例如gin框架中开发者使用伪随机数作为cookie的key值，如果种子值被泄漏，则会导致攻击者本地生成cookie，越权攻击</p>
+<p>小结：</p>
+<p>在开发中使用伪随机数时应注意种子值的修改，如果我们的应用对安全性要求比较高，需要使用真随机数的话，可以使用<code>crypto/rand</code> 包中的方法</p>
+<h2 id="windows-非可信目录路径查找">Windows 非可信目录路径查找</h2>
+<blockquote>
+<p>CVE-2021-3115</p>
+</blockquote>
+<p>该漏洞是由日本安全研究人员RyotaK发现的，属于命令注入漏洞。漏洞产生的根本原因是用户运行go get命令来提取库时编译过程的工作原理造成的。</p>
+<p>在Windows 命令窗口输入netstat，Windows就会在当前目录中搜索netstat.exe、netstat.bat或其他netstat.*可执行文件，这些搜索到的文件会优先执行，如果当前目录中不存在 netstat 相关的可执行文件，那么Windows shell就会查找 netstat 系统工具，该系统工具位于 Windows <code>%PATH%</code> 变量中。</p>
+<p>为了保持一致性，Golang 二进制文件在Unix 系统中效仿了Unix 规则，在Windows 系统中效仿了Windows 规则。也就是说，运行下面的命令在Unix系统和Windows 系统中会产生不同的行为：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">out</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">exec</span><span class="p">.</span><span class="nf">Command</span><span class="p">(</span><span class="s">&#34;go&#34;</span><span class="p">,</span> <span class="s">&#34;version&#34;</span><span class="p">).</span><span class="nf">CombinedOutput</span><span class="p">()</span> 
+</code></pre></td></tr></table>
+</div>
+</div><p>在Windows 系统中，本地的Go二进制文件优先级高，而Unix 系统中会首先搜索$PATH变量来确认其可信位置中是否存在 Go 二进制文件。</p>
+<p>这种优先本地、非可信目录的方法也在Go helper和编译器中实现了，比如为调用C语言代码生成Go包的工具：cgo。</p>
+<p>Cgo在Windows系统中编译C代码时，Golang可执行文件首先会在非可信的本地目录中搜索GCC编译器。Cgo运行的go命令会包含包资源。因此，攻击者可以利用cgo来启动恶意的gcc.exe程序。</p>
+<h2 id="ssti">SSTI</h2>
+<p>Golang的<code>html/template</code>包提供模板渲染的功能，当源码中出现用户可控且直接拼接渲染时会出现模板注入的漏洞，轻则造成信息泄漏，严重的可能会出现rce等</p>
+<p>一个demo：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;encoding/base64&#34;</span>
+	<span class="s">&#34;fmt&#34;</span>
+	<span class="s">&#34;html/template&#34;</span>
+	<span class="s">&#34;io/ioutil&#34;</span>
+	<span class="s">&#34;net/http&#34;</span>
+<span class="p">)</span>
+
+<span class="kd">type</span> <span class="nx">User</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">ID</span>       <span class="kt">int</span>
+	<span class="nx">Email</span>    <span class="kt">string</span>
+	<span class="nx">Password</span> <span class="kt">string</span>
+	<span class="nx">Image</span>    <span class="kt">string</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">ShowImg</span><span class="p">(</span><span class="nx">img</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">string</span> <span class="p">{</span>
+	<span class="nx">b</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">ioutil</span><span class="p">.</span><span class="nf">ReadFile</span><span class="p">(</span><span class="nx">img</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Print</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="nx">imgb64</span> <span class="o">:=</span> <span class="nx">base64</span><span class="p">.</span><span class="nx">StdEncoding</span><span class="p">.</span><span class="nf">EncodeToString</span><span class="p">(</span><span class="nx">b</span><span class="p">)</span>
+	<span class="k">return</span> <span class="nx">imgb64</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="kd">var</span> <span class="nx">u</span> <span class="p">=</span> <span class="o">&amp;</span><span class="nx">User</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="s">&#34;test@gmail.com&#34;</span><span class="p">,</span> <span class="s">&#34;test#123&#34;</span><span class="p">,</span> <span class="s">&#34;test.jpg&#34;</span><span class="p">}</span>
+
+	<span class="nx">http</span><span class="p">.</span><span class="nf">HandleFunc</span><span class="p">(</span><span class="s">&#34;/&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">w</span> <span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span> <span class="nx">r</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span> <span class="p">{</span>
+		<span class="kd">var</span> <span class="nx">tmpl</span> <span class="p">=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">`
+</span><span class="s">&lt;html&gt;
+</span><span class="s">&lt;head&gt;
+</span><span class="s">&lt;title&gt;SSTI&lt;/title&gt;
+</span><span class="s">&lt;/head&gt;
+</span><span class="s">&lt;h1&gt;SSTI Research&lt;/h1&gt;
+</span><span class="s">&lt;h2&gt;No search results for %s&lt;/h2&gt;
+</span><span class="s">&lt;h2&gt; Hi </span><span class="cp">{{</span><span class="w"> </span><span class="na">.Email</span><span class="w"> </span><span class="cp">}}</span><span class="s">&lt;h2&gt;
+</span><span class="s">&lt;img src=&#34;data:image/png;base64,</span><span class="cp">{{</span><span class="nx">showimg</span><span class="w"> </span><span class="na">.Image</span><span class="cp">}}</span><span class="s">&#34;/&gt;
+</span><span class="s">&lt;/html&gt;`</span><span class="p">,</span> <span class="nx">r</span><span class="p">.</span><span class="nx">URL</span><span class="p">.</span><span class="nf">Query</span><span class="p">()[</span><span class="s">&#34;q&#34;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+
+		<span class="nx">t</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">template</span><span class="p">.</span><span class="nf">New</span><span class="p">(</span><span class="s">&#34;page&#34;</span><span class="p">).</span><span class="nf">Funcs</span><span class="p">(</span><span class="nx">template</span><span class="p">.</span><span class="nx">FuncMap</span><span class="p">{</span><span class="s">&#34;showimg&#34;</span><span class="p">:</span> <span class="nx">ShowImg</span><span class="p">}).</span><span class="nf">Parse</span><span class="p">(</span><span class="nx">tmpl</span><span class="p">)</span>
+
+		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+			<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+		<span class="p">}</span>
+
+		<span class="nx">t</span><span class="p">.</span><span class="nf">Execute</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">u</span><span class="p">)</span>
+	<span class="p">})</span>
+	<span class="nx">http</span><span class="p">.</span><span class="nf">ListenAndServe</span><span class="p">(</span><span class="s">&#34;:10000&#34;</span><span class="p">,</span> <span class="kc">nil</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>这里我实现了一个函数<code>func ShowImg(img string)</code>用于动态展示图片，并且模板渲染的参数直接拼接且用户可控，所以这里会造成任意文件读取漏洞，所以开发时要注意自定义的渲染函数可能存在被利用的情况</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20210923120912802.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20210923120912802.png, https://gitee.com/leonsec/images/raw/master/image-20210923120912802.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20210923120912802.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20210923120912802.png"
+        title="image-20210923120912802" /></p>
+<p>我们还可以利用<code>{{.}}</code>来泄漏信息：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20210923120851226.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20210923120851226.png, https://gitee.com/leonsec/images/raw/master/image-20210923120851226.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20210923120851226.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20210923120851226.png"
+        title="image-20210923120851226" /></p>
+<p>除了这些，当存在SSTI时，我们还可以进行XSS：</p>
+<p>参考：https://blog.takemyhand.xyz/2020/05/ssti-breaking-gos-template-engine-to.html</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html">{{define &#34;T1&#34;}}<span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span><span class="nx">alert</span><span class="p">(</span><span class="mi">1</span><span class="p">)&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>{{end}} {{template &#34;T1&#34;}}
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20210923121521542.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20210923121521542.png, https://gitee.com/leonsec/images/raw/master/image-20210923121521542.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20210923121521542.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20210923121521542.png"
+        title="image-20210923121521542" /></p>
+<h2 id="net">net</h2>
+<p>在官方issues中，<code>net</code>相关库的安全问题比较多，这里找几个典型的在开发中容易忽视的安全问题介绍</p>
+<h3 id="crlf注入">CRLF注入</h3>
+<blockquote>
+<p>CVE-2019-9741</p>
+</blockquote>
+<p>issues: <a href="https://github.com/golang/go/issues/30794" target="_blank" rel="noopener noreffer">https://github.com/golang/go/issues/30794</a></p>
+<p>测试代码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">//go version go1.11.5
+</span><span class="c1"></span><span class="kn">package</span> <span class="nx">main</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+        <span class="s">&#34;fmt&#34;</span>
+        <span class="s">&#34;net/http&#34;</span>
+<span class="p">)</span>
+
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">client</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">http</span><span class="p">.</span><span class="nx">Client</span><span class="p">{}</span>
+        <span class="nx">host</span> <span class="o">:=</span> <span class="s">&#34;172.17.0.1:20000?a=1 HTTP/1.1\r\nX-injected: header\r\nTEST: 123&#34;</span>
+        <span class="c1">// host := &#34;127.0.0.1&#34;
+</span><span class="c1"></span>        <span class="nx">url</span> <span class="o">:=</span> <span class="s">&#34;http://&#34;</span> <span class="o">+</span> <span class="nx">host</span> <span class="o">+</span> <span class="s">&#34;:8080/test/?test=a&#34;</span>
+        <span class="nx">request</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">http</span><span class="p">.</span><span class="nf">NewRequest</span><span class="p">(</span><span class="s">&#34;GET&#34;</span><span class="p">,</span> <span class="nx">url</span><span class="p">,</span> <span class="kc">nil</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+                <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">())</span>
+        <span class="p">}</span>
+        <span class="nx">resp</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">client</span><span class="p">.</span><span class="nf">Do</span><span class="p">(</span><span class="nx">request</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+                <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">())</span>
+        <span class="p">}</span>
+        <span class="nx">resp</span><span class="p">.</span><span class="nx">Body</span><span class="p">.</span><span class="nf">Close</span><span class="p">()</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>监听接收结果：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="err">$ nc -lvnp 20000
+</span><span class="err">Listening on 0.0.0.0 20000
+</span><span class="err">Connection received on 172.17.0.2 48140
+</span><span class="err"></span><span class="nf">GET</span> <span class="nn">/?a=1</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="n">X-injected</span><span class="o">:</span> <span class="l">header</span>
+<span class="n">TEST</span><span class="o">:</span> <span class="l">123:8080/test/?test=a HTTP/1.1</span>
+<span class="n">Host</span><span class="o">:</span> <span class="l">172.17.0.1:20000</span>
+<span class="n">User-Agent</span><span class="o">:</span> <span class="l">Go-http-client/1.1</span>
+<span class="n">Accept-Encoding</span><span class="o">:</span> <span class="l">gzip</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>可以发现我们利用<code>\r\n</code>换行成功控制注入到header字段，我们可以利用此攻击内网中的redis、memcached等应用</p>
+<p>这个漏洞只在特定版本存在，开发时注意版本即可</p>
+<h3 id="header-crlf注入">header CRLF注入</h3>
+<p>issues: <a href="https://github.com/golang/go/issues/47711" target="_blank" rel="noopener noreffer">https://github.com/golang/go/issues/47711</a></p>
+<p>碰巧注意到最近有人在issues提交了header中允许换行符的安全问题，golang官方给其添加上了<code>security</code>标签，但是实际上我觉得在实战中几乎不会出现header头用户可控的情况，来看看demo：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">ts</span> <span class="o">:=</span> <span class="nx">httptest</span><span class="p">.</span><span class="nf">NewServer</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nf">HandlerFunc</span><span class="p">(</span><span class="kd">func</span><span class="p">(</span><span class="nx">w</span> <span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span> <span class="nx">r</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">w</span><span class="p">.</span><span class="nf">Header</span><span class="p">().</span><span class="nf">Set</span><span class="p">(</span><span class="s">&#34;Foo&#34;</span><span class="p">,</span> <span class="s">&#34;Bar&#34;</span><span class="p">)</span>
+		<span class="nx">w</span><span class="p">.</span><span class="nf">Header</span><span class="p">().</span><span class="nf">Set</span><span class="p">(</span><span class="s">&#34;Xxx: xxxx\nSmuggle&#34;</span><span class="p">,</span> <span class="s">&#34;smuggleval&#34;</span><span class="p">)</span>
+	<span class="p">}))</span>
+	<span class="nx">res</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">http</span><span class="p">.</span><span class="nf">Get</span><span class="p">(</span><span class="nx">ts</span><span class="p">.</span><span class="nx">URL</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">log</span><span class="p">.</span><span class="nf">Fatal</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="nx">res</span><span class="p">.</span><span class="nf">Write</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Stdout</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%v&#34;</span><span class="p">,</span> <span class="nx">res</span><span class="p">.</span><span class="nx">Header</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="c1">// HTTP/1.1 200 OK
+</span><span class="c1">// Date: Thu, 02 Sep 2021 09:07:13 GMT
+</span><span class="c1">// Foo: Bar
+</span><span class="c1">// Smuggle: smuggleval
+</span><span class="c1">// Xxx: xxxx
+</span><span class="c1">// Content-Length: 0
+</span><span class="c1"></span>
+<span class="c1">// map[Content-Length:[0] Date:[Thu, 02 Sep 2021 09:07:13 GMT] Foo:[Bar] Smuggle:[smuggleval] Xxx:[xxxx]]
+</span></code></pre></td></tr></table>
+</div>
+</div><p>提交者给了一个示例，使用两个换行导致其余的header变成body部分，再加上构造的xss payload，可以逃逸header到body触发xss</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">http</span><span class="p">.</span><span class="nf">HandleFunc</span><span class="p">(</span><span class="s">&#34;/&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">w</span> <span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span> <span class="nx">r</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">headerName</span> <span class="o">:=</span> <span class="nx">r</span><span class="p">.</span><span class="nx">URL</span><span class="p">.</span><span class="nf">Query</span><span class="p">().</span><span class="nf">Get</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">)</span>
+		<span class="nx">headerValue</span> <span class="o">:=</span> <span class="nx">r</span><span class="p">.</span><span class="nx">URL</span><span class="p">.</span><span class="nf">Query</span><span class="p">().</span><span class="nf">Get</span><span class="p">(</span><span class="s">&#34;value&#34;</span><span class="p">)</span>
+		<span class="nx">w</span><span class="p">.</span><span class="nf">Header</span><span class="p">().</span><span class="nf">Set</span><span class="p">(</span><span class="nx">headerName</span><span class="p">,</span> <span class="nx">headerValue</span><span class="p">)</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintf</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="s">&#34;Hello World&#34;</span><span class="p">)</span>
+	<span class="p">})</span>
+
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;Starting server at port 3000\n&#34;</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">http</span><span class="p">.</span><span class="nf">ListenAndServe</span><span class="p">(</span><span class="s">&#34;:3000&#34;</span><span class="p">,</span> <span class="kc">nil</span><span class="p">);</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">log</span><span class="p">.</span><span class="nf">Fatal</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">//http://localhost:3000/?name=%0a%0a%3Chtml%3E%3Cscript%3Ealert(%27have%20fun%27)%3C/script%3Easd&amp;value=a%0aasd
+</span></code></pre></td></tr></table>
+</div>
+</div><p>官方的修复方案是给header加了过滤：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20210914095103952.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20210914095103952.png, https://gitee.com/leonsec/images/raw/master/image-20210914095103952.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20210914095103952.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20210914095103952.png"
+        title="image-20210914095103952" /></p>
+<h3 id="ip前导0解析问题">ip前导0解析问题</h3>
+<blockquote>
+<p>CVE-2021-29923</p>
+</blockquote>
+<p>issues: <a href="https://github.com/golang/go/issues/30999" target="_blank" rel="noopener noreffer">https://github.com/golang/go/issues/30999</a></p>
+<p>影响版本：Golang &lt; 1.17</p>
+<p>近日，研究人员在DEF CON大会介绍了Go中的net模块安全漏洞。漏洞CVE编号为CVE-2021-29923，漏洞产生的原因是net处理混合格式的IP地址方式上存在问题，即当数字IPv4地址中以0开头时会触发漏洞。</p>
+<p>在net库中，所有IP地址开头的0都会被移除和丢弃。根据IETF的原始说明，如果IPv4地址的前缀有0，那么可以理解为是八进制。但是Golang的net模块忽略了这一点，并将其作为十进制数来处理。</p>
+<p>因此，如果开发者使用net库来验证IP地址是否属于某个特定的范围，比如访问控制列表ACL中的IP列表，结果可能就会出现错误。</p>
+<p>我们先来看看ping程序对含有前导0的ip解析：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">$ ping -c <span class="m">4</span> 0177.0.0.1
+PING 0177.0.0.1 <span class="o">(</span>127.0.0.1<span class="o">)</span>: <span class="m">56</span> data bytes
+<span class="m">64</span> bytes from 127.0.0.1: <span class="nv">icmp_seq</span><span class="o">=</span><span class="m">0</span> <span class="nv">ttl</span><span class="o">=</span><span class="m">64</span> <span class="nv">time</span><span class="o">=</span>0.084 ms
+<span class="m">64</span> bytes from 127.0.0.1: <span class="nv">icmp_seq</span><span class="o">=</span><span class="m">1</span> <span class="nv">ttl</span><span class="o">=</span><span class="m">64</span> <span class="nv">time</span><span class="o">=</span>0.106 ms
+<span class="m">64</span> bytes from 127.0.0.1: <span class="nv">icmp_seq</span><span class="o">=</span><span class="m">2</span> <span class="nv">ttl</span><span class="o">=</span><span class="m">64</span> <span class="nv">time</span><span class="o">=</span>0.158 ms
+<span class="m">64</span> bytes from 127.0.0.1: <span class="nv">icmp_seq</span><span class="o">=</span><span class="m">3</span> <span class="nv">ttl</span><span class="o">=</span><span class="m">64</span> <span class="nv">time</span><span class="o">=</span>0.081 ms
+
+--- 0177.0.0.1 ping statistics ---
+<span class="m">4</span> packets transmitted, <span class="m">4</span> packets received, 0.0% packet loss
+round-trip min/avg/max/stddev <span class="o">=</span> 0.081/0.107/0.158/0.031 ms
+</code></pre></td></tr></table>
+</div>
+</div><p>可以发现，ping程序将0177作为八进制，转换为十进制后就是127，所以最后解析为127.0.0.1</p>
+<p>再来看 Golang 对含有前导0的处理demo：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="kd">var</span> <span class="nx">input</span> <span class="p">=</span> <span class="s">&#34;0127.0.0.1&#34;</span>
+	<span class="kd">var</span> <span class="nx">addr</span> <span class="p">=</span> <span class="nx">net</span><span class="p">.</span><span class="nf">ParseIP</span><span class="p">(</span><span class="nx">input</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;input: &#34;</span><span class="p">,</span> <span class="nx">input</span><span class="p">,</span> <span class="s">&#34; result: &#34;</span><span class="p">,</span> <span class="nx">addr</span><span class="p">)</span>
+
+	<span class="nx">client</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">http</span><span class="p">.</span><span class="nx">Client</span><span class="p">{</span>
+		<span class="nx">Timeout</span><span class="p">:</span> <span class="mi">2</span> <span class="o">*</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">,</span>
+	<span class="p">}</span>
+
+	<span class="nx">req</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">http</span><span class="p">.</span><span class="nf">NewRequest</span><span class="p">(</span><span class="s">&#34;GET&#34;</span><span class="p">,</span> <span class="s">&#34;http://&#34;</span><span class="o">+</span><span class="nx">input</span><span class="p">,</span> <span class="kc">nil</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="nx">resp</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">client</span><span class="p">.</span><span class="nf">Do</span><span class="p">(</span><span class="nx">req</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">())</span>
+	<span class="p">}</span>
+	<span class="k">defer</span> <span class="nx">resp</span><span class="p">.</span><span class="nx">Body</span><span class="p">.</span><span class="nf">Close</span><span class="p">()</span>
+<span class="p">}</span>
+
+<span class="c1">// input:  0127.0.0.1  result:  127.0.0.1
+</span><span class="c1"></span>
+<span class="c1">// Get &#34;http://0127.0.0.1&#34;: dial tcp 127.0.0.1:80: connect: connection refused
+</span></code></pre></td></tr></table>
+</div>
+</div><p>Goalng net/http库中对于ip解析或请求的函数都受其影响</p>
+<p>可以看到，Golang对前导0直接采用忽略的方式，而ping将其当作八进制处理，这样的差异可能会导致一些安全问题</p>
+<h3 id="fileserver对range头错误解析">FileServer对Range头错误解析</h3>
+<p>issues: <a href="https://github.com/golang/go/issues/40940" target="_blank" rel="noopener noreffer">https://github.com/golang/go/issues/40940</a></p>
+<p>影响版本：Golang &lt; 1.16</p>
+<p><code>net/http</code>包中提供了展示静态资源的文件服务器<code>FileServer</code>，<code>Range</code>头经常用于断点续传技术中，但是<code>Range</code>是有一定范围和规范的，如果未对传入的<code>Range</code>进行验证，可能会导致不可预料的安全问题</p>
+<p>在 Golang 中启动一个静态文件服务器的demo：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+
+<span class="kn">import</span> <span class="s">&#34;net/http&#34;</span>
+
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">http</span><span class="p">.</span><span class="nf">Handle</span><span class="p">(</span><span class="s">&#34;/&#34;</span><span class="p">,</span> <span class="nx">http</span><span class="p">.</span><span class="nf">FileServer</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nf">Dir</span><span class="p">(</span><span class="s">&#34;/tmp&#34;</span><span class="p">)))</span>
+  <span class="nx">http</span><span class="p">.</span><span class="nf">ListenAndServe</span><span class="p">(</span><span class="s">&#34;:3000&#34;</span><span class="p">,</span> <span class="kc">nil</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>加上不符合规则的Range头后请求：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">$ curl -v -H <span class="s1">&#39;Range: bytes=--2&#39;</span> localhost:8081/go          
+*   Trying 127.0.0.1...
+* TCP_NODELAY <span class="nb">set</span>
+* Connected to localhost <span class="o">(</span>127.0.0.1<span class="o">)</span> port <span class="m">8081</span> <span class="o">(</span><span class="c1">#0)</span>
+&gt; GET /go HTTP/1.1
+&gt; Host: localhost:8081
+&gt; User-Agent: curl/7.64.1
+&gt; Accept: */*
+&gt; Range: <span class="nv">bytes</span><span class="o">=</span>--2
+&gt; 
+&lt; HTTP/1.1 <span class="m">206</span> Partial Content
+&lt; Accept-Ranges: bytes
+&lt; Content-Range: bytes 475-472/473
+&lt; Content-Type: text/plain<span class="p">;</span> <span class="nv">charset</span><span class="o">=</span>utf-8
+&lt; Last-Modified: Wed, <span class="m">22</span> Sep <span class="m">2021</span> 07:01:01 GMT
+&lt; Date: Wed, <span class="m">22</span> Sep <span class="m">2021</span> 07:22:05 GMT
+&lt; Transfer-Encoding: chunked
+&lt; 
+* Connection <span class="c1">#0 to host localhost left intact</span>
+* Closing connection <span class="m">0</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>可以看到服务端返回了正常响应，错误的解析了Range头<code>Content-Range: bytes 475-472/473</code>，并没有报任何错误，而正常来说对于错误的Range头返回应该是这样的：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">$ curl -v -H <span class="s1">&#39;Range: bytes=a&#39;</span> localhost:8081/go            
+*   Trying 127.0.0.1...
+* TCP_NODELAY <span class="nb">set</span>
+* Connected to localhost <span class="o">(</span>127.0.0.1<span class="o">)</span> port <span class="m">8081</span> <span class="o">(</span><span class="c1">#0)</span>
+&gt; GET /go HTTP/1.1
+&gt; Host: localhost:8081
+&gt; User-Agent: curl/7.64.1
+&gt; Accept: */*
+&gt; Range: <span class="nv">bytes</span><span class="o">=</span>a
+&gt; 
+&lt; HTTP/1.1 <span class="m">416</span> Requested Range Not Satisfiable
+&lt; Content-Type: text/plain<span class="p">;</span> <span class="nv">charset</span><span class="o">=</span>utf-8
+&lt; Last-Modified: Wed, <span class="m">22</span> Sep <span class="m">2021</span> 07:01:01 GMT
+&lt; X-Content-Type-Options: nosniff
+&lt; Date: Wed, <span class="m">22</span> Sep <span class="m">2021</span> 07:38:11 GMT
+&lt; Content-Length: <span class="m">14</span>
+&lt; 
+invalid range
+* Connection <span class="c1">#0 to host localhost left intact</span>
+* Closing connection <span class="m">0</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>解析Range头的实现在<a href="https://github.com/golang/go/blob/e94544cf012535da6b3c9e735bc4026e2db1c99c/src/net/http/fs.go#L749-L783" target="_blank" rel="noopener noreffer">$GOROOT/src/net/http/fs.go</a>的<code>parseRange</code>函数</p>
+<p>该<code>parseRange</code>函数获取<code>Range</code>标题，从中删除<code>bytes=</code>前缀并将其用<code>&quot;,&quot;</code>字符拆分。稍后，对于每个拆分字符串或更确切地说是“范围”，它会将其进一步对<code>&quot;-&quot;</code>进行拆分，然后检索<code>start</code>和<code>end</code>值。</p>
+<p>当只有一个值时，<code>start</code>是一个空字符串。然后程序转到第一个分支并<code>end</code>通过<code>ParseInt(end, 10, 64)</code>调用解析值。</p>
+<p>举个例子，如果我们传递<code>bytes=--2</code>Range 标头，我们最终会得到<code>start=&quot;&quot;, end=&quot;-2&quot;</code>字符串，然后<code>end</code>通过<code>ParseInt(end, 10, 64)</code>调用<code>-2</code>int64 值来解析。</p>
+<p>官方的修复是在调用<code>ParseInt</code>函数前加上判断是否为负数，不符合规则就报错</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20210922160221383.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20210922160221383.png, https://gitee.com/leonsec/images/raw/master/image-20210922160221383.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20210922160221383.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20210922160221383.png"
+        title="image-20210922160221383" /></p>
+<p>由此issue还衍生出了一个题目：https://ctftime.org/task/14632</p>
+<p>题目实现了一个静态资源服务，利用go-FileServer对Range头的解析差异进行攻击。</p>
+<h3 id="http2拒绝服务漏洞">HTTP/2拒绝服务漏洞</h3>
+<blockquote>
+<p>CVE-2019-9512 &amp;&amp; CVE-2019-9514</p>
+</blockquote>
+<p>issues: <a href="https://github.com/golang/go/issues/33606" target="_blank" rel="noopener noreffer">https://github.com/golang/go/issues/33606</a></p>
+<p><code>net/http</code>并<code>golang.org/x/net/http2</code>接受来自不可信的客户端直接连接的服务器可以远程作出分配的内存无限量，直到程序崩溃。</p>
+<p>这是一个HTTP/2的自身漏洞，攻击者可能会导致服务器排队无限数量的 PING、ACK 或 RST_STREAM 帧通过请求它们而不读取它们，直到程序内存不足导致拒绝服务，在Golang的某些特定版本中会出现。</p>
+<h3 id="http_proxy安全问题">HTTP_PROXY安全问题</h3>
+<blockquote>
+<p>CVE-2016-5386</p>
+<p><em>httpoxy</em>是一组影响在 CGI 或类 CGI 环境中运行的应用程序代码的漏洞。</p>
+<p>详细参考：https://httpoxy.org/</p>
+</blockquote>
+<p>漏洞成因：</p>
+<ul>
+<li>CGI 规范定义传入请求标头<code>Foo: Bar</code>映射到环境变量 <code>HTTP_FOO == &quot;Bar&quot;</code>。（见 RFC 3875 4.1.18）</li>
+<li>HTTP_PROXY 环境变量通常用于为 HTTP 客户端配置 HTTP 代理（Go 的 net/http.Client 和 Transport 默认遵守）</li>
+</ul>
+<p>这意味着在 CGI 环境中运行的 Go 程序（作为 CGI 主机下的子进程）容易受到包含<code>Proxy:attacker.com:1234</code>的传入请求的攻击，设置 HTTP_PROXY，并更改默认情况下 Go 代理所有出站 HTTP 请求的代理。</p>
+<p>官方修复是直接弃用了CGI模式下的HTTP_PROXY标头的设置：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20210922170545971.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20210922170545971.png, https://gitee.com/leonsec/images/raw/master/image-20210922170545971.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20210922170545971.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20210922170545971.png"
+        title="image-20210922170545971" /></p>
+<p>官方的poc：https://github.com/httpoxy/go-httpoxy-poc</p>
+<h3 id="smtp注入">SMTP注入</h3>
+<p>issues: <a href="https://github.com/golang/go/issues/21159" target="_blank" rel="noopener noreffer">https://github.com/golang/go/issues/21159</a></p>
+<p>影响版本：Golang &lt; 1.10</p>
+<p>在受影响的版本中，net/smtp 库中的一些函数对接收者邮件地址未做过滤处理，导致可以利用CRLF注入进行修改邮件正文，一个简单的demo如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;log&#34;</span>
+	<span class="s">&#34;net/smtp&#34;</span>
+<span class="p">)</span>
+
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">to</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&#34;recipient@example.net&gt;\r\nDATA\r\nInjected message body\r\n.\r\nQUIT\r\n&#34;</span><span class="p">}</span>
+	<span class="nx">msg</span> <span class="o">:=</span> <span class="p">[]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&#34;To: recipient@example.net\r\n&#34;</span> <span class="o">+</span>
+		<span class="s">&#34;Subject: discount Gophers!\r\n&#34;</span> <span class="o">+</span>
+		<span class="s">&#34;\r\n&#34;</span> <span class="o">+</span>
+		<span class="s">&#34;Real message body\r\n&#34;</span><span class="p">)</span>
+	<span class="nx">err</span> <span class="o">:=</span> <span class="nx">smtp</span><span class="p">.</span><span class="nf">SendMail</span><span class="p">(</span><span class="s">&#34;localhost:25&#34;</span><span class="p">,</span> <span class="kc">nil</span><span class="p">,</span> <span class="s">&#34;sender@example.org&#34;</span><span class="p">,</span> <span class="nx">to</span><span class="p">,</span> <span class="nx">msg</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">log</span><span class="p">.</span><span class="nf">Fatal</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>官方的修复是对<code>SendMail</code>、<code>Rcpt</code>和<code>Mail</code>等受影响的函数增加了换行符过滤：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20210922185131263.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20210922185131263.png, https://gitee.com/leonsec/images/raw/master/image-20210922185131263.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20210922185131263.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20210922185131263.png"
+        title="image-20210922185131263" /></p>
+<h3 id="readrequest栈溢出">ReadRequest栈溢出</h3>
+<blockquote>
+<p>CVE-2021-31525</p>
+</blockquote>
+<p>issues: <a href="https://github.com/golang/go/issues/45710" target="_blank" rel="noopener noreffer">https://github.com/golang/go/issues/45710</a></p>
+<p>ReadRequest 和 ReadResponse 在读取非常大的标头（在 64 位架构上超过 7MB，或在 32 位架构上超过 4MB）时会遇到不可恢复的panic。</p>
+<p>服务默认情况下不易受到攻击，但如果通过设置<code>Server.MaxHeaderBytes</code>为更高的值来覆盖默认的最大标头 1MB，则会受到堆栈溢出导致崩溃或拒绝服务。</p>
+<h3 id="cgifcgi-xss漏洞">CGI/FCGI XSS漏洞</h3>
+<blockquote>
+<p>CVE-2020-24553</p>
+</blockquote>
+<p>issues: <a href="https://github.com/golang/go/issues/40928" target="_blank" rel="noopener noreffer">https://github.com/golang/go/issues/40928</a></p>
+<p>当处理程序没有明确设置 Content-Type 标头时，CGI 和 FCGI 实现都默认为<code>text/html</code>。</p>
+<p>如果攻击者可以让服务器在他们的控制下生成内容（例如包含用户数据的 JSON 或上传的图像文件），这可能会被服务器错误地返回为<code>text/html</code>。如果受害者访问这样的页面，他们可能会在服务器源的上下文中执行攻击者的恶意<code>JavaScript</code>代码。</p>
+<p>利用参考：https://www.redteam-pentesting.de/en/advisories/rt-sa-2020-004/-inconsistent-behavior-of-gos-cgi-and-fastcgi-transport-may-lead-to-cross-site-scripting</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://gitee.com/leonsec/images/raw/master/image-20210923110743421.png"
+        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20210923110743421.png, https://gitee.com/leonsec/images/raw/master/image-20210923110743421.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20210923110743421.png 2x"
+        data-sizes="auto"
+        alt="https://gitee.com/leonsec/images/raw/master/image-20210923110743421.png"
+        title="image-20210923110743421" /></p>
+<h2 id="reference">Reference</h2>
+<p><a href="https://github.com/golang/go/issues/34540" target="_blank" rel="noopener noreffer">https://github.com/golang/go/issues/34540</a></p>
+<p><a href="https://github.com/golang/go/issues/40928" target="_blank" rel="noopener noreffer">https://github.com/golang/go/issues/40928</a></p>
+<p><a href="https://github.com/golang/go/issues/43783" target="_blank" rel="noopener noreffer">https://github.com/golang/go/issues/43783</a></p>
+<p><a href="https://github.com/golang/go/issues/12741" target="_blank" rel="noopener noreffer">https://github.com/golang/go/issues/12741</a></p>
+<p><a href="https://github.com/golang/go/issues/47711" target="_blank" rel="noopener noreffer">https://github.com/golang/go/issues/47711</a></p>
+<p><a href="https://github.com/golang/go/issues/30794" target="_blank" rel="noopener noreffer">https://github.com/golang/go/issues/30794</a></p>
+<p><a href="https://github.com/golang/go/issues/30999" target="_blank" rel="noopener noreffer">https://github.com/golang/go/issues/30999</a></p>
+<p><a href="https://github.com/golang/go/issues/40940" target="_blank" rel="noopener noreffer">https://github.com/golang/go/issues/40940</a></p>
+<p><a href="https://github.com/golang/go/issues/33606" target="_blank" rel="noopener noreffer">https://github.com/golang/go/issues/33606</a></p>
+<p><a href="https://github.com/golang/go/issues/16405" target="_blank" rel="noopener noreffer">https://github.com/golang/go/issues/16405</a></p>
+<p><a href="https://github.com/golang/go/issues/21159" target="_blank" rel="noopener noreffer">https://github.com/golang/go/issues/21159</a></p>
+<p><a href="https://github.com/golang/go/issues/45710" target="_blank" rel="noopener noreffer">https://github.com/golang/go/issues/45710</a></p>
+<p><a href="https://httpoxy.org/" target="_blank" rel="noopener noreffer">https://httpoxy.org/</a></p>
+<p><a href="https://www.bleepingcomputer.com/news/security/google-fixes-severe-golang-windows-rce-vulnerability/" target="_blank" rel="noopener noreffer">https://www.bleepingcomputer.com/news/security/google-fixes-severe-golang-windows-rce-vulnerability/</a></p></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2022-02-25</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://blog.h4ck.fun/golang_vuln_share/" data-title="Golang安全问题分享" data-via="Le0nsec" data-hashtags="Golang"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://blog.h4ck.fun/golang_vuln_share/" data-hashtag="Golang"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="Share on Reddit" data-sharer="reddit" data-url="https://blog.h4ck.fun/golang_vuln_share/"><i class="fab fa-reddit fa-fw"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://blog.h4ck.fun/golang_vuln_share/" data-title="Golang安全问题分享"><i class="fab fa-weibo fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/golang/">Golang</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/shiro_721_analysis/" class="prev" rel="prev" title="Shiro-721漏洞分析(CVE-2019-12422)"><i class="fas fa-angle-left fa-fw"></i>Shiro-721漏洞分析(CVE-2019-12422)</a>
+            <a href="/qiye_weixin_health_check/" class="next" rel="next" title="企业微信自动健康上报脚本小记">企业微信自动健康上报脚本小记<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2020 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://blog.h4ck.fun/" target="_blank">Leon</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span><span class="icp-splitter">&nbsp;|&nbsp;</span><br class="icp-br"/>
+                    <span class="icp"><script type="text/javascript" src="https://s9.cnzz.com/z_stat.php?id=1278765080&web_id=1278765080"></script></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/valine/valine.min.css"><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script type="text/javascript" src="/lib/valine/Valine.min.js"></script><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":40},"comment":{"valine":{"appId":"saBpLNPwjiIGzpSf9QvvTLw3-9Nh9j0Va","appKey":"jU0L8JdQYxxwunKTXrmGV194","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@5.0.1/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"en","pageSize":10,"placeholder":"Your comment ...","recordIP":true,"visitor":true}},"cookieconsent":{"content":{"dismiss":"Got it!","link":"Learn more","message":"This website uses Cookies to improve your experience."},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"highlightTag":"em","lunrIndexURL":"/index.json","maxResultLength":10,"noResultsFound":"No results found","snippetLength":50,"type":"lunr"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>
