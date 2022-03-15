@@ -4,7 +4,14 @@
         <link>https://blog.h4ck.fun/tags/unserialize/</link>
         <description>unserialize - Tag - Leon&#39;s Blog</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>leonsec@h4ck.fun (Leon)</managingEditor>
-            <webMaster>leonsec@h4ck.fun (Leon)</webMaster><lastBuildDate>Sat, 27 Feb 2021 20:34:38 &#43;0800</lastBuildDate><atom:link href="https://blog.h4ck.fun/tags/unserialize/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>leonsec@h4ck.fun (Leon)</webMaster><lastBuildDate>Wed, 01 Sep 2021 17:54:53 &#43;0800</lastBuildDate><atom:link href="https://blog.h4ck.fun/tags/unserialize/" rel="self" type="application/rss+xml" /><item>
+    <title>CakePHP 3.x/4.x 反序列化分析</title>
+    <link>https://blog.h4ck.fun/cakephp_3.x_4.x_unserialize/</link>
+    <pubDate>Wed, 01 Sep 2021 17:54:53 &#43;0800</pubDate>
+    <author>Author</author>
+    <guid>https://blog.h4ck.fun/cakephp_3.x_4.x_unserialize/</guid>
+    <description><![CDATA[<p>最近网上公开了cakephp一些反序列化链的细节，但是没有公开poc，并且网上关于cakephp的反序列化链比较少，于是自己跟一下 ，构造pop链。</p>]]></description>
+</item><item>
     <title>四叶草安全牛年CTF大赛</title>
     <link>https://blog.h4ck.fun/%E5%9B%9B%E5%8F%B6%E8%8D%89%E5%AE%89%E5%85%A8%E7%89%9B%E5%B9%B4ctf%E5%A4%A7%E8%B5%9B/</link>
     <pubDate>Sat, 27 Feb 2021 20:34:38 &#43;0800</pubDate>

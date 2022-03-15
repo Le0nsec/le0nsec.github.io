@@ -49,6 +49,13 @@
     <guid>https://blog.h4ck.fun/scientific_adfree_networking/</guid>
     <description><![CDATA[<p>WMCTF2021失之交臂的一道题，蛮有意思的</p>]]></description>
 </item><item>
+    <title>CakePHP 3.x/4.x 反序列化分析</title>
+    <link>https://blog.h4ck.fun/cakephp_3.x_4.x_unserialize/</link>
+    <pubDate>Wed, 01 Sep 2021 17:54:53 &#43;0800</pubDate>
+    <author>Author</author>
+    <guid>https://blog.h4ck.fun/cakephp_3.x_4.x_unserialize/</guid>
+    <description><![CDATA[<p>最近网上公开了cakephp一些反序列化链的细节，但是没有公开poc，并且网上关于cakephp的反序列化链比较少，于是自己跟一下 ，构造pop链。</p>]]></description>
+</item><item>
     <title>Apache Commons Collections反序列化链分析</title>
     <link>https://blog.h4ck.fun/commons_collections_analysis/</link>
     <pubDate>Wed, 01 Sep 2021 10:03:52 &#43;0800</pubDate>
@@ -69,12 +76,5 @@
     <author>Author</author>
     <guid>https://blog.h4ck.fun/ciscn2021-writeup/</guid>
     <description><![CDATA[<p>CISCN2021 Web 部分Writeup</p>]]></description>
-</item><item>
-    <title>四叶草安全牛年CTF大赛</title>
-    <link>https://blog.h4ck.fun/%E5%9B%9B%E5%8F%B6%E8%8D%89%E5%AE%89%E5%85%A8%E7%89%9B%E5%B9%B4ctf%E5%A4%A7%E8%B5%9B/</link>
-    <pubDate>Sat, 27 Feb 2021 20:34:38 &#43;0800</pubDate>
-    <author>Author</author>
-    <guid>https://blog.h4ck.fun/%E5%9B%9B%E5%8F%B6%E8%8D%89%E5%AE%89%E5%85%A8%E7%89%9B%E5%B9%B4ctf%E5%A4%A7%E8%B5%9B/</guid>
-    <description><![CDATA[<p>寒假没怎么打CTF，后面的AntCTF、D^3CTF刚好在开学的时间段，四叶草安全举办的小比赛，都是简单题，随便看看</p>]]></description>
 </item></channel>
 </rss>

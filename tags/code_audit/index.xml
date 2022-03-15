@@ -4,7 +4,14 @@
         <link>https://blog.h4ck.fun/tags/code_audit/</link>
         <description>code_audit - Tag - Leon&#39;s Blog</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>leonsec@h4ck.fun (Leon)</managingEditor>
-            <webMaster>leonsec@h4ck.fun (Leon)</webMaster><lastBuildDate>Wed, 01 Sep 2021 10:03:52 &#43;0800</lastBuildDate><atom:link href="https://blog.h4ck.fun/tags/code_audit/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>leonsec@h4ck.fun (Leon)</webMaster><lastBuildDate>Wed, 01 Sep 2021 17:54:53 &#43;0800</lastBuildDate><atom:link href="https://blog.h4ck.fun/tags/code_audit/" rel="self" type="application/rss+xml" /><item>
+    <title>CakePHP 3.x/4.x 反序列化分析</title>
+    <link>https://blog.h4ck.fun/cakephp_3.x_4.x_unserialize/</link>
+    <pubDate>Wed, 01 Sep 2021 17:54:53 &#43;0800</pubDate>
+    <author>Author</author>
+    <guid>https://blog.h4ck.fun/cakephp_3.x_4.x_unserialize/</guid>
+    <description><![CDATA[<p>最近网上公开了cakephp一些反序列化链的细节，但是没有公开poc，并且网上关于cakephp的反序列化链比较少，于是自己跟一下 ，构造pop链。</p>]]></description>
+</item><item>
     <title>Apache Commons Collections反序列化链分析</title>
     <link>https://blog.h4ck.fun/commons_collections_analysis/</link>
     <pubDate>Wed, 01 Sep 2021 10:03:52 &#43;0800</pubDate>

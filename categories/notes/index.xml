@@ -12,6 +12,13 @@
     <guid>https://blog.h4ck.fun/golang_vuln_share/</guid>
     <description><![CDATA[<p>一些Golang的安全问题。</p>]]></description>
 </item><item>
+    <title>CakePHP 3.x/4.x 反序列化分析</title>
+    <link>https://blog.h4ck.fun/cakephp_3.x_4.x_unserialize/</link>
+    <pubDate>Wed, 01 Sep 2021 17:54:53 &#43;0800</pubDate>
+    <author>Author</author>
+    <guid>https://blog.h4ck.fun/cakephp_3.x_4.x_unserialize/</guid>
+    <description><![CDATA[<p>最近网上公开了cakephp一些反序列化链的细节，但是没有公开poc，并且网上关于cakephp的反序列化链比较少，于是自己跟一下 ，构造pop链。</p>]]></description>
+</item><item>
     <title>Golang开发端口扫描器一些常用技术</title>
     <link>https://blog.h4ck.fun/golang_scan_tech/</link>
     <pubDate>Mon, 16 Aug 2021 11:31:40 &#43;0800</pubDate>
