@@ -211,11 +211,11 @@
 </div><p><img
         class="lazyload"
         src="/svg/loading.min.svg"
-        data-src="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625150049.png"
-        data-srcset="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625150049.png, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625150049.png 1.5x, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625150049.png 2x"
+        data-src="https://leonsec.gitee.io/images/QQ%e5%9b%be%e7%89%8720200625150049.png"
+        data-srcset="https://leonsec.gitee.io/images/QQ%e5%9b%be%e7%89%8720200625150049.png, https://leonsec.gitee.io/images/QQ%e5%9b%be%e7%89%8720200625150049.png 1.5x, https://leonsec.gitee.io/images/QQ%e5%9b%be%e7%89%8720200625150049.png 2x"
         data-sizes="auto"
-        alt="https://gitee.com/leonsec/images/raw/master/QQ图片20200625150049.png"
-        title="https://gitee.com/leonsec/images/raw/master/QQ图片20200625150049.png" /></p>
+        alt="https://leonsec.gitee.io/images/QQ图片20200625150049.png"
+        title="https://leonsec.gitee.io/images/QQ图片20200625150049.png" /></p>
 <h2 id="laravel">laravel</h2>
 <h3 id="确定版本">确定版本：</h3>
 <p>在<code>vendor\laravel\framework\src\Illuminate\Foundation\Application.php</code>32行看到5.7.28版本，这个版本存在反序列化漏洞
@@ -224,32 +224,32 @@
 <img
         class="lazyload"
         src="/svg/loading.min.svg"
-        data-src="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625161246.png"
-        data-srcset="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625161246.png, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625161246.png 1.5x, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625161246.png 2x"
+        data-src="https://leonsec.gitee.io/images/QQ%e5%9b%be%e7%89%8720200625161246.png"
+        data-srcset="https://leonsec.gitee.io/images/QQ%e5%9b%be%e7%89%8720200625161246.png, https://leonsec.gitee.io/images/QQ%e5%9b%be%e7%89%8720200625161246.png 1.5x, https://leonsec.gitee.io/images/QQ%e5%9b%be%e7%89%8720200625161246.png 2x"
         data-sizes="auto"
-        alt="https://gitee.com/leonsec/images/raw/master/QQ图片20200625161246.png"
-        title="https://gitee.com/leonsec/images/raw/master/QQ图片20200625161246.png" /></p>
+        alt="https://leonsec.gitee.io/images/QQ图片20200625161246.png"
+        title="https://leonsec.gitee.io/images/QQ图片20200625161246.png" /></p>
 <h3 id="寻找可用poc链">寻找可用poc链</h3>
 <p>只能另辟蹊径，找到这篇文章：<a href="https://xz.aliyun.com/t/2901" target="_blank" rel="noopener noreffer">2018护网杯easy_laravel getshell</a>
 继续尝试跟进，看能不能利用这个链，发现<code>vendor/laravel/framework/src/Illuminate/Broadcasting/PendingBroadcast.php</code>里的析构函数也被ban了：（嘤嘤嘤）
 <img
         class="lazyload"
         src="/svg/loading.min.svg"
-        data-src="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625162946.png"
-        data-srcset="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625162946.png, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625162946.png 1.5x, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625162946.png 2x"
+        data-src="https://leonsec.gitee.io/images/QQ%e5%9b%be%e7%89%8720200625162946.png"
+        data-srcset="https://leonsec.gitee.io/images/QQ%e5%9b%be%e7%89%8720200625162946.png, https://leonsec.gitee.io/images/QQ%e5%9b%be%e7%89%8720200625162946.png 1.5x, https://leonsec.gitee.io/images/QQ%e5%9b%be%e7%89%8720200625162946.png 2x"
         data-sizes="auto"
-        alt="https://gitee.com/leonsec/images/raw/master/QQ图片20200625162946.png"
-        title="https://gitee.com/leonsec/images/raw/master/QQ图片20200625162946.png" /></p>
+        alt="https://leonsec.gitee.io/images/QQ图片20200625162946.png"
+        title="https://leonsec.gitee.io/images/QQ图片20200625162946.png" /></p>
 <p>但是析构函数多的是，这个没了换一个就是了，主要是之前没法调用<code>run()</code>执行命令，看下这个链里的<code>Generator</code>类相关的执行命令函数且有没有被ban：
 在<code>vendor/fzaninotto/faker/src/Faker/Generator.php</code>里，发现<code>function format($formatter, $arguments = array())</code>调用了<code>call_user_func_array()</code>，如果它的输入能被控制，就能执行命令
 <img
         class="lazyload"
         src="/svg/loading.min.svg"
-        data-src="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625164439.png"
-        data-srcset="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625164439.png, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625164439.png 1.5x, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625164439.png 2x"
+        data-src="https://leonsec.gitee.io/images/QQ%e5%9b%be%e7%89%8720200625164439.png"
+        data-srcset="https://leonsec.gitee.io/images/QQ%e5%9b%be%e7%89%8720200625164439.png, https://leonsec.gitee.io/images/QQ%e5%9b%be%e7%89%8720200625164439.png 1.5x, https://leonsec.gitee.io/images/QQ%e5%9b%be%e7%89%8720200625164439.png 2x"
         data-sizes="auto"
-        alt="https://gitee.com/leonsec/images/raw/master/QQ图片20200625164439.png"
-        title="https://gitee.com/leonsec/images/raw/master/QQ图片20200625164439.png" /></p>
+        alt="https://leonsec.gitee.io/images/QQ图片20200625164439.png"
+        title="https://leonsec.gitee.io/images/QQ图片20200625164439.png" /></p>
 <p>继续跟进：
 Generator.php源码：</p>
 <div class="highlight"><div class="chroma">
@@ -406,11 +406,11 @@ Generator.php源码：</p>
 <img
         class="lazyload"
         src="/svg/loading.min.svg"
-        data-src="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625164630.png"
-        data-srcset="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625164630.png, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625164630.png 1.5x, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625164630.png 2x"
+        data-src="https://leonsec.gitee.io/images/QQ%e5%9b%be%e7%89%8720200625164630.png"
+        data-srcset="https://leonsec.gitee.io/images/QQ%e5%9b%be%e7%89%8720200625164630.png, https://leonsec.gitee.io/images/QQ%e5%9b%be%e7%89%8720200625164630.png 1.5x, https://leonsec.gitee.io/images/QQ%e5%9b%be%e7%89%8720200625164630.png 2x"
         data-sizes="auto"
-        alt="https://gitee.com/leonsec/images/raw/master/QQ图片20200625164630.png"
-        title="https://gitee.com/leonsec/images/raw/master/QQ图片20200625164630.png" /></p>
+        alt="https://leonsec.gitee.io/images/QQ图片20200625164630.png"
+        title="https://leonsec.gitee.io/images/QQ图片20200625164630.png" /></p>
 <p>我们知道当调用一个不存在的方法时会自动调用<code>__call()</code>，并且这里<code>__call()</code>调用了<code>format()</code>且参数可控，就可以执行命令了</p>
 <p>接下来寻找合适的类完成它的触发：
 在<code>vendor/symfony/routing/Loader/Configurator/ImportConfigurator.php</code>中找到合适的析构函数：
@@ -562,11 +562,11 @@ Generator.php源码：</p>
 </div><p><img
         class="lazyload"
         src="/svg/loading.min.svg"
-        data-src="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625171343.png"
-        data-srcset="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625171343.png, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625171343.png 1.5x, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625171343.png 2x"
+        data-src="https://leonsec.gitee.io/images/QQ%e5%9b%be%e7%89%8720200625171343.png"
+        data-srcset="https://leonsec.gitee.io/images/QQ%e5%9b%be%e7%89%8720200625171343.png, https://leonsec.gitee.io/images/QQ%e5%9b%be%e7%89%8720200625171343.png 1.5x, https://leonsec.gitee.io/images/QQ%e5%9b%be%e7%89%8720200625171343.png 2x"
         data-sizes="auto"
-        alt="https://gitee.com/leonsec/images/raw/master/QQ图片20200625171343.png"
-        title="https://gitee.com/leonsec/images/raw/master/QQ图片20200625171343.png" />
+        alt="https://leonsec.gitee.io/images/QQ图片20200625171343.png"
+        title="https://leonsec.gitee.io/images/QQ图片20200625171343.png" />
 这里析构函数调用了<code>addCollection</code>方法</p>
 <h3 id="pop链构造">pop链构造</h3>
 <p>我们还知道，当<code>__destruct</code>销毁对象的时候会自动调用该方法，而调用一个不存在的方法时会自动调用<code>__call()</code>，所以现在pop链就清楚了，先创建一个<code>Generator</code>实例，然后将其赋值给<code>ImportConfigurator</code>的<code>$parent</code>。当<code>ImportConfigurator</code>自动销毁时会调用<code>Generator</code>的<code>addCollection</code>方法，但是<code>addCollection</code>方法在<code>Generator</code>中不存在，所以自动调用<code>Generator</code>中的<code>__call()</code>方法，而<code>__call()</code>方法调用了<code>format</code>方法，<code>format</code>里面的两个参数都可控，这样就可以RCE了。</p>
@@ -694,20 +694,20 @@ Generator.php源码：</p>
 <img
         class="lazyload"
         src="/svg/loading.min.svg"
-        data-src="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625172550.png"
-        data-srcset="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625172550.png, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625172550.png 1.5x, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625172550.png 2x"
+        data-src="https://leonsec.gitee.io/images/QQ%e5%9b%be%e7%89%8720200625172550.png"
+        data-srcset="https://leonsec.gitee.io/images/QQ%e5%9b%be%e7%89%8720200625172550.png, https://leonsec.gitee.io/images/QQ%e5%9b%be%e7%89%8720200625172550.png 1.5x, https://leonsec.gitee.io/images/QQ%e5%9b%be%e7%89%8720200625172550.png 2x"
         data-sizes="auto"
-        alt="https://gitee.com/leonsec/images/raw/master/QQ图片20200625172550.png"
-        title="https://gitee.com/leonsec/images/raw/master/QQ图片20200625172550.png" /></p>
+        alt="https://leonsec.gitee.io/images/QQ图片20200625172550.png"
+        title="https://leonsec.gitee.io/images/QQ图片20200625172550.png" /></p>
 <p><code>GET</code>传值参数为p，拿到flag</p>
 <p><img
         class="lazyload"
         src="/svg/loading.min.svg"
-        data-src="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625172413.png"
-        data-srcset="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625172413.png, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625172413.png 1.5x, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200625172413.png 2x"
+        data-src="https://leonsec.gitee.io/images/QQ%e5%9b%be%e7%89%8720200625172413.png"
+        data-srcset="https://leonsec.gitee.io/images/QQ%e5%9b%be%e7%89%8720200625172413.png, https://leonsec.gitee.io/images/QQ%e5%9b%be%e7%89%8720200625172413.png 1.5x, https://leonsec.gitee.io/images/QQ%e5%9b%be%e7%89%8720200625172413.png 2x"
         data-sizes="auto"
-        alt="https://gitee.com/leonsec/images/raw/master/QQ图片20200625172413.png"
-        title="https://gitee.com/leonsec/images/raw/master/QQ图片20200625172413.png" /></p>
+        alt="https://leonsec.gitee.io/images/QQ图片20200625172413.png"
+        title="https://leonsec.gitee.io/images/QQ图片20200625172413.png" /></p>
 <h2 id="do-you-know">do you know</h2>
 <p>这题很让人无语
 index.php:</p>
@@ -1056,11 +1056,11 @@ name=leon
 <img
         class="lazyload"
         src="/svg/loading.min.svg"
-        data-src="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200626235358.png"
-        data-srcset="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200626235358.png, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200626235358.png 1.5x, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200626235358.png 2x"
+        data-src="https://leonsec.gitee.io/images/QQ%e5%9b%be%e7%89%8720200626235358.png"
+        data-srcset="https://leonsec.gitee.io/images/QQ%e5%9b%be%e7%89%8720200626235358.png, https://leonsec.gitee.io/images/QQ%e5%9b%be%e7%89%8720200626235358.png 1.5x, https://leonsec.gitee.io/images/QQ%e5%9b%be%e7%89%8720200626235358.png 2x"
         data-sizes="auto"
-        alt="https://gitee.com/leonsec/images/raw/master/QQ图片20200626235358.png"
-        title="https://gitee.com/leonsec/images/raw/master/QQ图片20200626235358.png" />
+        alt="https://leonsec.gitee.io/images/QQ图片20200626235358.png"
+        title="https://leonsec.gitee.io/images/QQ图片20200626235358.png" />
 可以发现<code>data</code>是被urlencode过的，所以gopher构造时，<code>data</code>也应该是urlencode过的，因为这里是打ssrf，浏览器会解码一次，curl会再解码一次，所以需要构造的gopher数据进行二次编码：
 构造的gopher：</p>
 <div class="highlight"><div class="chroma">
@@ -1195,11 +1195,11 @@ data=%3C%3Fxml%20version%20%3D%20%221.0%22%3F%3E%0A%3C!DOCTYPE%20ANY%20%5B%0A%20
 </div><p><img
         class="lazyload"
         src="/svg/loading.min.svg"
-        data-src="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200627001930.png"
-        data-srcset="https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200627001930.png, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200627001930.png 1.5x, https://gitee.com/leonsec/images/raw/master/QQ%e5%9b%be%e7%89%8720200627001930.png 2x"
+        data-src="https://leonsec.gitee.io/images/QQ%e5%9b%be%e7%89%8720200627001930.png"
+        data-srcset="https://leonsec.gitee.io/images/QQ%e5%9b%be%e7%89%8720200627001930.png, https://leonsec.gitee.io/images/QQ%e5%9b%be%e7%89%8720200627001930.png 1.5x, https://leonsec.gitee.io/images/QQ%e5%9b%be%e7%89%8720200627001930.png 2x"
         data-sizes="auto"
-        alt="https://gitee.com/leonsec/images/raw/master/QQ图片20200627001930.png"
-        title="https://gitee.com/leonsec/images/raw/master/QQ图片20200627001930.png" /></p>
+        alt="https://leonsec.gitee.io/images/QQ图片20200627001930.png"
+        title="https://leonsec.gitee.io/images/QQ图片20200627001930.png" /></p>
 <p>那我还需要到xxe.php去用gopher协议打xxe读flag.php?
 两个地方都是要url编码绕过关键词</p>
 <p>如果预期是main.php绕过ob_start()进行输出，那我等一手wp，看完了再来复现</p>

@@ -125,14 +125,14 @@
 <p>然后<code>report</code>路由可以给tom发信息，tom会去看（后面打了半天，客服才说每看完一个请求都会重启clash，然后才把多次请求写在一起）</p>
 <p>想了一下这里应该没法xsleak，看他专门描述开了clash，就想能不能控制修改clash的配置文件（看配置文件的时候看到有个external controller API是可控的），然后代理到vps看能不能拿tom的cookie</p>
 <p>然后找可控点的时候看到了<code>logout</code>路由可以进行跳转</p>
-<a class="lightgallery" href="https://gitee.com/leonsec/images/raw/master/NK8jWXZ.png" title="https://gitee.com/leonsec/images/raw/master/NK8jWXZ.png" data-thumbnail="https://gitee.com/leonsec/images/raw/master/NK8jWXZ.png">
+<a class="lightgallery" href="https://leonsec.gitee.io/images/NK8jWXZ.png" title="https://leonsec.gitee.io/images/NK8jWXZ.png" data-thumbnail="https://leonsec.gitee.io/images/NK8jWXZ.png">
         <img
             class="lazyload"
             src="/svg/loading.min.svg"
-            data-src="https://gitee.com/leonsec/images/raw/master/NK8jWXZ.png"
-            data-srcset="https://gitee.com/leonsec/images/raw/master/NK8jWXZ.png, https://gitee.com/leonsec/images/raw/master/NK8jWXZ.png 1.5x, https://gitee.com/leonsec/images/raw/master/NK8jWXZ.png 2x"
+            data-src="https://leonsec.gitee.io/images/NK8jWXZ.png"
+            data-srcset="https://leonsec.gitee.io/images/NK8jWXZ.png, https://leonsec.gitee.io/images/NK8jWXZ.png 1.5x, https://leonsec.gitee.io/images/NK8jWXZ.png 2x"
             data-sizes="auto"
-            alt="https://gitee.com/leonsec/images/raw/master/NK8jWXZ.png" />
+            alt="https://leonsec.gitee.io/images/NK8jWXZ.png" />
     </a>
 <p>于是可以控制一下xhr，打external controller API进行修改，看了一下api文档：</p>
 <p><a href="https://clash.gitbook.io/doc/restful-api" target="_blank" rel="noopener noreffer">https://clash.gitbook.io/doc/restful-api</a></p>
@@ -150,14 +150,14 @@
 </code></pre></td></tr></table>
 </div>
 </div><p>但是它第二次http请求打过来还是没有cookie。。</p>
-<a class="lightgallery" href="https://gitee.com/leonsec/images/raw/master/EnOYS2p.png" title="https://gitee.com/leonsec/images/raw/master/EnOYS2p.png" data-thumbnail="https://gitee.com/leonsec/images/raw/master/EnOYS2p.png">
+<a class="lightgallery" href="https://leonsec.gitee.io/images/EnOYS2p.png" title="https://leonsec.gitee.io/images/EnOYS2p.png" data-thumbnail="https://leonsec.gitee.io/images/EnOYS2p.png">
         <img
             class="lazyload"
             src="/svg/loading.min.svg"
-            data-src="https://gitee.com/leonsec/images/raw/master/EnOYS2p.png"
-            data-srcset="https://gitee.com/leonsec/images/raw/master/EnOYS2p.png, https://gitee.com/leonsec/images/raw/master/EnOYS2p.png 1.5x, https://gitee.com/leonsec/images/raw/master/EnOYS2p.png 2x"
+            data-src="https://leonsec.gitee.io/images/EnOYS2p.png"
+            data-srcset="https://leonsec.gitee.io/images/EnOYS2p.png, https://leonsec.gitee.io/images/EnOYS2p.png 1.5x, https://leonsec.gitee.io/images/EnOYS2p.png 2x"
             data-sizes="auto"
-            alt="https://gitee.com/leonsec/images/raw/master/EnOYS2p.png" />
+            alt="https://leonsec.gitee.io/images/EnOYS2p.png" />
     </a>
 <p>然后又去看源码找了一下可控文件的地方，api给出的就只有<code>configs</code>的path那个可以控制绝对路径加载配置文件，加载其他文件可以报错泄漏4 5个字符</p>
 <p>还有配置文件中<code>proxy-providers</code>的配置，也是指定路径加载配置文件，详细配置：</p>
@@ -307,14 +307,14 @@
 </code></pre></td></tr></table>
 </div>
 </div><p>以上是比赛时的做题记录，当时光顾着看代理服务接收请求的cookie了，没注意代理后的流量emmm，还觉得后续可能没那么简单，肝了一下午后没有再看这道题了</p>
-<a class="lightgallery" href="https://gitee.com/leonsec/images/raw/master/ceeb653ely1gm1l440lqpj20ku0kl41y-20210908185648546.jpg" title="https://gitee.com/leonsec/images/raw/master/ceeb653ely1gm1l440lqpj20ku0kl41y-20210908185648546.jpg" data-thumbnail="https://gitee.com/leonsec/images/raw/master/ceeb653ely1gm1l440lqpj20ku0kl41y-20210908185648546.jpg">
+<a class="lightgallery" href="https://leonsec.gitee.io/images/ceeb653ely1gm1l440lqpj20ku0kl41y-20210908185648546.jpg" title="https://leonsec.gitee.io/images/ceeb653ely1gm1l440lqpj20ku0kl41y-20210908185648546.jpg" data-thumbnail="https://leonsec.gitee.io/images/ceeb653ely1gm1l440lqpj20ku0kl41y-20210908185648546.jpg">
         <img
             class="lazyload"
             src="/svg/loading.min.svg"
-            data-src="https://gitee.com/leonsec/images/raw/master/ceeb653ely1gm1l440lqpj20ku0kl41y-20210908185648546.jpg"
-            data-srcset="https://gitee.com/leonsec/images/raw/master/ceeb653ely1gm1l440lqpj20ku0kl41y-20210908185648546.jpg, https://gitee.com/leonsec/images/raw/master/ceeb653ely1gm1l440lqpj20ku0kl41y-20210908185648546.jpg 1.5x, https://gitee.com/leonsec/images/raw/master/ceeb653ely1gm1l440lqpj20ku0kl41y-20210908185648546.jpg 2x"
+            data-src="https://leonsec.gitee.io/images/ceeb653ely1gm1l440lqpj20ku0kl41y-20210908185648546.jpg"
+            data-srcset="https://leonsec.gitee.io/images/ceeb653ely1gm1l440lqpj20ku0kl41y-20210908185648546.jpg, https://leonsec.gitee.io/images/ceeb653ely1gm1l440lqpj20ku0kl41y-20210908185648546.jpg 1.5x, https://leonsec.gitee.io/images/ceeb653ely1gm1l440lqpj20ku0kl41y-20210908185648546.jpg 2x"
             data-sizes="auto"
-            alt="https://gitee.com/leonsec/images/raw/master/ceeb653ely1gm1l440lqpj20ku0kl41y-20210908185648546.jpg" />
+            alt="https://leonsec.gitee.io/images/ceeb653ely1gm1l440lqpj20ku0kl41y-20210908185648546.jpg" />
     </a>
 <p>实际上代理转发后的流量是带了cookie的，获取到cookie然后解码登录admin拿到flag</p></div><div class="post-footer" id="post-footer">
     <div class="post-info">

@@ -125,7 +125,7 @@
 <p>疫情期间学校要求每天都要健康打卡，之前是中午12点之前打卡，现在改成晚上21点到22点之间打卡，有时候事情多总是会忘，再加上周末可能会超过22点才回学校，上报定位也是个问题，因为这些原因，昨晚闲着没事给手机代理然后抓了个包，简单写了个脚本自动提交健康打卡。</p>
 <p>简单看了一下，表单页面是通过<code>form_id</code>来请求api获取需要填写的表单内容，我们提交的时候也是需要这个<code>form_id</code>，由于这个<code>form_id</code>每天可能都会变，需要先获取一下，也就是下图这个页面：</p>
 <p align="center">
-<img src="https://gitee.com/leonsec/images/raw/master/8CF7904CAC110B9C3F09D53417FDFCEF.jpg" alt="8CF7904CAC110B9C3F09D53417FDFCEF" style="zoom: 33%;" />
+<img src="https://leonsec.gitee.io/images/8CF7904CAC110B9C3F09D53417FDFCEF.jpg" alt="8CF7904CAC110B9C3F09D53417FDFCEF" style="zoom: 33%;" />
 </p>
 <p>API为：</p>
 <div class="highlight"><div class="chroma">
@@ -141,10 +141,10 @@
 <p><img
         class="lazyload"
         src="/svg/loading.min.svg"
-        data-src="https://gitee.com/leonsec/images/raw/master/image-20211202214529972-8452737.png"
-        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20211202214529972-8452737.png, https://gitee.com/leonsec/images/raw/master/image-20211202214529972-8452737.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20211202214529972-8452737.png 2x"
+        data-src="https://leonsec.gitee.io/images/image-20211202214529972-8452737.png"
+        data-srcset="https://leonsec.gitee.io/images/image-20211202214529972-8452737.png, https://leonsec.gitee.io/images/image-20211202214529972-8452737.png 1.5x, https://leonsec.gitee.io/images/image-20211202214529972-8452737.png 2x"
         data-sizes="auto"
-        alt="https://gitee.com/leonsec/images/raw/master/image-20211202214529972-8452737.png"
+        alt="https://leonsec.gitee.io/images/image-20211202214529972-8452737.png"
         title="image-20211202214529972" /></p>
 <p>所以其实最后提交的是获取的位置信息静态中文字符串，所以妈妈再也不用担心晚上十点后回学校的定位问题了</p>
 <p>提交的http报文如下：</p>
@@ -255,16 +255,16 @@ null
 先使用浏览器打开新的无痕窗口，访问：<a href="https://doc.weixin.qq.com/disklogin/login_page" target="_blank" rel="noopener noreffer">https://doc.weixin.qq.com/disklogin/login_page</a>，然后使用你登陆了南京邮电大学的<strong>企业微信</strong>（不是微信）扫码登陆</p>
 <p>登录后按F12打开开发者工具，或者在网页空白处右键点击“检查”，如下图：</p>
  <p align="center">
- <img src="https://gitee.com/leonsec/images/raw/master/144440784-d825f6ea-1657-470e-8fe5-ee94025789cd.png" alt="image" style="zoom:67%;" />
+ <img src="https://leonsec.gitee.io/images/144440784-d825f6ea-1657-470e-8fe5-ee94025789cd.png" alt="image" style="zoom:67%;" />
  </p>
 <p>然后在控制台(console)输入<code>document.cookie</code>查看当前cookie字符串：</p>
 <p><img
         class="lazyload"
         src="/svg/loading.min.svg"
-        data-src="https://gitee.com/leonsec/images/raw/master/144441988-90e30845-8a31-4c28-9751-1202047df99d.png"
-        data-srcset="https://gitee.com/leonsec/images/raw/master/144441988-90e30845-8a31-4c28-9751-1202047df99d.png, https://gitee.com/leonsec/images/raw/master/144441988-90e30845-8a31-4c28-9751-1202047df99d.png 1.5x, https://gitee.com/leonsec/images/raw/master/144441988-90e30845-8a31-4c28-9751-1202047df99d.png 2x"
+        data-src="https://leonsec.gitee.io/images/144441988-90e30845-8a31-4c28-9751-1202047df99d.png"
+        data-srcset="https://leonsec.gitee.io/images/144441988-90e30845-8a31-4c28-9751-1202047df99d.png, https://leonsec.gitee.io/images/144441988-90e30845-8a31-4c28-9751-1202047df99d.png 1.5x, https://leonsec.gitee.io/images/144441988-90e30845-8a31-4c28-9751-1202047df99d.png 2x"
         data-sizes="auto"
-        alt="https://gitee.com/leonsec/images/raw/master/144441988-90e30845-8a31-4c28-9751-1202047df99d.png"
+        alt="https://leonsec.gitee.io/images/144441988-90e30845-8a31-4c28-9751-1202047df99d.png"
         title="image" /></p>
 <p>复制后粘贴到脚本中即可</p>
 </li>

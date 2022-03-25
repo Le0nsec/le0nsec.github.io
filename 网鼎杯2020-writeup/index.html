@@ -301,9 +301,9 @@
 <p>然后就是读取文件了，但是直接相对路径读flag.php没用，不知道为什么</p>
 <p>用绝对路径/var/www/html读也没用</p>
 <p>我发现404页面有开发文档：<a href="https://hub.docker.com/r/nimmis/alpine-apache/"><a href="https://hub.docker.com/r/nimmis/alpine-apache/" target="_blank" rel="noopener noreffer">https://hub.docker.com/r/nimmis/alpine-apache/</a></a></p>
-<img class="alignnone size-full wp-image-437" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200510212600.png" alt="" width="515" height="115" />
+<img class="alignnone size-full wp-image-437" src="https://leonsec.gitee.io/images/QQ图片20200510212600.png" alt="" width="515" height="115" />
 <p>然后发现了web路径：</p>
-<img class="alignnone size-full wp-image-436" src="https://gitee.com/leonsec/images/raw/master/QQ图片20200510212537.png" alt="" width="633" height="462" />
+<img class="alignnone size-full wp-image-436" src="https://leonsec.gitee.io/images/QQ图片20200510212537.png" alt="" width="633" height="462" />
 <p>所以猜测flag.php路径是：/web/html/flag.php</p>
 <p>直接读取不行，用伪协议读可以</p>
 <p>payload：</p>
@@ -475,7 +475,7 @@
 </div>
 </div><p>这里考到了CVE-2014-3529类似的漏洞</p>
 <p>这部分代码逻辑表示，如果我们的文件名是excel-开始加上.xlsx结尾，就会用poi解析xlsx。</p>
-<img class="alignnone size-full wp-image-434" src="https://gitee.com/leonsec/images/raw/master/assfdhtrerghkh2433242gfg.png" alt="" width="315" height="114" />
+<img class="alignnone size-full wp-image-434" src="https://leonsec.gitee.io/images/assfdhtrerghkh2433242gfg.png" alt="" width="315" height="114" />
 <p>因为提示flag在根目录，正好可以用这个xxe打。不过没回显，所以要引用外部xml盲打xxe。</p>
 <p>首先是本地新建一个excel-1.xlsx文件，然后改后缀为zip，然后把[Content_Types].xml文件解压出来</p>
 <p>修改[Content_Types].xml的内容为：</p>
@@ -516,7 +516,7 @@
 </code></pre></td></tr></table>
 </div>
 </div><p>然后监听8500端口，上传excel-1.xlsx即可收到flag</p>
-<img class="alignnone size-full wp-image-435" src="https://gitee.com/leonsec/images/raw/master/fdf324trgtr676j8l7l.png" alt="" width="598" height="187" />
+<img class="alignnone size-full wp-image-435" src="https://leonsec.gitee.io/images/fdf324trgtr676j8l7l.png" alt="" width="598" height="187" />
 <p>flag{5bd5f61e-9138-4321-9976-d1c7157655ec}</p>
 <p>XML参考：<a href="https://xz.aliyun.com/t/3357"><a href="https://xz.aliyun.com/t/3357" target="_blank" rel="noopener noreffer">https://xz.aliyun.com/t/3357</a></a></p>
 <h2 id="notes">notes</h2>

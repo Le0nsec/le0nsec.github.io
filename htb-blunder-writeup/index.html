@@ -123,51 +123,51 @@
 <img
         class="lazyload"
         src="/svg/loading.min.svg"
-        data-src="https://gitee.com/leonsec/images/raw/master/image-20200710114842926.png"
-        data-srcset="https://gitee.com/leonsec/images/raw/master/image-20200710114842926.png, https://gitee.com/leonsec/images/raw/master/image-20200710114842926.png 1.5x, https://gitee.com/leonsec/images/raw/master/image-20200710114842926.png 2x"
+        data-src="https://leonsec.gitee.io/images/image-20200710114842926.png"
+        data-srcset="https://leonsec.gitee.io/images/image-20200710114842926.png, https://leonsec.gitee.io/images/image-20200710114842926.png 1.5x, https://leonsec.gitee.io/images/image-20200710114842926.png 2x"
         data-sizes="auto"
-        alt="https://gitee.com/leonsec/images/raw/master/image-20200710114842926.png"
-        title="https://gitee.com/leonsec/images/raw/master/image-20200710114842926.png" /></p>
+        alt="https://leonsec.gitee.io/images/image-20200710114842926.png"
+        title="https://leonsec.gitee.io/images/image-20200710114842926.png" /></p>
 <p>先用<code>nmap</code>探测一下：<code>nmap -A -sV 10.10.10.191</code></p>
 <p><img
         class="lazyload"
         src="/svg/loading.min.svg"
-        data-src="https://gitee.com/leonsec/images/raw/master/%e6%88%aa%e5%9b%be_2020-07-09_18-18-04.png"
-        data-srcset="https://gitee.com/leonsec/images/raw/master/%e6%88%aa%e5%9b%be_2020-07-09_18-18-04.png, https://gitee.com/leonsec/images/raw/master/%e6%88%aa%e5%9b%be_2020-07-09_18-18-04.png 1.5x, https://gitee.com/leonsec/images/raw/master/%e6%88%aa%e5%9b%be_2020-07-09_18-18-04.png 2x"
+        data-src="https://leonsec.gitee.io/images/%e6%88%aa%e5%9b%be_2020-07-09_18-18-04.png"
+        data-srcset="https://leonsec.gitee.io/images/%e6%88%aa%e5%9b%be_2020-07-09_18-18-04.png, https://leonsec.gitee.io/images/%e6%88%aa%e5%9b%be_2020-07-09_18-18-04.png 1.5x, https://leonsec.gitee.io/images/%e6%88%aa%e5%9b%be_2020-07-09_18-18-04.png 2x"
         data-sizes="auto"
-        alt="https://gitee.com/leonsec/images/raw/master/截图_2020-07-09_18-18-04.png"
-        title="https://gitee.com/leonsec/images/raw/master/截图_2020-07-09_18-18-04.png" /></p>
+        alt="https://leonsec.gitee.io/images/截图_2020-07-09_18-18-04.png"
+        title="https://leonsec.gitee.io/images/截图_2020-07-09_18-18-04.png" /></p>
 <p>发现80端口有web服务，直接访问，收集信息时在源码看见：
 <img
         class="lazyload"
         src="/svg/loading.min.svg"
-        data-src="https://gitee.com/leonsec/images/raw/master/%e6%88%aa%e5%9b%be_2020-07-09_18-19-28.png"
-        data-srcset="https://gitee.com/leonsec/images/raw/master/%e6%88%aa%e5%9b%be_2020-07-09_18-19-28.png, https://gitee.com/leonsec/images/raw/master/%e6%88%aa%e5%9b%be_2020-07-09_18-19-28.png 1.5x, https://gitee.com/leonsec/images/raw/master/%e6%88%aa%e5%9b%be_2020-07-09_18-19-28.png 2x"
+        data-src="https://leonsec.gitee.io/images/%e6%88%aa%e5%9b%be_2020-07-09_18-19-28.png"
+        data-srcset="https://leonsec.gitee.io/images/%e6%88%aa%e5%9b%be_2020-07-09_18-19-28.png, https://leonsec.gitee.io/images/%e6%88%aa%e5%9b%be_2020-07-09_18-19-28.png 1.5x, https://leonsec.gitee.io/images/%e6%88%aa%e5%9b%be_2020-07-09_18-19-28.png 2x"
         data-sizes="auto"
-        alt="https://gitee.com/leonsec/images/raw/master/截图_2020-07-09_18-19-28.png"
-        title="https://gitee.com/leonsec/images/raw/master/截图_2020-07-09_18-19-28.png" /></p>
+        alt="https://leonsec.gitee.io/images/截图_2020-07-09_18-19-28.png"
+        title="https://leonsec.gitee.io/images/截图_2020-07-09_18-19-28.png" /></p>
 <p>搜索关键词<code>bl-themes</code>后得知该主题是<code>Bludit CMS</code>的主题
 查找相关漏洞发现：<code>CVE-2019-16113</code>
 然后顺藤摸瓜找到了漏洞发现者在github报送的issue：
 <img
         class="lazyload"
         src="/svg/loading.min.svg"
-        data-src="https://gitee.com/leonsec/images/raw/master/%e7%81%ab%e7%8b%90%e6%88%aa%e5%9b%be_2020-07-09T09-49-56.045Z.png"
-        data-srcset="https://gitee.com/leonsec/images/raw/master/%e7%81%ab%e7%8b%90%e6%88%aa%e5%9b%be_2020-07-09T09-49-56.045Z.png, https://gitee.com/leonsec/images/raw/master/%e7%81%ab%e7%8b%90%e6%88%aa%e5%9b%be_2020-07-09T09-49-56.045Z.png 1.5x, https://gitee.com/leonsec/images/raw/master/%e7%81%ab%e7%8b%90%e6%88%aa%e5%9b%be_2020-07-09T09-49-56.045Z.png 2x"
+        data-src="https://leonsec.gitee.io/images/%e7%81%ab%e7%8b%90%e6%88%aa%e5%9b%be_2020-07-09T09-49-56.045Z.png"
+        data-srcset="https://leonsec.gitee.io/images/%e7%81%ab%e7%8b%90%e6%88%aa%e5%9b%be_2020-07-09T09-49-56.045Z.png, https://leonsec.gitee.io/images/%e7%81%ab%e7%8b%90%e6%88%aa%e5%9b%be_2020-07-09T09-49-56.045Z.png 1.5x, https://leonsec.gitee.io/images/%e7%81%ab%e7%8b%90%e6%88%aa%e5%9b%be_2020-07-09T09-49-56.045Z.png 2x"
         data-sizes="auto"
-        alt="https://gitee.com/leonsec/images/raw/master/火狐截图_2020-07-09T09-49-56.045Z.png"
-        title="https://gitee.com/leonsec/images/raw/master/火狐截图_2020-07-09T09-49-56.045Z.png" /></p>
+        alt="https://leonsec.gitee.io/images/火狐截图_2020-07-09T09-49-56.045Z.png"
+        title="https://leonsec.gitee.io/images/火狐截图_2020-07-09T09-49-56.045Z.png" /></p>
 <p>找到了作者挖掘该漏洞的博客：<a href="https://christa.top/details/46/" target="_blank" rel="noopener noreffer">某CMS 审计记录</a></p>
 <p>要利用该漏洞，需要登录到后台，先进行信息收集，看能不能找到什么课利用的：
 扫目录：<code>python3 dirsearch.py -u http://10.10.10.191 -e *</code></p>
 <p><img
         class="lazyload"
         src="/svg/loading.min.svg"
-        data-src="https://gitee.com/leonsec/images/raw/master/%e6%88%aa%e5%9b%be_2020-07-09_20-42-28.png"
-        data-srcset="https://gitee.com/leonsec/images/raw/master/%e6%88%aa%e5%9b%be_2020-07-09_20-42-28.png, https://gitee.com/leonsec/images/raw/master/%e6%88%aa%e5%9b%be_2020-07-09_20-42-28.png 1.5x, https://gitee.com/leonsec/images/raw/master/%e6%88%aa%e5%9b%be_2020-07-09_20-42-28.png 2x"
+        data-src="https://leonsec.gitee.io/images/%e6%88%aa%e5%9b%be_2020-07-09_20-42-28.png"
+        data-srcset="https://leonsec.gitee.io/images/%e6%88%aa%e5%9b%be_2020-07-09_20-42-28.png, https://leonsec.gitee.io/images/%e6%88%aa%e5%9b%be_2020-07-09_20-42-28.png 1.5x, https://leonsec.gitee.io/images/%e6%88%aa%e5%9b%be_2020-07-09_20-42-28.png 2x"
         data-sizes="auto"
-        alt="https://gitee.com/leonsec/images/raw/master/截图_2020-07-09_20-42-28.png"
-        title="https://gitee.com/leonsec/images/raw/master/截图_2020-07-09_20-42-28.png" /></p>
+        alt="https://leonsec.gitee.io/images/截图_2020-07-09_20-42-28.png"
+        title="https://leonsec.gitee.io/images/截图_2020-07-09_20-42-28.png" /></p>
 <p>得到后台路径<code>/admin</code></p>
 <p>然后使用<code>wfuzz</code>工具：
 参考：<a href="https://www.freebuf.com/sectool/173746.html" target="_blank" rel="noopener noreffer">Web模糊测试：WFuzz的坑和快速入门</a></p>
@@ -175,11 +175,11 @@
 <p><img
         class="lazyload"
         src="/svg/loading.min.svg"
-        data-src="https://gitee.com/leonsec/images/raw/master/%e6%88%aa%e5%9b%be_2020-07-09_18-17-11.png"
-        data-srcset="https://gitee.com/leonsec/images/raw/master/%e6%88%aa%e5%9b%be_2020-07-09_18-17-11.png, https://gitee.com/leonsec/images/raw/master/%e6%88%aa%e5%9b%be_2020-07-09_18-17-11.png 1.5x, https://gitee.com/leonsec/images/raw/master/%e6%88%aa%e5%9b%be_2020-07-09_18-17-11.png 2x"
+        data-src="https://leonsec.gitee.io/images/%e6%88%aa%e5%9b%be_2020-07-09_18-17-11.png"
+        data-srcset="https://leonsec.gitee.io/images/%e6%88%aa%e5%9b%be_2020-07-09_18-17-11.png, https://leonsec.gitee.io/images/%e6%88%aa%e5%9b%be_2020-07-09_18-17-11.png 1.5x, https://leonsec.gitee.io/images/%e6%88%aa%e5%9b%be_2020-07-09_18-17-11.png 2x"
         data-sizes="auto"
-        alt="https://gitee.com/leonsec/images/raw/master/截图_2020-07-09_18-17-11.png"
-        title="https://gitee.com/leonsec/images/raw/master/截图_2020-07-09_18-17-11.png" /></p>
+        alt="https://leonsec.gitee.io/images/截图_2020-07-09_18-17-11.png"
+        title="https://leonsec.gitee.io/images/截图_2020-07-09_18-17-11.png" /></p>
 <p>看到<code>inform fergus that the new blog needs images </code>，可以猜测<code>fergus</code>是一个用户</p>
 <p>接下来找密码
 使用<code>cewl</code>工具利用网站信息生成字典：<code>cewl -w wordlists.txt -d 10 -m 1 http://10.10.10.191/</code>
@@ -188,11 +188,11 @@
 <img
         class="lazyload"
         src="/svg/loading.min.svg"
-        data-src="https://gitee.com/leonsec/images/raw/master/%e6%88%aa%e5%9b%be_2020-07-10_12-12-01.png"
-        data-srcset="https://gitee.com/leonsec/images/raw/master/%e6%88%aa%e5%9b%be_2020-07-10_12-12-01.png, https://gitee.com/leonsec/images/raw/master/%e6%88%aa%e5%9b%be_2020-07-10_12-12-01.png 1.5x, https://gitee.com/leonsec/images/raw/master/%e6%88%aa%e5%9b%be_2020-07-10_12-12-01.png 2x"
+        data-src="https://leonsec.gitee.io/images/%e6%88%aa%e5%9b%be_2020-07-10_12-12-01.png"
+        data-srcset="https://leonsec.gitee.io/images/%e6%88%aa%e5%9b%be_2020-07-10_12-12-01.png, https://leonsec.gitee.io/images/%e6%88%aa%e5%9b%be_2020-07-10_12-12-01.png 1.5x, https://leonsec.gitee.io/images/%e6%88%aa%e5%9b%be_2020-07-10_12-12-01.png 2x"
         data-sizes="auto"
-        alt="https://gitee.com/leonsec/images/raw/master/截图_2020-07-10_12-12-01.png"
-        title="https://gitee.com/leonsec/images/raw/master/截图_2020-07-10_12-12-01.png" /></p>
+        alt="https://leonsec.gitee.io/images/截图_2020-07-10_12-12-01.png"
+        title="https://leonsec.gitee.io/images/截图_2020-07-10_12-12-01.png" /></p>
 <p>使用脚本爆破：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -288,11 +288,11 @@
 <img
         class="lazyload"
         src="/svg/loading.min.svg"
-        data-src="https://gitee.com/leonsec/images/raw/master/%e6%88%aa%e5%9b%be_2020-07-10_11-21-02.png"
-        data-srcset="https://gitee.com/leonsec/images/raw/master/%e6%88%aa%e5%9b%be_2020-07-10_11-21-02.png, https://gitee.com/leonsec/images/raw/master/%e6%88%aa%e5%9b%be_2020-07-10_11-21-02.png 1.5x, https://gitee.com/leonsec/images/raw/master/%e6%88%aa%e5%9b%be_2020-07-10_11-21-02.png 2x"
+        data-src="https://leonsec.gitee.io/images/%e6%88%aa%e5%9b%be_2020-07-10_11-21-02.png"
+        data-srcset="https://leonsec.gitee.io/images/%e6%88%aa%e5%9b%be_2020-07-10_11-21-02.png, https://leonsec.gitee.io/images/%e6%88%aa%e5%9b%be_2020-07-10_11-21-02.png 1.5x, https://leonsec.gitee.io/images/%e6%88%aa%e5%9b%be_2020-07-10_11-21-02.png 2x"
         data-sizes="auto"
-        alt="https://gitee.com/leonsec/images/raw/master/截图_2020-07-10_11-21-02.png"
-        title="https://gitee.com/leonsec/images/raw/master/截图_2020-07-10_11-21-02.png" /></p>
+        alt="https://leonsec.gitee.io/images/截图_2020-07-10_11-21-02.png"
+        title="https://leonsec.gitee.io/images/截图_2020-07-10_11-21-02.png" /></p>
 <p>于是使用用户名<code>fergus</code>密码<code>RolandDeschain</code>登录后台
 在新增内容处上传图片：</p>
 <p>然后抓包修改为：</p>
@@ -359,11 +359,11 @@ ceb56bf227d17480762ba33e8a3afce642adca4e
 </div><p><img
         class="lazyload"
         src="/svg/loading.min.svg"
-        data-src="https://gitee.com/leonsec/images/raw/master/%e6%88%aa%e5%9b%be_2020-07-09_22-12-52.png"
-        data-srcset="https://gitee.com/leonsec/images/raw/master/%e6%88%aa%e5%9b%be_2020-07-09_22-12-52.png, https://gitee.com/leonsec/images/raw/master/%e6%88%aa%e5%9b%be_2020-07-09_22-12-52.png 1.5x, https://gitee.com/leonsec/images/raw/master/%e6%88%aa%e5%9b%be_2020-07-09_22-12-52.png 2x"
+        data-src="https://leonsec.gitee.io/images/%e6%88%aa%e5%9b%be_2020-07-09_22-12-52.png"
+        data-srcset="https://leonsec.gitee.io/images/%e6%88%aa%e5%9b%be_2020-07-09_22-12-52.png, https://leonsec.gitee.io/images/%e6%88%aa%e5%9b%be_2020-07-09_22-12-52.png 1.5x, https://leonsec.gitee.io/images/%e6%88%aa%e5%9b%be_2020-07-09_22-12-52.png 2x"
         data-sizes="auto"
-        alt="https://gitee.com/leonsec/images/raw/master/截图_2020-07-09_22-12-52.png"
-        title="https://gitee.com/leonsec/images/raw/master/截图_2020-07-09_22-12-52.png" /></p>
+        alt="https://leonsec.gitee.io/images/截图_2020-07-09_22-12-52.png"
+        title="https://leonsec.gitee.io/images/截图_2020-07-09_22-12-52.png" /></p>
 <p>上传<code>.htaccess</code>：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -430,11 +430,11 @@ ceb56bf227d17480762ba33e8a3afce642adca4e
 </div><p><img
         class="lazyload"
         src="/svg/loading.min.svg"
-        data-src="https://gitee.com/leonsec/images/raw/master/%e6%88%aa%e5%9b%be_2020-07-09_22-13-03.png"
-        data-srcset="https://gitee.com/leonsec/images/raw/master/%e6%88%aa%e5%9b%be_2020-07-09_22-13-03.png, https://gitee.com/leonsec/images/raw/master/%e6%88%aa%e5%9b%be_2020-07-09_22-13-03.png 1.5x, https://gitee.com/leonsec/images/raw/master/%e6%88%aa%e5%9b%be_2020-07-09_22-13-03.png 2x"
+        data-src="https://leonsec.gitee.io/images/%e6%88%aa%e5%9b%be_2020-07-09_22-13-03.png"
+        data-srcset="https://leonsec.gitee.io/images/%e6%88%aa%e5%9b%be_2020-07-09_22-13-03.png, https://leonsec.gitee.io/images/%e6%88%aa%e5%9b%be_2020-07-09_22-13-03.png 1.5x, https://leonsec.gitee.io/images/%e6%88%aa%e5%9b%be_2020-07-09_22-13-03.png 2x"
         data-sizes="auto"
-        alt="https://gitee.com/leonsec/images/raw/master/截图_2020-07-09_22-13-03.png"
-        title="https://gitee.com/leonsec/images/raw/master/截图_2020-07-09_22-13-03.png" /></p>
+        alt="https://leonsec.gitee.io/images/截图_2020-07-09_22-13-03.png"
+        title="https://leonsec.gitee.io/images/截图_2020-07-09_22-13-03.png" /></p>
 <p>然后访问<code>http://10.10.10.191/bl-content/tmp/leon.jpg</code>生成shell，就获得了<code>www-date</code>权限</p>
 <p>使用python反弹个交互shell：</p>
 <div class="highlight"><div class="chroma">
@@ -448,29 +448,29 @@ ceb56bf227d17480762ba33e8a3afce642adca4e
 </div><p><img
         class="lazyload"
         src="/svg/loading.min.svg"
-        data-src="https://gitee.com/leonsec/images/raw/master/%e6%88%aa%e5%9b%be_2020-07-09_22-25-45.png"
-        data-srcset="https://gitee.com/leonsec/images/raw/master/%e6%88%aa%e5%9b%be_2020-07-09_22-25-45.png, https://gitee.com/leonsec/images/raw/master/%e6%88%aa%e5%9b%be_2020-07-09_22-25-45.png 1.5x, https://gitee.com/leonsec/images/raw/master/%e6%88%aa%e5%9b%be_2020-07-09_22-25-45.png 2x"
+        data-src="https://leonsec.gitee.io/images/%e6%88%aa%e5%9b%be_2020-07-09_22-25-45.png"
+        data-srcset="https://leonsec.gitee.io/images/%e6%88%aa%e5%9b%be_2020-07-09_22-25-45.png, https://leonsec.gitee.io/images/%e6%88%aa%e5%9b%be_2020-07-09_22-25-45.png 1.5x, https://leonsec.gitee.io/images/%e6%88%aa%e5%9b%be_2020-07-09_22-25-45.png 2x"
         data-sizes="auto"
-        alt="https://gitee.com/leonsec/images/raw/master/截图_2020-07-09_22-25-45.png"
-        title="https://gitee.com/leonsec/images/raw/master/截图_2020-07-09_22-25-45.png" /></p>
+        alt="https://leonsec.gitee.io/images/截图_2020-07-09_22-25-45.png"
+        title="https://leonsec.gitee.io/images/截图_2020-07-09_22-25-45.png" /></p>
 <p>现在需要获得普通<code>user</code>权限，信息收集后发现<code>www</code>文件夹下有另一个版本的<code>Bludit</code>，在<code>bludit-3.10.0a/bl-content/databases/users.php</code>发现：</p>
 <p><img
         class="lazyload"
         src="/svg/loading.min.svg"
-        data-src="https://gitee.com/leonsec/images/raw/master/%e6%88%aa%e5%9b%be_2020-07-09_22-30-19.png"
-        data-srcset="https://gitee.com/leonsec/images/raw/master/%e6%88%aa%e5%9b%be_2020-07-09_22-30-19.png, https://gitee.com/leonsec/images/raw/master/%e6%88%aa%e5%9b%be_2020-07-09_22-30-19.png 1.5x, https://gitee.com/leonsec/images/raw/master/%e6%88%aa%e5%9b%be_2020-07-09_22-30-19.png 2x"
+        data-src="https://leonsec.gitee.io/images/%e6%88%aa%e5%9b%be_2020-07-09_22-30-19.png"
+        data-srcset="https://leonsec.gitee.io/images/%e6%88%aa%e5%9b%be_2020-07-09_22-30-19.png, https://leonsec.gitee.io/images/%e6%88%aa%e5%9b%be_2020-07-09_22-30-19.png 1.5x, https://leonsec.gitee.io/images/%e6%88%aa%e5%9b%be_2020-07-09_22-30-19.png 2x"
         data-sizes="auto"
-        alt="https://gitee.com/leonsec/images/raw/master/截图_2020-07-09_22-30-19.png"
-        title="https://gitee.com/leonsec/images/raw/master/截图_2020-07-09_22-30-19.png" /></p>
+        alt="https://leonsec.gitee.io/images/截图_2020-07-09_22-30-19.png"
+        title="https://leonsec.gitee.io/images/截图_2020-07-09_22-30-19.png" /></p>
 <p>然后在线网站解密：</p>
 <p><img
         class="lazyload"
         src="/svg/loading.min.svg"
-        data-src="https://gitee.com/leonsec/images/raw/master/%e6%88%aa%e5%9b%be_2020-07-09_22-32-09.png"
-        data-srcset="https://gitee.com/leonsec/images/raw/master/%e6%88%aa%e5%9b%be_2020-07-09_22-32-09.png, https://gitee.com/leonsec/images/raw/master/%e6%88%aa%e5%9b%be_2020-07-09_22-32-09.png 1.5x, https://gitee.com/leonsec/images/raw/master/%e6%88%aa%e5%9b%be_2020-07-09_22-32-09.png 2x"
+        data-src="https://leonsec.gitee.io/images/%e6%88%aa%e5%9b%be_2020-07-09_22-32-09.png"
+        data-srcset="https://leonsec.gitee.io/images/%e6%88%aa%e5%9b%be_2020-07-09_22-32-09.png, https://leonsec.gitee.io/images/%e6%88%aa%e5%9b%be_2020-07-09_22-32-09.png 1.5x, https://leonsec.gitee.io/images/%e6%88%aa%e5%9b%be_2020-07-09_22-32-09.png 2x"
         data-sizes="auto"
-        alt="https://gitee.com/leonsec/images/raw/master/截图_2020-07-09_22-32-09.png"
-        title="https://gitee.com/leonsec/images/raw/master/截图_2020-07-09_22-32-09.png" /></p>
+        alt="https://leonsec.gitee.io/images/截图_2020-07-09_22-32-09.png"
+        title="https://leonsec.gitee.io/images/截图_2020-07-09_22-32-09.png" /></p>
 <p>于是<code>su hugo</code>输入<code>Password120</code>获得<code>user</code>权限
 在用户目录拿到<code>user.txt</code></p>
 <p>接下来要获取<code>root</code>权限，但是这种方法获得的shell好像行不通</p>
@@ -567,29 +567,29 @@ User hugo may run the following commands on blunder:
 </div><p><img
         class="lazyload"
         src="/svg/loading.min.svg"
-        data-src="https://gitee.com/leonsec/images/raw/master/%e6%88%aa%e5%9b%be_2020-07-10_11-25-50.png"
-        data-srcset="https://gitee.com/leonsec/images/raw/master/%e6%88%aa%e5%9b%be_2020-07-10_11-25-50.png, https://gitee.com/leonsec/images/raw/master/%e6%88%aa%e5%9b%be_2020-07-10_11-25-50.png 1.5x, https://gitee.com/leonsec/images/raw/master/%e6%88%aa%e5%9b%be_2020-07-10_11-25-50.png 2x"
+        data-src="https://leonsec.gitee.io/images/%e6%88%aa%e5%9b%be_2020-07-10_11-25-50.png"
+        data-srcset="https://leonsec.gitee.io/images/%e6%88%aa%e5%9b%be_2020-07-10_11-25-50.png, https://leonsec.gitee.io/images/%e6%88%aa%e5%9b%be_2020-07-10_11-25-50.png 1.5x, https://leonsec.gitee.io/images/%e6%88%aa%e5%9b%be_2020-07-10_11-25-50.png 2x"
         data-sizes="auto"
-        alt="https://gitee.com/leonsec/images/raw/master/截图_2020-07-10_11-25-50.png"
-        title="https://gitee.com/leonsec/images/raw/master/截图_2020-07-10_11-25-50.png" /></p>
+        alt="https://leonsec.gitee.io/images/截图_2020-07-10_11-25-50.png"
+        title="https://leonsec.gitee.io/images/截图_2020-07-10_11-25-50.png" /></p>
 <p>发现<code>(ALL, !root) /bin/bash</code>，想起来之前<code>fmyy</code>发过的linux权限漏洞：<a href="https://fmyy.pro/2020/06/06/CVE/CVE-2019-14287/" target="_blank" rel="noopener noreffer">CVE_2019_14287</a></p>
 <p>于是直接：<code>sudo -u#-1 /bin/bash</code>，得到：</p>
 <p><img
         class="lazyload"
         src="/svg/loading.min.svg"
-        data-src="https://gitee.com/leonsec/images/raw/master/%e6%88%aa%e5%9b%be_2020-07-10_11-28-44.png"
-        data-srcset="https://gitee.com/leonsec/images/raw/master/%e6%88%aa%e5%9b%be_2020-07-10_11-28-44.png, https://gitee.com/leonsec/images/raw/master/%e6%88%aa%e5%9b%be_2020-07-10_11-28-44.png 1.5x, https://gitee.com/leonsec/images/raw/master/%e6%88%aa%e5%9b%be_2020-07-10_11-28-44.png 2x"
+        data-src="https://leonsec.gitee.io/images/%e6%88%aa%e5%9b%be_2020-07-10_11-28-44.png"
+        data-srcset="https://leonsec.gitee.io/images/%e6%88%aa%e5%9b%be_2020-07-10_11-28-44.png, https://leonsec.gitee.io/images/%e6%88%aa%e5%9b%be_2020-07-10_11-28-44.png 1.5x, https://leonsec.gitee.io/images/%e6%88%aa%e5%9b%be_2020-07-10_11-28-44.png 2x"
         data-sizes="auto"
-        alt="https://gitee.com/leonsec/images/raw/master/截图_2020-07-10_11-28-44.png"
-        title="https://gitee.com/leonsec/images/raw/master/截图_2020-07-10_11-28-44.png" /></p>
+        alt="https://leonsec.gitee.io/images/截图_2020-07-10_11-28-44.png"
+        title="https://leonsec.gitee.io/images/截图_2020-07-10_11-28-44.png" /></p>
 <p><img
         class="lazyload"
         src="/svg/loading.min.svg"
-        data-src="https://gitee.com/leonsec/images/raw/master/%e6%88%aa%e5%9b%be_2020-07-10_11-28-02.png"
-        data-srcset="https://gitee.com/leonsec/images/raw/master/%e6%88%aa%e5%9b%be_2020-07-10_11-28-02.png, https://gitee.com/leonsec/images/raw/master/%e6%88%aa%e5%9b%be_2020-07-10_11-28-02.png 1.5x, https://gitee.com/leonsec/images/raw/master/%e6%88%aa%e5%9b%be_2020-07-10_11-28-02.png 2x"
+        data-src="https://leonsec.gitee.io/images/%e6%88%aa%e5%9b%be_2020-07-10_11-28-02.png"
+        data-srcset="https://leonsec.gitee.io/images/%e6%88%aa%e5%9b%be_2020-07-10_11-28-02.png, https://leonsec.gitee.io/images/%e6%88%aa%e5%9b%be_2020-07-10_11-28-02.png 1.5x, https://leonsec.gitee.io/images/%e6%88%aa%e5%9b%be_2020-07-10_11-28-02.png 2x"
         data-sizes="auto"
-        alt="https://gitee.com/leonsec/images/raw/master/截图_2020-07-10_11-28-02.png"
-        title="https://gitee.com/leonsec/images/raw/master/截图_2020-07-10_11-28-02.png" /></p>
+        alt="https://leonsec.gitee.io/images/截图_2020-07-10_11-28-02.png"
+        title="https://leonsec.gitee.io/images/截图_2020-07-10_11-28-02.png" /></p>
 <p>然后直接在r<code>/root</code>目录拿到<code>root.txt</code></p>
 <h2 id="reference">Reference</h2>
 <p><a href="https://fdlucifer.github.io/2020-06-05-blunder.html" target="_blank" rel="noopener noreffer">Hack-The-Box-walkthrough[blunder]</a></p></div><div class="post-footer" id="post-footer">

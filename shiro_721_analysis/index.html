@@ -164,14 +164,14 @@ $ git checkout shiro-root-1.4.1
 </ul>
 <p>例：使用 PKCS5Padding 方式填充 3 个字节 : <code>| AA BB CC DD EE 03 03 03 |</code></p>
 <p>在 Apache Shiro 中默认使用 CBC 加密模式与 PKCS5Padding 填充方式， CBC 加密模式容易遭到 Padding Oracle Attack，攻击者可以通过枚举 IV 的方式计算出全部明文，并且可以通过 CBC Byte-Flipping Attack 篡改某一段的明文</p>
-<a class="lightgallery" href="https://gitee.com/leonsec/images/raw/master/%28null%29-20210909003231188.jpg" title="https://gitee.com/leonsec/images/raw/master/(null)-20210909003231188.jpg" data-thumbnail="https://gitee.com/leonsec/images/raw/master/(null)-20210909003231188.jpg">
+<a class="lightgallery" href="https://leonsec.gitee.io/images/%28null%29-20210909003231188.jpg" title="https://leonsec.gitee.io/images/(null)-20210909003231188.jpg" data-thumbnail="https://leonsec.gitee.io/images/(null)-20210909003231188.jpg">
         <img
             class="lazyload"
             src="/svg/loading.min.svg"
-            data-src="https://gitee.com/leonsec/images/raw/master/%28null%29-20210909003231188.jpg"
-            data-srcset="https://gitee.com/leonsec/images/raw/master/%28null%29-20210909003231188.jpg, https://gitee.com/leonsec/images/raw/master/%28null%29-20210909003231188.jpg 1.5x, https://gitee.com/leonsec/images/raw/master/%28null%29-20210909003231188.jpg 2x"
+            data-src="https://leonsec.gitee.io/images/%28null%29-20210909003231188.jpg"
+            data-srcset="https://leonsec.gitee.io/images/%28null%29-20210909003231188.jpg, https://leonsec.gitee.io/images/%28null%29-20210909003231188.jpg 1.5x, https://leonsec.gitee.io/images/%28null%29-20210909003231188.jpg 2x"
             data-sizes="auto"
-            alt="https://gitee.com/leonsec/images/raw/master/(null)-20210909003231188.jpg" />
+            alt="https://leonsec.gitee.io/images/(null)-20210909003231188.jpg" />
     </a>
 <p>在每个Block解密后，会异或“前一个密文Block”，得到明文，若最后1个解密出的明文padding填充值错误，会导致解密不成功，报错</p>
 <p>攻击者可以通过不断改变“前一个Block”，改变“后1个Block密文”的明文。通过返回结果，来判断解密是否成功。进而获取“后一个Block”解密出的“MediumValue”，得到“MediumValue”就能解密密文，加密明文。大于2组的密文，攻击者可以按规则选取其中2组block进行尝试，从而达到加密解密所有Block的效果</p>
@@ -192,23 +192,23 @@ $ git checkout shiro-root-1.4.1
 $ python2 shiro_exp.py http://localhost:8081/samples_web_war_141/account/ xCKD5USpoOeldd+0q1GW1JtommZvz8/SHxg03t59L1f5qiJRgZ/rzuKHmzhPixuFYTjx6/ET3eLYPjoskQKsrSbnvGe9NoHOgy1n7/aFTQOOMCeifyFPOTucmKhzZgJMrRX/DYOprvI+cpqS0ZEhX1yiOoKvoZTMAURobpxOSsihhjyvjb9XhtOnLlxIY0xXP5Wvr5ooinqz+5h2KTQUwHlf7OLttKpFShAWmp+svx9u9IH/LG93QRXf435nes/lyAykYT+Lm+O+yOUM3uab0oMS2soykUUVKS6dGFOWyzFV84egw6dJeS6AvRzBjXv87ZjAsx2odrY1/izjf9i8JoJM+byV2zgNV2v/Y5kCcqWPQpc6j86X6OOKDtC8f10Xl5PnltcibrJpKOxMlQ4KSPYtN980DY9SQWQeZYnX8BVmuF1s0ZA0vu5sarPO7lDuVm0ULDH/vpUETBpya70LhBkrKI7bi7XlizWgVN5PRj3pP0s7mkF3L5nSxYRj4E6y urldns.ser
 </code></pre></td></tr></table>
 </div>
-</div><a class="lightgallery" href="https://gitee.com/leonsec/images/raw/master/%28null%29-20210909003309889.min.jpg" title="https://gitee.com/leonsec/images/raw/master/(null)-20210909003309889.min.jpg" data-thumbnail="https://gitee.com/leonsec/images/raw/master/(null)-20210909003309889.min.jpg">
+</div><a class="lightgallery" href="https://leonsec.gitee.io/images/%28null%29-20210909003309889.min.jpg" title="https://leonsec.gitee.io/images/(null)-20210909003309889.min.jpg" data-thumbnail="https://leonsec.gitee.io/images/(null)-20210909003309889.min.jpg">
         <img
             class="lazyload"
             src="/svg/loading.min.svg"
-            data-src="https://gitee.com/leonsec/images/raw/master/%28null%29-20210909003309889.min.jpg"
-            data-srcset="https://gitee.com/leonsec/images/raw/master/%28null%29-20210909003309889.min.jpg, https://gitee.com/leonsec/images/raw/master/%28null%29-20210909003309889.min.jpg 1.5x, https://gitee.com/leonsec/images/raw/master/%28null%29-20210909003309889.min.jpg 2x"
+            data-src="https://leonsec.gitee.io/images/%28null%29-20210909003309889.min.jpg"
+            data-srcset="https://leonsec.gitee.io/images/%28null%29-20210909003309889.min.jpg, https://leonsec.gitee.io/images/%28null%29-20210909003309889.min.jpg 1.5x, https://leonsec.gitee.io/images/%28null%29-20210909003309889.min.jpg 2x"
             data-sizes="auto"
-            alt="https://gitee.com/leonsec/images/raw/master/(null)-20210909003309889.min.jpg" />
+            alt="https://leonsec.gitee.io/images/(null)-20210909003309889.min.jpg" />
     </a>
-<a class="lightgallery" href="https://gitee.com/leonsec/images/raw/master/%28null%29-20210909003315626.jpg" title="https://gitee.com/leonsec/images/raw/master/(null)-20210909003315626.jpg" data-thumbnail="https://gitee.com/leonsec/images/raw/master/(null)-20210909003315626.jpg">
+<a class="lightgallery" href="https://leonsec.gitee.io/images/%28null%29-20210909003315626.jpg" title="https://leonsec.gitee.io/images/(null)-20210909003315626.jpg" data-thumbnail="https://leonsec.gitee.io/images/(null)-20210909003315626.jpg">
         <img
             class="lazyload"
             src="/svg/loading.min.svg"
-            data-src="https://gitee.com/leonsec/images/raw/master/%28null%29-20210909003315626.jpg"
-            data-srcset="https://gitee.com/leonsec/images/raw/master/%28null%29-20210909003315626.jpg, https://gitee.com/leonsec/images/raw/master/%28null%29-20210909003315626.jpg 1.5x, https://gitee.com/leonsec/images/raw/master/%28null%29-20210909003315626.jpg 2x"
+            data-src="https://leonsec.gitee.io/images/%28null%29-20210909003315626.jpg"
+            data-srcset="https://leonsec.gitee.io/images/%28null%29-20210909003315626.jpg, https://leonsec.gitee.io/images/%28null%29-20210909003315626.jpg 1.5x, https://leonsec.gitee.io/images/%28null%29-20210909003315626.jpg 2x"
             data-sizes="auto"
-            alt="https://gitee.com/leonsec/images/raw/master/(null)-20210909003315626.jpg" />
+            alt="https://leonsec.gitee.io/images/(null)-20210909003315626.jpg" />
     </a>
 <h2 id="reference">Reference</h2>
 <p><a href="https://www.anquanke.com/post/id/192819" target="_blank" rel="noopener noreffer">https://www.anquanke.com/post/id/192819</a></p>
