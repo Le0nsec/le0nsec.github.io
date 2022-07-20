@@ -4,23 +4,9 @@
         <link>https://blog.h4ck.fun/</link>
         <description>Leon&#39;s Blog-Keep learning web security</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>leonsec@h4ck.fun (Leon)</managingEditor>
-            <webMaster>leonsec@h4ck.fun (Leon)</webMaster><lastBuildDate>Sat, 01 Jan 2022 20:35:24 &#43;0800</lastBuildDate>
+            <webMaster>leonsec@h4ck.fun (Leon)</webMaster><lastBuildDate>Tue, 30 Nov 2021 23:52:50 &#43;0800</lastBuildDate>
             <atom:link href="https://blog.h4ck.fun/index.xml" rel="self" type="application/rss+xml" />
         <item>
-    <title>关于2021，关于我</title>
-    <link>https://blog.h4ck.fun/summary_about_2021/</link>
-    <pubDate>Sat, 01 Jan 2022 20:35:24 &#43;0800</pubDate>
-    <author>Author</author>
-    <guid>https://blog.h4ck.fun/summary_about_2021/</guid>
-    <description><![CDATA[<p>    刚结束了考试周，去汤山泡了温泉，在归家的飞机上掏出手机写一写2021这一年对自己的总结吧。</p>]]></description>
-</item><item>
-    <title>企业微信自动健康上报脚本小记</title>
-    <link>https://blog.h4ck.fun/qiye_weixin_health_check/</link>
-    <pubDate>Thu, 02 Dec 2021 23:19:52 &#43;0800</pubDate>
-    <author>Author</author>
-    <guid>https://blog.h4ck.fun/qiye_weixin_health_check/</guid>
-    <description><![CDATA[<p>编写企业微信自动健康上报脚本小记</p>]]></description>
-</item><item>
     <title>Golang安全问题分享</title>
     <link>https://blog.h4ck.fun/golang_vuln_share/</link>
     <pubDate>Tue, 30 Nov 2021 23:52:50 &#43;0800</pubDate>
@@ -76,5 +62,19 @@
     <author>Author</author>
     <guid>https://blog.h4ck.fun/ciscn2021-writeup/</guid>
     <description><![CDATA[<p>CISCN2021 Web 部分Writeup</p>]]></description>
+</item><item>
+    <title>四叶草安全牛年CTF大赛</title>
+    <link>https://blog.h4ck.fun/%E5%9B%9B%E5%8F%B6%E8%8D%89%E5%AE%89%E5%85%A8%E7%89%9B%E5%B9%B4ctf%E5%A4%A7%E8%B5%9B/</link>
+    <pubDate>Sat, 27 Feb 2021 20:34:38 &#43;0800</pubDate>
+    <author>Author</author>
+    <guid>https://blog.h4ck.fun/%E5%9B%9B%E5%8F%B6%E8%8D%89%E5%AE%89%E5%85%A8%E7%89%9B%E5%B9%B4ctf%E5%A4%A7%E8%B5%9B/</guid>
+    <description><![CDATA[<p>寒假没怎么打CTF，后面的AntCTF、D^3CTF刚好在开学的时间段，四叶草安全举办的小比赛，都是简单题，随便看看</p>]]></description>
+</item><item>
+    <title>ThinkPHP审计入门</title>
+    <link>https://blog.h4ck.fun/thinkphp%E5%AE%A1%E8%AE%A1%E5%85%A5%E9%97%A8/</link>
+    <pubDate>Mon, 01 Feb 2021 23:44:03 &#43;0800</pubDate>
+    <author>Author</author>
+    <guid>https://blog.h4ck.fun/thinkphp%E5%AE%A1%E8%AE%A1%E5%85%A5%E9%97%A8/</guid>
+    <description><![CDATA[<p>跟一下<a href="https://github.com/Mochazz/ThinkPHP-Vuln" target="_blank" rel="noopener noreffer">Mochazz/ThinkPHP-Vuln: 关于ThinkPHP框架的历史漏洞分析集合</a>，记点笔记</p>]]></description>
 </item></channel>
 </rss>
